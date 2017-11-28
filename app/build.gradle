@@ -1,6 +1,15 @@
 apply plugin: 'com.android.application'
 apply from: '../androidUtils/ide/funcs.gradle'
 
+//def SIGNING_INFO_PATH = "${projectDir}/../../../secret/android/signing.common.properties"
+
+def FLAVOR_CHANNEL = 'channel'
+def FLAVOR_PHONE = 'phone'
+
+def developChannels = ['dev', 'qa']
+def debugOnlyChannels = ['dev']
+def originChannels = developChannels + 'prd'
+
 android {
     compileSdkVersion rootProject.ext.android.compileSdkVersion
     buildToolsVersion rootProject.ext.android.buildToolsVersion
@@ -12,13 +21,78 @@ android {
         versionName rootProject.ext.android.versionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
-    buildTypes {
+    /*
+    signingConfigs {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            File sf = new File(SIGNING_INFO_PATH)
+            if (sf.exists()) {
+                String dir = sf.parent
+                Properties props = new Properties()
+                props.load(new FileInputStream(SIGNING_INFO_PATH))
+                storeFile file("${dir}/${props.getProperty('signing.release.keyStore')}")
+                storePassword props.getProperty('signing.release.storePassword')
+                keyAlias props.getProperty('signing.release.keyAlias')
+                keyPassword props.getProperty('signing.release.keyPassword')
+            }
         }
     }
-
+    */
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            //signingConfig signingConfigs.release
+        }
+    }
+    /*
+    compileOptions {
+        sourceCompatibility rootProject.ext.android.java_version
+        targetCompatibility rootProject.ext.android.java_version
+    }
+    */
+    flavorDimensions FLAVOR_CHANNEL, FLAVOR_PHONE
+    productFlavors {
+        dev {
+            dimension FLAVOR_CHANNEL
+            applicationIdSuffix "."+name
+        }
+        qa {
+            dimension FLAVOR_CHANNEL
+            applicationIdSuffix "."+name
+        }
+        prd {
+            dimension FLAVOR_CHANNEL
+        }
+        common {
+            dimension FLAVOR_PHONE
+        }
+    }
+    productFlavors.all { flavor ->
+        flavor.manifestPlaceholders.put(flavor.dimension, name)
+        if (sourceSets.findByName('origin')?.name != null && flavor.dimension == FLAVOR_CHANNEL) {
+            if (originChannels.contains(name)) {
+                sourceSets."${name}" {
+                    java.srcDirs += 'src/origin/java'
+                    res.srcDirs += 'src/origin/res'
+                }
+            }
+            if (sourceSets.findByName('prod')?.name != null && !developChannels.contains(name)) {
+                sourceSets."${name}" {
+                    java.srcDirs += 'src/prod/java'
+                    res.srcDirs += 'src/prod/res'
+                }
+            }
+        }
+    }
+    variantFilter { variant ->
+        def flavors = variant.getFlavors()
+        if (!flavors.isEmpty()) {
+            def channel = flavors.get(0).name
+            def abi = flavors.get(1).name
+            def buildTypeName = variant.buildType.name
+            variant.setIgnore(buildTypeName == buildTypes.release.name && debugOnlyChannels.contains(channel))
+        }
+    }
     processApkOutputs("elu-ds")
 }
 

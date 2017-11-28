@@ -7,7 +7,8 @@ ext {
             targetSdkVersion: 26,
             versionCode: 1,
             versionName: '1.0',
-            applicationId: "com.qingyun.zhiyunelu.ds"
+            applicationId: "com.qingyun.zhiyunelu.ds",
+            //java_version: JavaVersion.VERSION_1_7,
     ]
 
     // gradle 依赖管理
