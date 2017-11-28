@@ -1,0 +1,22 @@
+
+ext {
+    android = [
+            compileSdkVersion: 26,
+            buildToolsVersion: '26.0.2',
+            minSdkVersion: 22,
+            targetSdkVersion: 26,
+            versionCode: 1,
+            versionName: '1.0',
+            applicationId: "com.qingyun.zhiyunelu.ds"
+    ]
+
+    // gradle 依赖管理
+    dependencies = [
+            // ------------- Android Api -------------
+            appcompatV7: 'com.android.support:appcompat-v7:27.0.1',
+            design: 'com.android.support:design:27.0.1',
+            junit: 'junit:junit:4.12',
+            test_runner: 'com.android.support.test:runner:0.5',
+            espresso: 'com.android.support.test.espresso:espresso-core:2.2.2',
+    ]
+}

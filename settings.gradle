@@ -1,1 +1,6 @@
-include ':app'
+
+include ':JavaUtility', ':AndroidUtility', ':AndroidSupport', ':app'
+
+project(':JavaUtility').projectDir = new File('androidUtils/javaUtils/utility')
+project(':AndroidUtility').projectDir = new File('androidUtils/utility')
+project(':AndroidSupport').projectDir = new File('androidUtils/support')

@@ -2,8 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/androidUtils/support/AndroidSupport.iml" filepath="$PROJECT_DIR$/androidUtils/support/AndroidSupport.iml" />
+      <module fileurl="file://$PROJECT_DIR$/androidUtils/utility/AndroidUtility.iml" filepath="$PROJECT_DIR$/androidUtils/utility/AndroidUtility.iml" />
+      <module fileurl="file://$PROJECT_DIR$/androidUtils/javaUtils/utility/JavaUtility.iml" filepath="$PROJECT_DIR$/androidUtils/javaUtils/utility/JavaUtility.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ds.iml" filepath="$PROJECT_DIR$/ds.iml" />
+      <module fileurl="file://$PROJECT_DIR$/elu-app-ds.iml" filepath="$PROJECT_DIR$/elu-app-ds.iml" />
     </modules>
   </component>
 </project>
