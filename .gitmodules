@@ -1,3 +1,4 @@
-[submodule "utility"]
-	path = utility
+[submodule "androidUtils"]
+	path = androidUtils
 	url = ssh://git@code.regiswang.com/velites/utility/android
+	branch = master
