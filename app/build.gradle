@@ -93,7 +93,7 @@ android {
             variant.setIgnore(buildTypeName == buildTypes.release.name && debugOnlyChannels.contains(channel))
         }
     }
-    processApkOutputs("elu-ds")
+    processApkOutputs(rootProject.ext.android.apk_name_prefix)
 }
 
 dependencies {
