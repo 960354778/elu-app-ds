@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="bg_primary">#ff3f51b5</color>
+    <color name="bg_primaryDark">#ff303f9f</color>
+    <color name="bg_accent">#ffff4081</color>
+    <color name="bg_gray">#ffe8e8e8</color>
+    <color name="bg_white_grey">#fff8f8ff</color>
+    <color name="bg_none">@android:color/transparent</color>
+    <color name="bg_mask">#33000000</color>
 </resources>

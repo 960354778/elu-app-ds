@@ -22,5 +22,7 @@ ext {
             junit: 'junit:junit:4.12',
             test_runner: 'com.android.support.test:runner:0.5',
             espresso: 'com.android.support.test.espresso:espresso-core:2.2.2',
+            butterknife: 'com.jakewharton:butterknife:8.5.1',
+            butterknife_annotation: 'com.jakewharton:butterknife-compiler:8.5.1',
     ]
 }

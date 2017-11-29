@@ -1,11 +1,22 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+    <style name="BaseAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/bg_primary</item>
+        <item name="colorPrimaryDark">@color/bg_primaryDark</item>
+        <item name="colorAccent">@color/bg_accent</item>
+
+        <item name="bgListItemPrimary">@drawable/bg_list_item_major</item>
+        <item name="bgBlack">@android:color/black</item>
+        <item name="bgGray">@color/bg_gray</item>
+        <item name="bgWhite">@android:color/white</item>
+        <item name="bgNone">@android:color/transparent</item>
+        <item name="bgMask">@color/bg_mask</item>
+        <item name="bgWhiteGray">@color/bg_white_grey</item>
     </style>
+
+    <style name="AppTheme" parent="BaseAppTheme">
+        <item name="android:windowContentTransitions">true</item>
+    </style>
+    <style name="AppTheme.AppBarOverlay" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
 </resources>
