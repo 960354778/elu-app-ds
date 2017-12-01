@@ -1,5 +1,7 @@
 package com.qingyun.zhiyunelu.ds;
 
+import com.qingyun.zhiyunelu.ds.bcst.CallPhoneBCSTR;
+
 import velites.android.utility.framework.BaseApplication;
 
 /**
@@ -11,5 +13,6 @@ public class App extends BaseApplication {
     public void onCreate() {
         super.onCreate();
         AppAssistant.ensureInit(this);
+        CallPhoneBCSTR.ensureInit(this);
     }
 }
