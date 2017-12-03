@@ -5,10 +5,10 @@ import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.widget.TextView;
 
-
 import com.qingyun.zhiyunelu.ds.AppAssistant;
 import com.qingyun.zhiyunelu.ds.Constants;
 import com.qingyun.zhiyunelu.ds.R;
+import com.qingyun.zhiyunelu.ds.wechat.WxManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -58,6 +58,7 @@ public class SplashActivity extends BaseActivity {
                 return true;
             }
         }, Constants.PERMISSIONS_MUST_HAVE, Constants.PERMISSIONS_NICE_TO_HAVE);
+        WxManager.test();
     }
 
     @Override
