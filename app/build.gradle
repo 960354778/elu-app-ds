@@ -103,6 +103,7 @@ dependencies {
     implementation project(':AndroidSupport')
     implementation rootProject.ext.dependencies['appcompatV7']
     implementation rootProject.ext.dependencies['butterknife']
+    implementation rootProject.ext.dependencies['sqlcipher']
     annotationProcessor rootProject.ext.dependencies['butterknife_annotation']
     testImplementation rootProject.ext.dependencies['junit']
     androidTestImplementation(rootProject.ext.dependencies['test_runner'])

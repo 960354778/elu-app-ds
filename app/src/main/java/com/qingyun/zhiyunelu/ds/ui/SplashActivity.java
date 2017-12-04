@@ -58,7 +58,7 @@ public class SplashActivity extends BaseActivity {
                 return true;
             }
         }, Constants.PERMISSIONS_MUST_HAVE, Constants.PERMISSIONS_NICE_TO_HAVE);
-        WxManager.test();
+        WxManager.test(this);
     }
 
     @Override

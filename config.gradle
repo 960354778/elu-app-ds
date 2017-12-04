@@ -24,5 +24,6 @@ ext {
             espresso: 'com.android.support.test.espresso:espresso-core:2.2.2',
             butterknife: 'com.jakewharton:butterknife:8.5.1',
             butterknife_annotation: 'com.jakewharton:butterknife-compiler:8.5.1',
+            sqlcipher: 'net.zetetic:android-database-sqlcipher:3.4.0@aar'
     ]
 }
