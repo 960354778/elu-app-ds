@@ -19,4 +19,44 @@
     </style>
     <style name="AppTheme.AppBarOverlay" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
+    <!--custom style for xml-->
+    <style name="HWWWStyle">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+    </style>
+    <style name="HWWMStyle">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+    </style>
+
+    <style name="HMWWStyle">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">wrap_content</item>
+    </style>
+
+    <style name="LLVerMWStyle" parent="HWWMStyle">
+        <item name="android:orientation">vertical</item>
+    </style>
+    <style name="LLHorMWStyle" parent="HWWMStyle">
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <style name="TTextBoldStyle" parent="HWWWStyle">
+        <item name="android:textSize">@dimen/text_large</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/bg_primary</item>
+    </style>
+
+    <style name="ETextStyle" parent="HWWMStyle">
+        <item name="android:textSize">@dimen/text_medium</item>
+        <item name="android:textColor">@color/c_000000</item>
+        <item name="android:paddingTop">@dimen/space_medium</item>
+        <item name="android:paddingBottom">@dimen/space_medium</item>
+        <item name="android:paddingLeft">@dimen/space_medium</item>
+        <item name="android:paddingRight">@dimen/space_medium</item>
+        <item name="android:textColorHint">@color/c_353c46</item>
+        <item name="android:background">@null</item>
+        <item name="android:layout_gravity">center_vertical</item>
+    </style>
+
 </resources>

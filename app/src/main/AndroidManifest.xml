@@ -30,7 +30,8 @@
         <activity android:name=".ui.MainActivity" android:screenOrientation="${CommonOrientation}">
         </activity>
         <activity android:name=".ui.SettingsActivity" android:label="@string/label_settings" android:screenOrientation="${CommonOrientation}" />
-
+        <activity android:name=".ui.LoginActivity" android:screenOrientation="${CommonOrientation}"
+            />
         <receiver android:name=".bcst.CallPhoneBCSTR" >
             <intent-filter>
                 <action android:name="android.intent.action.NEW_OUTGOING_CALL" />

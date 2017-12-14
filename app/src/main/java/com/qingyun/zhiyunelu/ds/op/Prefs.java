@@ -2,7 +2,6 @@ package com.qingyun.zhiyunelu.ds.op;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Environment;
 import android.preference.PreferenceManager;
 
 /**
@@ -26,4 +25,13 @@ public class Prefs {
     public void setPermissionRequested(boolean value) {
         pref.edit().putBoolean(PERMISSIONS_REQUESTED, value).apply();
     }
+
+    public void setStr(String key , String value){
+        pref.edit().putString(key, value).apply();
+    }
+
+    public String getStr(String key){
+        return pref.getString(key, "");
+    }
+
 }

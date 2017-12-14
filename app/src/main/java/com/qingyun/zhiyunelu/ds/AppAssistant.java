@@ -5,6 +5,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 
 import com.qingyun.zhiyunelu.ds.data.DbOperator;
+import com.qingyun.zhiyunelu.ds.net.ApiService;
 import com.qingyun.zhiyunelu.ds.op.Prefs;
 
 import velites.android.utility.framework.EnvironmentInfo;
@@ -40,6 +41,7 @@ public final class AppAssistant {
                 LogHub.setProcessor(new SingleLooperLogProcessor());
             }
             prefs = new Prefs(ctx);
+            apiService = new ApiService();
             ExceptionUtil.wrapperGlobalUncaughtExceptionHandlerWithLog();
         }
     };
@@ -53,6 +55,7 @@ public final class AppAssistant {
     private static String buildType;
     private static boolean showLog;
     private static Prefs prefs;
+    private static ApiService apiService;
 
     public static Context getDefaultContext() {
         initializer.awaitInitializedNoThrows(null);
@@ -98,6 +101,12 @@ public final class AppAssistant {
         initializer.awaitInitializedNoThrows(null);
         return prefs;
     }
+
+    public static ApiService getApi() {
+        initializer.awaitInitializedNoThrows(null);
+        return apiService;
+    }
+
 
     public static final void ensureInit(Context ctx) {
         initializer.ensureInit(ctx);

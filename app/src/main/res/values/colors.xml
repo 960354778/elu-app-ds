@@ -7,4 +7,7 @@
     <color name="bg_white_grey">#fff8f8ff</color>
     <color name="bg_none">@android:color/transparent</color>
     <color name="bg_mask">#33000000</color>
+
+    <color name="c_000000">#000000</color>
+    <color name="c_353c46">#353c46</color>
 </resources>

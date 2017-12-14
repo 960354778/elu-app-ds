@@ -10,6 +10,8 @@ public final class Constants {
     private Constants() {
     }
 
+    public static final String BASE_URL = "http://api.zhiyunyilu.com/";
+
     public static final String[] PERMISSIONS_MUST_HAVE = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO, Manifest.permission.READ_PHONE_STATE};
     public static final String[] PERMISSIONS_NICE_TO_HAVE = new String[]{Manifest.permission.READ_PHONE_STATE};
 
@@ -32,5 +34,9 @@ public final class Constants {
     public static final class PrefsKey{
         private PrefsKey() {
         }
+        public static final String AUTH_TOKEN_KEY = "authToken";
+        public static final String ACCOUNT_NAME_KEY = "accountName";
+        public static final String ACCOUNT_PWD_KEY = "accountPwd";
+        public static final String LOGIN_NAME = "loginName";
     }
 }
