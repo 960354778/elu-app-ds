@@ -6,7 +6,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.qingyun.zhiyunelu.ds.R;
 
@@ -29,7 +31,13 @@ public abstract class BaseTemplatedActivity extends BaseActivity {
         @BindView(R.id.body)
         FrameLayout body;
     }
+
+    class Titles{
+        @BindView(R.id.ttTitleId)
+        TextView title;
+    }
     private final Widgets widgets = new Widgets();
+    private final Titles titles = new Titles();
 
     protected Integer getContentResId() {
         return null;
@@ -49,6 +57,8 @@ public abstract class BaseTemplatedActivity extends BaseActivity {
         setContentView(R.layout.activity_base);
         ButterKnife.bind(widgets, this);
         setSupportActionBar(widgets.toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(isDisplayShowTitleForAppName());
+        setTitleView();
         Integer rid = getHeadMoreContentResId();
         if (rid != null) {
             getLayoutInflater().inflate(rid, widgets.more, true);
@@ -64,6 +74,18 @@ public abstract class BaseTemplatedActivity extends BaseActivity {
                 finish();
             }
         });
+    }
+
+    private void setTitleView() {
+        if(isShowCustomTitle()){
+            int id = getTitleViewId();
+            if(id > 0){
+                View view = getLayoutInflater().inflate(id, null);
+                ButterKnife.bind(titles, view);
+                widgets.toolbar.addView(view, new ViewGroup.LayoutParams(-1, -1));
+                titles.title.setText(getTitleStr());
+            }
+        }
     }
 
     protected Toolbar getToolbar() {
@@ -104,6 +126,10 @@ public abstract class BaseTemplatedActivity extends BaseActivity {
     protected int[] getVisibleMenuIds() {
         return null;
     }
+    protected boolean isDisplayShowTitleForAppName(){return false;}
+    protected boolean isShowCustomTitle(){return true;}
+    protected int getTitleViewId(){return R.layout.view_title_layout;}
+    protected String getTitleStr() {return "";}
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

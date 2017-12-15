@@ -11,6 +11,12 @@ import android.view.ViewGroup;
 
 public class WorkOrderAdapter extends BaseAdatper<String> {
 
+    private int typeAdapter;
+
+    public WorkOrderAdapter(int type) {
+        this.typeAdapter = type;
+    }
+
     @Override
     public int getSubLayoutId() {
         return 0;

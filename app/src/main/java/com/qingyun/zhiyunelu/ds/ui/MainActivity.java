@@ -14,6 +14,7 @@ import com.qingyun.zhiyunelu.ds.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import velites.android.utility.utils.ToastUtil;
 import velites.java.utility.misc.StringUtil;
 
 public class MainActivity extends BaseTemplatedActivity {
@@ -50,12 +51,20 @@ public class MainActivity extends BaseTemplatedActivity {
                         loginDispose();
                     break;
                 case R.id.MyDoctorListTab:
+                    if(!checkLogin())
+                        return;
+                    ViewPagerActivity.lanuchMe(MainActivity.this,"我的医生列表", Constants.Codes.REQUEST_NET_MY_DOCTER_LIST_TAG);
                     break;
                 case R.id.MyHosListTab:
+                    if(!checkLogin())
+                        return;
+                    ViewPagerActivity.lanuchMe(MainActivity.this,"我的医院列表", Constants.Codes.REQUEST_NET_MY_HOSPITAL_LIST_TAG);
                     break;
                 case R.id.tvDoctersTab:
+                    ViewPagerActivity.lanuchMe(MainActivity.this,"医生列表", Constants.Codes.REQUEST_NET_DOCTER_LIST_TAG);
                     break;
                 case R.id.tvhosTab:
+                    ViewPagerActivity.lanuchMe(MainActivity.this,"医院列表", Constants.Codes.REQUEST_NET_HOSPITAL_LIST_TAG);
                     break;
                 case R.id.tvLogout:
                     AppAssistant.getPrefs().setStr(Constants.PrefsKey.AUTH_TOKEN_KEY, "");
@@ -115,4 +124,17 @@ public class MainActivity extends BaseTemplatedActivity {
         }
     }
 
+    @Override
+    protected String getTitleStr() {
+        return "首页";
+    }
+
+    private boolean checkLogin(){
+        String token = AppAssistant.getPrefs().getStr(Constants.PrefsKey.AUTH_TOKEN_KEY);
+        if(StringUtil.isNullOrEmpty(token)){
+            ToastUtil.showToastShort(this, "请先登录");
+            return false;
+        }
+        return true;
+    }
 }

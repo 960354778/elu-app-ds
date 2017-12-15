@@ -4,17 +4,17 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout style="@style/LLHorMWStyle"
+    <LinearLayout
+        style="@style/LLHorMWStyle"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/space_xxlarge"
         android:layout_marginLeft="@dimen/size_xsmall"
         android:layout_marginRight="@dimen/size_xsmall"
-        android:layout_gravity="center_horizontal"
-        android:layout_height="50dp"
-        android:paddingRight="@dimen/space_medium"
-        android:paddingLeft="@dimen/space_medium"
-        android:background="@drawable/edit_pwd_bg_shape"
-        android:layout_marginBottom="@dimen/space_xxlarge"
         android:layout_marginTop="@dimen/space_xxlarge"
-        >
+        android:background="@drawable/edit_pwd_bg_shape"
+        android:paddingLeft="@dimen/space_medium"
+        android:paddingRight="@dimen/space_medium">
 
         <TextView
             style="@style/TTextBoldStyle"
@@ -28,15 +28,15 @@
             android:hint="请输入账号..." />
     </LinearLayout>
 
-    <LinearLayout style="@style/LLHorMWStyle"
+    <LinearLayout
+        style="@style/LLHorMWStyle"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal"
         android:layout_marginLeft="@dimen/size_xsmall"
         android:layout_marginRight="@dimen/size_xsmall"
-        android:layout_gravity="center_horizontal"
-        android:layout_height="50dp"
-        android:paddingRight="@dimen/space_medium"
-        android:paddingLeft="@dimen/space_medium"
         android:background="@drawable/edit_pwd_bg_shape"
-        >
+        android:paddingLeft="@dimen/space_medium"
+        android:paddingRight="@dimen/space_medium">
 
         <TextView
             style="@style/TTextBoldStyle"
@@ -47,25 +47,25 @@
             android:id="@+id/TVloginPwd"
             style="@style/ETextStyle"
             android:layout_gravity="center_vertical"
-            android:inputType="textPassword"
-            android:hint="请输入密码..." />
+            android:hint="请输入密码..."
+            android:inputType="textPassword" />
     </LinearLayout>
 
 
     <Button
         android:id="@+id/BTLogin"
         style="@style/HWWMStyle"
-        android:layout_marginTop="50dp"
-        android:background="@color/bg_primary"
         android:layout_height="50dp"
-        android:padding="@dimen/space_medium"
-        android:text="登录"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:textColor="@android:color/white"
-        android:gravity="center"
         android:layout_marginLeft="80dp"
         android:layout_marginRight="80dp"
+        android:layout_marginTop="50dp"
+        android:background="@color/bg_primary"
+        android:gravity="center"
+        android:padding="@dimen/space_medium"
+        android:text="登录"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
 
         />
 </LinearLayout>

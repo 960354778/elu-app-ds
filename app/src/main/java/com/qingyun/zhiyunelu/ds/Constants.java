@@ -11,6 +11,8 @@ public final class Constants {
     }
 
     public static final String BASE_URL = "http://api.zhiyunyilu.com/";
+    public static final int PAGE_SIZE = 20;
+
 
     public static final String[] PERMISSIONS_MUST_HAVE = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO, Manifest.permission.READ_PHONE_STATE};
     public static final String[] PERMISSIONS_NICE_TO_HAVE = new String[]{Manifest.permission.READ_PHONE_STATE};
@@ -20,6 +22,11 @@ public final class Constants {
         }
 
         public static final int REQUEST_CODE_REQUIRE_PERMISSION = 17801;
+
+        public static final int REQUEST_NET_MY_DOCTER_LIST_TAG = 21001;
+        public static final int REQUEST_NET_MY_HOSPITAL_LIST_TAG = 21002;
+        public static final int REQUEST_NET_DOCTER_LIST_TAG = 21003;
+        public static final int REQUEST_NET_HOSPITAL_LIST_TAG = 21004;
     }
 
     public static final class FilePaths {
@@ -39,4 +46,5 @@ public final class Constants {
         public static final String ACCOUNT_PWD_KEY = "accountPwd";
         public static final String LOGIN_NAME = "loginName";
     }
+
 }

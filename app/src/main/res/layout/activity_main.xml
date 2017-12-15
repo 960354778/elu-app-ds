@@ -13,6 +13,7 @@
         android:background="@color/bg_primary"
         android:layout_margin="10dp"
         android:id="@+id/LLLoginTab"
+        android:gravity="center"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         >

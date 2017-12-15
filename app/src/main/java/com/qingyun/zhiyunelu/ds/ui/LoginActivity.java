@@ -96,4 +96,9 @@ public class LoginActivity extends BaseTemplatedActivity {
     private void decorateToolbar() {
         getToolbar().setNavigationIcon(null);
     }
+
+    @Override
+    protected String getTitleStr() {
+        return "登录";
+    }
 }

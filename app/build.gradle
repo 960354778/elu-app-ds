@@ -113,6 +113,7 @@ dependencies {
     implementation rootProject.ext.dependencies['converterGson']
     implementation rootProject.ext.dependencies['pageview']
     implementation rootProject.ext.dependencies['logInter']
+    implementation rootProject.ext.dependencies['ultra']
     annotationProcessor rootProject.ext.dependencies['butterknife_annotation']
     testImplementation rootProject.ext.dependencies['junit']
     androidTestImplementation(rootProject.ext.dependencies['test_runner'])

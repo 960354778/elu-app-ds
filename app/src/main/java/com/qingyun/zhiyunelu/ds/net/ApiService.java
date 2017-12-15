@@ -4,6 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.qingyun.zhiyunelu.ds.Constants;
 import com.qingyun.zhiyunelu.ds.data.LoginInfo;
+import com.qingyun.zhiyunelu.ds.data.OrderInfo;
+
+import java.util.Map;
 
 import io.reactivex.Observable;
 import okhttp3.OkHttpClient;
@@ -50,4 +53,24 @@ public class ApiService {
             return createJsonApi(Constants.BASE_URL).login(body);
     }
 
+    public Observable<OrderInfo> getOrderList(int request, Map<String, String> params){
+//        String token = AppAssistant.getPrefs().getStr(Constants.PrefsKey.AUTH_TOKEN_KEY);
+        try{
+            String token = "";
+            switch (request){
+                case Constants.Codes.REQUEST_NET_MY_DOCTER_LIST_TAG:
+                    return createJsonApi(Constants.BASE_URL).getMyDoctersList(token, params);
+                case Constants.Codes.REQUEST_NET_MY_HOSPITAL_LIST_TAG:
+                    return createJsonApi(Constants.BASE_URL).getMyHospitalList(token, params);
+                case Constants.Codes.REQUEST_NET_DOCTER_LIST_TAG:
+                    return createJsonApi(Constants.BASE_URL).getDoctersList(token, params);
+                case Constants.Codes.REQUEST_NET_HOSPITAL_LIST_TAG:
+                    return createJsonApi(Constants.BASE_URL).getHospitalList(token, params);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 }

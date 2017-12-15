@@ -33,6 +33,7 @@ ext {
             rxjava: 'io.reactivex.rxjava2:rxjava:2.1.7',
             pageview: 'com.astuetz:pagerslidingtabstrip:1.0.1',
             converterGson: 'com.squareup.retrofit2:converter-gson:2.3.0',
-            logInter: 'com.squareup.okhttp3:logging-interceptor:3.4.1'
+            logInter: 'com.squareup.okhttp3:logging-interceptor:3.4.1',
+            ultra: 'in.srain.cube:ultra-ptr:1.0.11'
     ]
 }
