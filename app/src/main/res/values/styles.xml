@@ -73,4 +73,20 @@
         <item name="android:layout_centerInParent">true</item>
     </style>
 
+    <style name="CustomDialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:theme">@android:style/Theme.Dialog</item>
+    </style>
+
+    <style name="land_view_line_style">
+        <item name="android:background">@color/c_e6e6e6</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0.5dp</item>
+    </style>
+
 </resources>

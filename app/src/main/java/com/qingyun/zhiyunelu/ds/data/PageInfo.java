@@ -8,8 +8,8 @@ import android.os.Parcelable;
  */
 
 public class PageInfo implements Parcelable {
-    private int pageCounts;
-    private int pageIndex;
+    private int totalCount;
+    private int pageNumber;
     private int pageSize;
 
 
@@ -20,8 +20,8 @@ public class PageInfo implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.pageCounts);
-        dest.writeInt(this.pageIndex);
+        dest.writeInt(this.totalCount);
+        dest.writeInt(this.pageNumber);
         dest.writeInt(this.pageSize);
     }
 
@@ -29,8 +29,8 @@ public class PageInfo implements Parcelable {
     }
 
     protected PageInfo(Parcel in) {
-        this.pageCounts = in.readInt();
-        this.pageIndex = in.readInt();
+        this.totalCount = in.readInt();
+        this.pageNumber = in.readInt();
         this.pageSize = in.readInt();
     }
 
@@ -46,12 +46,12 @@ public class PageInfo implements Parcelable {
         }
     };
 
-    public int getPageCounts() {
-        return pageCounts;
+    public int getTotalCount() {
+        return totalCount;
     }
 
-    public int getPageIndex() {
-        return pageIndex;
+    public int getPageNumber() {
+        return pageNumber;
     }
 
     public int getPageSize() {

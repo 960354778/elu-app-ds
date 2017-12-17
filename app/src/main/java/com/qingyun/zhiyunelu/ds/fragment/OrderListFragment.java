@@ -1,11 +1,14 @@
 package com.qingyun.zhiyunelu.ds.fragment;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -13,16 +16,24 @@ import com.qingyun.zhiyunelu.ds.AppAssistant;
 import com.qingyun.zhiyunelu.ds.R;
 import com.qingyun.zhiyunelu.ds.adapter.BaseAdatper;
 import com.qingyun.zhiyunelu.ds.data.OrderInfo;
+import com.qingyun.zhiyunelu.ds.net.ApiService;
+import com.qingyun.zhiyunelu.ds.widget.ShowPhoeListDialog;
+
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
 
 import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import velites.android.utility.utils.ToastUtil;
+import velites.java.utility.generic.Action1;
 import velites.java.utility.log.LogEntry;
 import velites.java.utility.log.LogHub;
 import velites.java.utility.misc.StringUtil;
@@ -67,7 +78,7 @@ public class OrderListFragment extends BaseListFragment<OrderInfo> {
             requestType = bundle.getInt("requestType");
         }
         orderAdpater = new OrderAdpater(adpaterType);
-        loadData(requestType, 0);
+        loadData(requestType, 1);
     }
 
     class OrderAdpater extends BaseAdatper<OrderInfo> {
@@ -130,15 +141,27 @@ public class OrderListFragment extends BaseListFragment<OrderInfo> {
                 @Override
                 public void onClick(View v) {
                     int index = (Integer) v.getTag();
-                    //TODO
-                    ToastUtil.showToastShort(getActivity(), "你点击了"+index);
+                    ShowPhoeListDialog dialog = new ShowPhoeListDialog(getActivity(), R.style.CustomDialog, datas.get(index).getPhones(), new Action1<String>() {
+                        @Override
+                        public void a(String arg1) {
+                            if (!StringUtil.isNullOrEmpty(arg1)) {
+                                Intent intent = new Intent(Intent.ACTION_CALL);
+                                Uri data = Uri.parse("tel:" + arg1);
+                                intent.setData(data);
+                                getActivity().startActivity(intent);
+
+                            }
+
+                        }
+                    });
+                    dialog.show();
                 }
             });
         }
 
         private void fillItem(TextView tv, String content, String formatStr) {
             tv.setText(StringUtil.isNullOrEmpty(content) ? "" : String.format(formatStr, content));
-            if(StringUtil.isNullOrEmpty(content))
+            if (StringUtil.isNullOrEmpty(content))
                 tv.setVisibility(View.GONE);
             else
                 tv.setVisibility(View.VISIBLE);
@@ -148,11 +171,11 @@ public class OrderListFragment extends BaseListFragment<OrderInfo> {
         public void updateData(OrderInfo args) {
             orderInfo = args;
             if (orderInfo != null && orderInfo.getTaskList() != null) {
-                if(args.getPage() != null){
-                    int index = args.getPage().getPageIndex();
-                    if(index == 0){
+                if (args.getPage() != null) {
+                    int index = args.getPage().getPageNumber();
+                    if (index == 1) {
                         datas = orderInfo.getTaskList();
-                    }else{
+                    } else {
                         datas.addAll(orderInfo.getTaskList());
                     }
                 }
@@ -177,6 +200,8 @@ public class OrderListFragment extends BaseListFragment<OrderInfo> {
         TextView tt5;
         @BindView(R.id.tv6Id)
         TextView tt6;
+        @BindView(R.id.ivCallId)
+        ImageView callPhone;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -185,37 +210,60 @@ public class OrderListFragment extends BaseListFragment<OrderInfo> {
 
     private void loadData(int requestType, int pageNum) {
         HashMap<String, String> params = new HashMap<>();
-        params.put("pageIndex", pageNum + "");
-        if(adpaterType == 0 || adpaterType == 1)
-            params.put("taskStatus",adpaterType == 0?"Undo":(adpaterType == 1?"Done":""));
-        AppAssistant.getApi().getOrderList(requestType, params)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<OrderInfo>() {
-                    @Override
-                    public void accept(OrderInfo orderInfo) {
-                        try {
-                            if (orderInfo != null && orderAdpater != null&&orderInfo.getData() != null) {
-                                LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, "orderList","msg:%s", orderInfo.toString()));
-                                orderAdpater.updateData(orderInfo.getData());
+        params.put("pageNumber", pageNum + "");
+        if (adpaterType == 0 || adpaterType == 1)
+            params.put("taskStatus", adpaterType == 0 ? "Undo" : (adpaterType == 1 ? "Done" : ""));
+        try{
+            AppAssistant.getApi().getOrderList(requestType, params)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<OrderInfo>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+                        }
+
+                        @Override
+                        public void onNext(OrderInfo orderInfo) {
+                            try {
+                                if (orderInfo != null && orderAdpater != null && orderInfo.getData() != null) {
+                                    LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, "orderList", "msg:%s", orderInfo.toString()));
+                                    orderAdpater.updateData(orderInfo.getData());
+                                }
+                            } catch (Exception e) {
+                                ToastUtil.showToastShort(getActivity(), "请求异常");
                             }
-                        } catch (Exception e) {
+                            isLoading = false;
+                            stopRefresh();
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            e.printStackTrace();
                             ToastUtil.showToastShort(getActivity(), "请求异常");
                         }
-                        isLoading = false;
-                        stopRefresh();
-                    }
-                });
+
+                        @Override
+                        public void onComplete() {
+
+                        }
+                    });
+        }catch (Exception e){
+            e.printStackTrace();
+            ToastUtil.showToastShort(getActivity(), "请求异常");
+        }
+
     }
 
     @Override
     public void requestData() {
-        int requestNum = 0;
+        int requestNum = 1;
         if (orderInfo != null && orderInfo.getPage() != null) {
-            int pageNum = orderInfo.getPage().getPageIndex();
-            int allCount = orderInfo.getPage().getPageCounts();
+            int pageNum = orderInfo.getPage().getPageNumber();
+            int allCount = orderInfo.getPage().getTotalCount();
             if (pageNum < allCount) {
-                requestNum = pageNum+1;
+                requestNum = pageNum + 1;
+            }else{
+                return;
             }
         }
         loadData(requestType, requestNum);
@@ -223,6 +271,6 @@ public class OrderListFragment extends BaseListFragment<OrderInfo> {
 
     @Override
     protected void refresh() {
-        loadData(requestType, 0);
+        loadData(requestType, 1);
     }
 }

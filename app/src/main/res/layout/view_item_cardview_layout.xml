@@ -23,11 +23,23 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:id="@+id/ivCallId"
+                android:src="@drawable/uncall_icon"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/space_xxxlarge"
+                android:layout_marginLeft="@dimen/space_medium"
+                android:layout_centerVertical="true"
+                />
+
 
             <LinearLayout
                 android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentLeft="true"
+                android:layout_toLeftOf="@+id/ivCallId"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"

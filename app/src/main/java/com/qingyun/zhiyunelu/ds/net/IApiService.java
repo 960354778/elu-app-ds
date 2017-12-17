@@ -26,7 +26,7 @@ public interface IApiService {
     @GET("Task/GetDoctorTaskList?pageSize="+ Constants.PAGE_SIZE)
     Observable<OrderInfo> getMyDoctersList(@Header("token") String token, @QueryMap Map<String, String> params );
 
-    @GET("Task/GetMyHospitalTaskList?pageSize="+ Constants.PAGE_SIZE)
+    @GET("MyTask/HospitalTasks?pageSize="+ Constants.PAGE_SIZE)
     Observable<OrderInfo> getMyHospitalList(@Header("token") String token,@QueryMap Map<String, String> params);
 
     @GET("Task/GetDoctorTaskList?pageSize="+ Constants.PAGE_SIZE)

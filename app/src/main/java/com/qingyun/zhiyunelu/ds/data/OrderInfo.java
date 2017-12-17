@@ -14,8 +14,8 @@ public class OrderInfo implements Parcelable {
     private long timestamp;
     private OrderInfo  data;
     private List<OrderInfo> taskList;
+    private List<String> phones;
     private PageInfo page;
-
     private String doctorName;
     private String hospitalName;
     private String departmentName;
@@ -36,6 +36,7 @@ public class OrderInfo implements Parcelable {
         dest.writeLong(this.timestamp);
         dest.writeParcelable(this.data, flags);
         dest.writeList(this.taskList);
+        dest.writeList(this.phones);
         dest.writeParcelable(this.page, flags);
         dest.writeString(this.doctorName);
         dest.writeString(this.hospitalName);
@@ -55,6 +56,8 @@ public class OrderInfo implements Parcelable {
         this.data = in.readParcelable(OrderInfo.class.getClassLoader());
         this.taskList = new ArrayList<OrderInfo>();
         in.readList(this.taskList, OrderInfo.class.getClassLoader());
+        this.phones = new ArrayList<>();
+        in.readList(this.phones, String.class.getClassLoader());
         this.page = in.readParcelable(PageInfo.class.getClassLoader());
         this.doctorName = in.readString();
         this.hospitalName = in.readString();
@@ -126,12 +129,17 @@ public class OrderInfo implements Parcelable {
         return districtName;
     }
 
+    public List<String> getPhones() {
+        return phones;
+    }
+
     @Override
     public String toString() {
         return "OrderInfo{" +
                 "timestamp=" + timestamp +
                 ", data=" + data +
                 ", taskList=" + taskList +
+                ", phones=" + phones +
                 ", page=" + page +
                 ", doctorName='" + doctorName + '\'' +
                 ", hospitalName='" + hospitalName + '\'' +

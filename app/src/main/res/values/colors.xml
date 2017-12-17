@@ -10,4 +10,8 @@
 
     <color name="c_000000">#000000</color>
     <color name="c_353c46">#353c46</color>
+    <color name="c_bf000000">#bf000000</color>
+    <color name="c_333333">#333333</color>
+    <color name="c_e6e6e6">#e6e6e6</color>
+    <color name="c_ebebeb">#ebebeb</color>
 </resources>

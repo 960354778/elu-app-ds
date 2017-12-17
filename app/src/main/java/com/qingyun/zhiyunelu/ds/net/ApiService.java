@@ -2,6 +2,7 @@ package com.qingyun.zhiyunelu.ds.net;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.qingyun.zhiyunelu.ds.AppAssistant;
 import com.qingyun.zhiyunelu.ds.Constants;
 import com.qingyun.zhiyunelu.ds.data.LoginInfo;
 import com.qingyun.zhiyunelu.ds.data.OrderInfo;
@@ -54,9 +55,8 @@ public class ApiService {
     }
 
     public Observable<OrderInfo> getOrderList(int request, Map<String, String> params){
-//        String token = AppAssistant.getPrefs().getStr(Constants.PrefsKey.AUTH_TOKEN_KEY);
+        String token = AppAssistant.getPrefs().getStr(Constants.PrefsKey.AUTH_TOKEN_KEY);
         try{
-            String token = "";
             switch (request){
                 case Constants.Codes.REQUEST_NET_MY_DOCTER_LIST_TAG:
                     return createJsonApi(Constants.BASE_URL).getMyDoctersList(token, params);
@@ -73,4 +73,5 @@ public class ApiService {
 
         return null;
     }
+
 }

@@ -55,22 +55,4 @@ public class ViewPagerAdatper extends FragmentPagerAdapter {
         return tabs == null ?0: tabs.length;
     }
 
-    public boolean isCanRefresh(){
-        if(fragmentMaps != null){
-            OrderListFragment currentFragment = fragmentMaps.get(index);
-            if(currentFragment != null){
-                return currentFragment.isCanRefresh();
-            }
-        }
-        return false;
-    }
-
-    public void loadData(){
-        if(fragmentMaps != null){
-            OrderListFragment currentFragment = fragmentMaps.get(index);
-            if(currentFragment != null){
-                currentFragment.requestData();
-            }
-        }
-    }
 }

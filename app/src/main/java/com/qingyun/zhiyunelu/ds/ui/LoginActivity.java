@@ -16,8 +16,9 @@ import com.qingyun.zhiyunelu.ds.data.LoginInfo;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import velites.android.utility.utils.ToastUtil;
 import velites.java.utility.log.LogEntry;
@@ -52,9 +53,13 @@ public class LoginActivity extends BaseTemplatedActivity {
             AppAssistant.getApi().login(new LoginInfo.LoginRequest(name, pwd))
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Consumer<LoginInfo>() {
+                    .subscribe(new Observer<LoginInfo>() {
                         @Override
-                        public void accept(LoginInfo loginInfo) throws Exception {
+                        public void onSubscribe(Disposable d) {
+                        }
+
+                        @Override
+                        public void onNext(LoginInfo loginInfo) {
                             LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, "LoginActivity","thread name:%s loginInfo: %s", Thread.currentThread().getName(), loginInfo.toString()));
                             if(loginInfo != null && !StringUtil.isNullOrEmpty(loginInfo.getToken())){
                                 AppAssistant.getPrefs().setStr(Constants.PrefsKey.AUTH_TOKEN_KEY, loginInfo.getToken());
@@ -63,7 +68,17 @@ public class LoginActivity extends BaseTemplatedActivity {
                                 ToastUtil.showToastShort(AppAssistant.getDefaultContext(), "登录成功");
                                 finish();
                             }
-                       }
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            e.printStackTrace();
+                            ToastUtil.showToastShort(LoginActivity.this, "请求异常");
+                        }
+
+                        @Override
+                        public void onComplete() {
+                        }
                     });
         }
     }
