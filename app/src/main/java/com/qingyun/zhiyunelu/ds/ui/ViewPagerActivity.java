@@ -66,6 +66,7 @@ public class ViewPagerActivity extends BaseTemplatedActivity {
         widgets.viewPager.setAdapter(mPagerAdapter);
         widgets.tabStrip.setViewPager(widgets.viewPager);
         mPagerAdapter.setIndex(0);
+        widgets.viewPager.setOffscreenPageLimit(3);
     }
 
     @Override
