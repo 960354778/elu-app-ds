@@ -30,19 +30,22 @@ public class WxManager {
             @Override
             public void a(Boolean isOk, String msg, SQLiteDatabase sql) {
                 if (isOk && sql != null) {
-                    List<WxLocalMsg> list = new ArrayList();
-                    StringBuffer buffer = new StringBuffer();
-                    buffer.append("SELECT m.msgId,m.msgSvrId,m.createTime,m.status,m.content,r.username,r.alias,r.conRemark,r.nickname").append(" FROM message m INNER JOIN rcontact r").append(" ON m.talker=r.username").append(" WHERE m.content IS NOT NULL").append(" AND r.verifyFlag=0").append(" AND r.nickname!=''").append(" AND r.type!=33").append(" AND r.type!=35").append(" ORDER BY").append(" m.createTime ASC").append(" LIMIT ?");
-                    Cursor c1 = sql.rawQuery(buffer.toString(), new String[]{String.valueOf(100)});
-                    while (c1.moveToNext()) {
-                        list.add(WxLocalMsg.buildMsgFromWxDb(c1));
+                    try {
+                        List<WxLocalMsg> list = new ArrayList();
+                        StringBuffer buffer = new StringBuffer();
+                        buffer.append("SELECT m.msgId,m.msgSvrId,m.createTime,m.status,m.content,r.username,r.alias,r.conRemark,r.nickname").append(" FROM message m INNER JOIN rcontact r").append(" ON m.talker=r.username").append(" WHERE m.content IS NOT NULL").append(" AND r.verifyFlag=0").append(" AND r.nickname!=''").append(" AND r.type!=33").append(" AND r.type!=35").append(" ORDER BY").append(" m.createTime ASC").append(" LIMIT ?");
+                        Cursor c1 = sql.rawQuery(buffer.toString(), new String[]{String.valueOf(100)});
+                        while (c1.moveToNext()) {
+                            list.add(WxLocalMsg.buildMsgFromWxDb(c1));
+                        }
+                        c1.close();
+                        LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, WxManager.class, "list size:%d", list.size()));
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                    c1.close();
-                    LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, WxManager.class, "list size:%d",list.size()));
+
                 }
             }
         });
-
-
     }
 }

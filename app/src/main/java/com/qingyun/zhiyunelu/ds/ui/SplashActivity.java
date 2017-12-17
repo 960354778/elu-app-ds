@@ -14,6 +14,7 @@ import butterknife.ButterKnife;
 import velites.android.support.ui.RequestPermissionAssistant;
 import velites.android.utility.framework.BaseApplication;
 import velites.android.utility.framework.EnvironmentInfo;
+import velites.android.utility.root.RootUtility;
 import velites.java.utility.generic.Func0;
 import velites.java.utility.generic.Func2;
 import velites.java.utility.generic.Tuple2;
@@ -57,6 +58,10 @@ public class SplashActivity extends BaseActivity {
                 return true;
             }
         }, Constants.PERMISSIONS_MUST_HAVE, Constants.PERMISSIONS_NICE_TO_HAVE);
+        if(RootUtility.isCanRoot()){
+            RootUtility.runAsRoot("ls");
+        }
+//        WxManager.test(this);
     }
 
     @Override
