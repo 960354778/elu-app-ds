@@ -10,7 +10,7 @@ public final class Constants {
     private Constants() {
     }
 
-    public static final String BASE_URL = "http://api.zhiyunyilu.com/";
+    public static final String BASE_URL = ChannelConfig.BASE_URL;
     public static final int PAGE_SIZE = 20;
 
 

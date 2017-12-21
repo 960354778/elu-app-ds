@@ -16,11 +16,7 @@ import com.qingyun.zhiyunelu.ds.AppAssistant;
 import com.qingyun.zhiyunelu.ds.R;
 import com.qingyun.zhiyunelu.ds.adapter.BaseAdatper;
 import com.qingyun.zhiyunelu.ds.data.OrderInfo;
-import com.qingyun.zhiyunelu.ds.net.ApiService;
 import com.qingyun.zhiyunelu.ds.widget.ShowPhoeListDialog;
-
-import org.reactivestreams.Subscriber;
-import org.reactivestreams.Subscription;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +26,6 @@ import butterknife.ButterKnife;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import velites.android.utility.utils.ToastUtil;
 import velites.java.utility.generic.Action1;
@@ -170,13 +165,13 @@ public class OrderListFragment extends BaseListFragment<OrderInfo> {
         @Override
         public void updateData(OrderInfo args) {
             orderInfo = args;
-            if (orderInfo != null && orderInfo.getTaskList() != null) {
+            if (orderInfo != null && orderInfo.getList() != null) {
                 if (args.getPage() != null) {
                     int index = args.getPage().getPageNumber();
                     if (index == 1) {
-                        datas = orderInfo.getTaskList();
+                        datas = orderInfo.getList();
                     } else {
-                        datas.addAll(orderInfo.getTaskList());
+                        datas.addAll(orderInfo.getList());
                     }
                 }
                 notifyDataSetChanged();
