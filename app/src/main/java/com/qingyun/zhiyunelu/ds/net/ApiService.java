@@ -6,6 +6,7 @@ import com.qingyun.zhiyunelu.ds.AppAssistant;
 import com.qingyun.zhiyunelu.ds.Constants;
 import com.qingyun.zhiyunelu.ds.data.LoginInfo;
 import com.qingyun.zhiyunelu.ds.data.OrderInfo;
+import com.qingyun.zhiyunelu.ds.data.PageInfo;
 
 import java.util.Map;
 
@@ -55,17 +56,18 @@ public class ApiService {
     }
 
     public Observable<OrderInfo> getOrderList(int request, Map<String, String> params){
+        PageInfo paramsInfo = new PageInfo(Integer.valueOf(params.get("pageNumber")), Constants.PAGE_SIZE);
         String token = AppAssistant.getPrefs().getStr(Constants.PrefsKey.AUTH_TOKEN_KEY);
         try{
             switch (request){
                 case Constants.Codes.REQUEST_NET_MY_DOCTER_LIST_TAG:
-                    return createJsonApi(Constants.BASE_URL).getMyDoctersList(token, params);
+                    return createJsonApi(Constants.BASE_URL).getMyDoctersList(token, paramsInfo);
                 case Constants.Codes.REQUEST_NET_MY_HOSPITAL_LIST_TAG:
-                    return createJsonApi(Constants.BASE_URL).getMyHospitalList(token, params);
+                    return createJsonApi(Constants.BASE_URL).getMyHospitalList(token, paramsInfo);
                 case Constants.Codes.REQUEST_NET_DOCTER_LIST_TAG:
-                    return createJsonApi(Constants.BASE_URL).getDoctersList(token, params);
+                    return createJsonApi(Constants.BASE_URL).getDoctersList(token, paramsInfo);
                 case Constants.Codes.REQUEST_NET_HOSPITAL_LIST_TAG:
-                    return createJsonApi(Constants.BASE_URL).getHospitalList(token, params);
+                    return createJsonApi(Constants.BASE_URL).getHospitalList(token, paramsInfo);
             }
         }catch (Exception e){
             e.printStackTrace();

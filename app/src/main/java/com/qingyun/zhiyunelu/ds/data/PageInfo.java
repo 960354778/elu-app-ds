@@ -28,6 +28,11 @@ public class PageInfo implements Parcelable {
     public PageInfo() {
     }
 
+    public PageInfo(int pageNumber, int pageSize) {
+        this.pageNumber = pageNumber;
+        this.pageSize = pageSize;
+    }
+
     protected PageInfo(Parcel in) {
         this.totalCount = in.readInt();
         this.pageNumber = in.readInt();
