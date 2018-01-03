@@ -23,7 +23,7 @@ public interface IApiService {
     @POST("user/login")
     Observable<LoginInfo> login(@Body LoginInfo.LoginRequest body);
 
-    @GET("Task/GetDoctorTaskList?pageSize="+ Constants.PAGE_SIZE)
+    @GET("MyTask/DoctorTasks?pageSize="+ Constants.PAGE_SIZE)
     Observable<OrderInfo> getMyDoctersList(@Header("token") String token, @QueryMap Map<String, String> params );
 
     @GET("MyTask/HospitalTasks?pageSize="+ Constants.PAGE_SIZE)
