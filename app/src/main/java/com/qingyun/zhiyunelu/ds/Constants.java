@@ -1,6 +1,7 @@
 package com.qingyun.zhiyunelu.ds;
 
 import android.Manifest;
+import android.os.Environment;
 
 /**
  * Created by regis on 16/11/11.
@@ -36,6 +37,8 @@ public final class Constants {
         public static final String WX_MICROMS_PATH = "/data/data/com.tencent.mm/MicroMsg";
         public static final String WX_MS_DB_NAME = "EnMicroMsg.db";
         public static final String WX_PACKAGE = "com.tencent.mm";
+
+        public static final String MIUI_SOUND_DIR = Environment.getExternalStorageDirectory().getAbsolutePath()+"/MIUI/sound_recorder/call_rec/";
     }
 
     public static final class PrefsKey{

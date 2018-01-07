@@ -17,13 +17,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 import velites.android.utility.utils.ToastUtil;
 import velites.java.utility.log.LogEntry;
 import velites.java.utility.log.LogHub;
 import velites.java.utility.misc.StringUtil;
+
+import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
+import static io.reactivex.schedulers.Schedulers.io;
 
 /**
  * Created by luohongzhen on 13/12/2017.
@@ -51,8 +52,8 @@ public class LoginActivity extends BaseTemplatedActivity {
             AppAssistant.getPrefs().setStr(Constants.PrefsKey.ACCOUNT_PWD_KEY, pwd);
 
             AppAssistant.getApi().login(new LoginInfo.LoginRequest(name, pwd))
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(io())
+                    .observeOn(mainThread())
                     .subscribe(new Observer<LoginInfo>() {
                         @Override
                         public void onSubscribe(Disposable d) {
