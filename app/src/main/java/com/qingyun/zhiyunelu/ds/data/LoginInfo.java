@@ -14,9 +14,13 @@ public class LoginInfo implements Parcelable {
     private LoginInfo data;
     private String displayName;
     private List<String> permissions;
-    private String token;
+    private LoginInfo token;
     private String code;
     private String message;
+    private String value;
+    private long expire;
+
+
 
 
     @Override
@@ -30,9 +34,11 @@ public class LoginInfo implements Parcelable {
         dest.writeParcelable(this.data, flags);
         dest.writeString(this.displayName);
         dest.writeStringList(this.permissions);
-        dest.writeString(this.token);
+        dest.writeParcelable(this.token, flags);
         dest.writeString(this.code);
         dest.writeString(this.message);
+        dest.writeString(this.value);
+        dest.writeLong(this.expire);
     }
 
     public LoginInfo() {
@@ -43,9 +49,12 @@ public class LoginInfo implements Parcelable {
         this.data = in.readParcelable(LoginInfo.class.getClassLoader());
         this.displayName = in.readString();
         this.permissions = in.createStringArrayList();
-        this.token = in.readString();
+        this.token = in.readParcelable(LoginInfo.class.getClassLoader());
         this.code = in.readString();
         this.message = in.readString();
+        this.value = in.readString();
+        this.expire = in.readLong();
+
     }
 
     public static final Parcelable.Creator<LoginInfo> CREATOR = new Parcelable.Creator<LoginInfo>() {
@@ -76,8 +85,17 @@ public class LoginInfo implements Parcelable {
         return permissions;
     }
 
-    public String getToken() {
+    public LoginInfo getToken() {
         return token;
+    }
+
+
+    public String getValue() {
+        return value;
+    }
+
+    public long getExpire() {
+        return expire;
     }
 
     @Override

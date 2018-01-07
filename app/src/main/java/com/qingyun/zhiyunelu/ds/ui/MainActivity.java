@@ -100,7 +100,8 @@ public class MainActivity extends BaseTemplatedActivity {
     private void initView(){
         String displayName = "登录";
         mToken = AppAssistant.getPrefs().getStr(Constants.PrefsKey.AUTH_TOKEN_KEY);
-        if(!StringUtil.isNullOrEmpty(mToken)){
+        long expire = AppAssistant.getPrefs().getLong(Constants.PrefsKey.AUTH_EXPIRE_KEY);
+        if(!StringUtil.isNullOrEmpty(mToken) && System.currentTimeMillis() < expire){
             displayName = AppAssistant.getPrefs().getStr(Constants.PrefsKey.LOGIN_NAME);
             if(StringUtil.isNullOrEmpty(displayName)){
                 displayName = "已登录";
@@ -119,7 +120,8 @@ public class MainActivity extends BaseTemplatedActivity {
     }
 
     private void loginDispose(){
-        if(StringUtil.isNullOrEmpty(mToken)){
+        long expire = AppAssistant.getPrefs().getLong(Constants.PrefsKey.AUTH_EXPIRE_KEY);
+        if(StringUtil.isNullOrEmpty(mToken) || System.currentTimeMillis() > expire){
             LoginActivity.launchMe(MainActivity.this);
         }
     }
@@ -131,7 +133,8 @@ public class MainActivity extends BaseTemplatedActivity {
 
     private boolean checkLogin(){
         String token = AppAssistant.getPrefs().getStr(Constants.PrefsKey.AUTH_TOKEN_KEY);
-        if(StringUtil.isNullOrEmpty(token)){
+        long expire = AppAssistant.getPrefs().getLong(Constants.PrefsKey.AUTH_EXPIRE_KEY);
+        if(StringUtil.isNullOrEmpty(token) && System.currentTimeMillis() < expire){
             ToastUtil.showToastShort(this, "请先登录");
             return false;
         }

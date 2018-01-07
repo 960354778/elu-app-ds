@@ -42,9 +42,11 @@ public final class Constants {
         private PrefsKey() {
         }
         public static final String AUTH_TOKEN_KEY = "authToken";
+        public static final String AUTH_EXPIRE_KEY = "authExpire";
         public static final String ACCOUNT_NAME_KEY = "accountName";
         public static final String ACCOUNT_PWD_KEY = "accountPwd";
         public static final String LOGIN_NAME = "loginName";
+
     }
 
 }

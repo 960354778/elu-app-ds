@@ -34,4 +34,12 @@ public class Prefs {
         return pref.getString(key, "");
     }
 
+    public void setLong(String key , long value){
+        pref.edit().putLong(key, value).apply();
+    }
+
+    public long getLong(String key){
+        return pref.getLong(key, 0L);
+    }
+
 }
