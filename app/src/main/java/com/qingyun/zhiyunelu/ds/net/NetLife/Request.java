@@ -8,18 +8,21 @@ import android.support.annotation.NonNull;
 
 public abstract class Request<T> implements Comparable<Request<T>> {
 
+    private Priority mPriority = Priority.NORMAL;
     private final byte[] mLock = new byte[0];
     private RequestQueue mRequestQueue;
     private boolean mCanceled = false;
 
     private NetworkRequestCompleteListener mRequestCompListener;
 
-    interface NetworkRequestCompleteListener{
+    public interface NetworkRequestCompleteListener{
         void onResponseReceived(Request<?> request, Response<?> response);
         void onNoUsableResponseReceived(Request<?> request);
+        void onResponseError(Request<?> request, Response<?> response);
     }
 
     private String mTag;
+    private String mUrl;
 
 
     public enum Priority {
@@ -33,6 +36,18 @@ public abstract class Request<T> implements Comparable<Request<T>> {
         return mTag;
     }
 
+    public void setmTag(String mTag) {
+        this.mTag = mTag;
+    }
+
+    public String getmUrl() {
+        return mUrl;
+    }
+
+    public void setmUrl(String mUrl) {
+        this.mUrl = mUrl;
+    }
+
     public Request<?> setRequestQueue(RequestQueue requestQueue) {
         mRequestQueue = requestQueue;
         return this;
@@ -40,7 +55,7 @@ public abstract class Request<T> implements Comparable<Request<T>> {
 
     void finish() {
         if (mRequestQueue != null) {
-//            mRequestQueue.finish(this);
+            mRequestQueue.finish(this);
         }
     }
 
@@ -71,6 +86,20 @@ public abstract class Request<T> implements Comparable<Request<T>> {
         if (listener != null) {
             listener.onResponseReceived(this, response);
         }
+        finish();
+    }
+
+    public void notifyListenerErrorReceived(Response<?> errorResponse){
+        NetworkRequestCompleteListener listener;
+        synchronized (mLock) {
+            listener = mRequestCompListener;
+        }
+        if(mRequestQueue != null)
+            mRequestQueue.addFail(this);
+
+        if (listener != null) {
+            listener.onResponseError(this, errorResponse);
+        }
     }
 
     public Response<T> performRequest(){
@@ -89,7 +118,11 @@ public abstract class Request<T> implements Comparable<Request<T>> {
     }
 
     public Priority getPriority() {
-        return Priority.NORMAL;
+        return mPriority;
+    }
+
+    public void setPriority(Priority mPriority) {
+        this.mPriority = mPriority;
     }
 
     @Override

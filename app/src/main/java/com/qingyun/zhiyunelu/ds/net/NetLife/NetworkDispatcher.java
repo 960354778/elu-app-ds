@@ -48,7 +48,9 @@ public class NetworkDispatcher extends Thread{
             Response<?> response = request.performRequest();
             request.notifyListenerResponseReceived(response);
         }catch (Exception e){
-            request.notifyListenerResponseReceived(Response.error(e.getMessage()));
+            request.notifyListenerErrorReceived(Response.error(e.getMessage()));
+        }finally {
+            request.finish();
         }
     }
 }

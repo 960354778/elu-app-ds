@@ -6,6 +6,8 @@ import android.content.pm.PackageManager;
 
 import com.qingyun.zhiyunelu.ds.data.DbOperator;
 import com.qingyun.zhiyunelu.ds.net.ApiService;
+import com.qingyun.zhiyunelu.ds.net.NetLife.NetLifeManager;
+import com.qingyun.zhiyunelu.ds.net.NetLife.RequestQueue;
 import com.qingyun.zhiyunelu.ds.op.Prefs;
 
 import velites.android.utility.framework.EnvironmentInfo;
@@ -42,6 +44,7 @@ public final class AppAssistant {
             }
             prefs = new Prefs(ctx);
             apiService = new ApiService();
+            requestQueue = NetLifeManager.newRequestQueue();
             ExceptionUtil.wrapperGlobalUncaughtExceptionHandlerWithLog();
         }
     };
@@ -56,6 +59,8 @@ public final class AppAssistant {
     private static boolean showLog;
     private static Prefs prefs;
     private static ApiService apiService;
+    private static RequestQueue requestQueue;
+
 
     public static Context getDefaultContext() {
         initializer.awaitInitializedNoThrows(null);
@@ -105,6 +110,11 @@ public final class AppAssistant {
     public static ApiService getApi() {
         initializer.awaitInitializedNoThrows(null);
         return apiService;
+    }
+
+    public static RequestQueue getRequestQueue(){
+        initializer.awaitInitializedNoThrows(null);
+        return requestQueue;
     }
 
 

@@ -36,12 +36,33 @@ public class RequestQueue {
             mDispatchers[i] = networkDispatcher;
             networkDispatcher.start();
         }
+
     }
 
     public void stop() {
         for (final NetworkDispatcher item : mDispatchers) {
             if (item != null) {
                 item.quit();
+            }
+        }
+    }
+
+    public <T> Request<T> addFail(Request<T> request){
+        request.setRequestQueue(this);
+        synchronized (mFailRequests){
+            mFailRequests.add(request);
+        }
+        return request;
+    }
+
+    public void runFailRequest(){
+        if(mFailRequests != null && mFailRequests.size() > 0){
+            for(Request<?> item : mFailRequests){
+                if(item != null){
+                    item.setPriority(Request.Priority.IMMEDIATE);
+                    add(item);
+                    mFailRequests.remove(item);
+                }
             }
         }
     }
