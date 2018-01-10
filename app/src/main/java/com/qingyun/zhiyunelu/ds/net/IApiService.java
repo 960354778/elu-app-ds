@@ -4,6 +4,7 @@ package com.qingyun.zhiyunelu.ds.net;
 import com.qingyun.zhiyunelu.ds.data.LoginInfo;
 import com.qingyun.zhiyunelu.ds.data.OrderInfo;
 import com.qingyun.zhiyunelu.ds.data.PageInfo;
+import com.qingyun.zhiyunelu.ds.data.RecordInfo;
 
 import io.reactivex.Observable;
 import retrofit2.http.Body;
@@ -30,5 +31,8 @@ public interface IApiService {
 
     @POST("Task/GetHospitalTaskList")
     Observable<OrderInfo> getHospitalList(@Header("token") String token, @Body PageInfo params);
+
+    @POST("TaskDetail/RecordCalledOut")
+    Observable<RecordInfo> recordCalledOut(@Header("token") String token, @Body RecordInfo.RecordRequestBody params);
 
 }

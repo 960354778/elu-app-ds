@@ -7,6 +7,7 @@ import com.qingyun.zhiyunelu.ds.Constants;
 import com.qingyun.zhiyunelu.ds.data.LoginInfo;
 import com.qingyun.zhiyunelu.ds.data.OrderInfo;
 import com.qingyun.zhiyunelu.ds.data.PageInfo;
+import com.qingyun.zhiyunelu.ds.data.RecordInfo;
 
 import java.util.Map;
 
@@ -74,6 +75,11 @@ public class ApiService {
         }
 
         return null;
+    }
+
+    public Observable<RecordInfo> recordCalledOut(RecordInfo.RecordRequestBody body){
+        String token = AppAssistant.getPrefs().getStr(Constants.PrefsKey.AUTH_TOKEN_KEY);
+        return createJsonApi(Constants.BASE_URL).recordCalledOut(token,body);
     }
 
 }

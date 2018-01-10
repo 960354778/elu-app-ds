@@ -13,6 +13,9 @@ public abstract class Request<T> implements Comparable<Request<T>> {
     private RequestQueue mRequestQueue;
     private boolean mCanceled = false;
 
+    private String mTaskId;
+    private String mPhone;
+
     private NetworkRequestCompleteListener mRequestCompListener;
 
     public interface NetworkRequestCompleteListener{
@@ -38,6 +41,14 @@ public abstract class Request<T> implements Comparable<Request<T>> {
 
     public void setmTag(String mTag) {
         this.mTag = mTag;
+    }
+
+    public String getPhone() {
+        return mPhone;
+    }
+
+    public void setPhone(String mPhone) {
+        this.mPhone = mPhone;
     }
 
     public String getmUrl() {
@@ -70,6 +81,14 @@ public abstract class Request<T> implements Comparable<Request<T>> {
         synchronized (mLock) {
             return mCanceled;
         }
+    }
+
+    public String getTaskId() {
+        return mTaskId;
+    }
+
+    public void setTaskId(String mTaskId) {
+        this.mTaskId = mTaskId;
     }
 
     public void setmRequestCompListener(NetworkRequestCompleteListener mRequestCompListener) {

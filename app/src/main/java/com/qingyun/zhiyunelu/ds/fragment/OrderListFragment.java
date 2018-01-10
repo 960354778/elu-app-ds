@@ -13,9 +13,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.qingyun.zhiyunelu.ds.AppAssistant;
+import com.qingyun.zhiyunelu.ds.Constants;
 import com.qingyun.zhiyunelu.ds.R;
 import com.qingyun.zhiyunelu.ds.adapter.BaseAdatper;
 import com.qingyun.zhiyunelu.ds.data.OrderInfo;
+import com.qingyun.zhiyunelu.ds.record.RecordRequest;
 import com.qingyun.zhiyunelu.ds.widget.ShowPhoeListDialog;
 
 import java.util.HashMap;
@@ -31,6 +33,7 @@ import velites.android.utility.utils.ToastUtil;
 import velites.java.utility.generic.Action1;
 import velites.java.utility.log.LogEntry;
 import velites.java.utility.log.LogHub;
+import velites.java.utility.misc.FileUtil;
 import velites.java.utility.misc.StringUtil;
 
 /**
@@ -136,10 +139,13 @@ public class OrderListFragment extends BaseListFragment<OrderInfo> {
                 @Override
                 public void onClick(View v) {
                     int index = (Integer) v.getTag();
+                    final OrderInfo itemInfo = datas.get(index);
                     ShowPhoeListDialog dialog = new ShowPhoeListDialog(getActivity(), R.style.CustomDialog, datas.get(index).getPhones(), new Action1<String>() {
                         @Override
                         public void a(String arg1) {
                             if (!StringUtil.isNullOrEmpty(arg1)) {
+                                RecordRequest request = new RecordRequest(arg1, FileUtil.getRecentlyMiUiSoundPath(arg1, Constants.FilePaths.MIUI_SOUND_DIR), itemInfo.getTaskId());
+                                AppAssistant.getRequestQueue().addWaitTask(arg1, request);
                                 Intent intent = new Intent(Intent.ACTION_CALL);
                                 Uri data = Uri.parse("tel:" + arg1);
                                 intent.setData(data);

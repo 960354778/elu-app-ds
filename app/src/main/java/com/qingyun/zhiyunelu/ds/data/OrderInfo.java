@@ -24,6 +24,7 @@ public class OrderInfo implements Parcelable {
     private String provinceName;
     private String cityName;
     private String districtName;
+    private String taskId;
 
 
     @Override
@@ -46,6 +47,7 @@ public class OrderInfo implements Parcelable {
         dest.writeString(this.provinceName);
         dest.writeString(this.cityName);
         dest.writeString(this.districtName);
+        dest.writeString(this.taskId);
     }
 
     public OrderInfo() {
@@ -67,6 +69,7 @@ public class OrderInfo implements Parcelable {
         this.provinceName = in.readString();
         this.cityName = in.readString();
         this.districtName = in.readString();
+        this.taskId = in.readString();
     }
 
     public static final Parcelable.Creator<OrderInfo> CREATOR = new Parcelable.Creator<OrderInfo>() {
@@ -131,6 +134,10 @@ public class OrderInfo implements Parcelable {
 
     public List<String> getPhones() {
         return phones;
+    }
+
+    public String getTaskId() {
+        return taskId;
     }
 
     @Override

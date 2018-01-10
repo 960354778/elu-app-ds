@@ -1,5 +1,7 @@
 package com.qingyun.zhiyunelu.ds.net.NetLife;
 
+import android.util.SparseArray;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.PriorityBlockingQueue;
@@ -18,6 +20,8 @@ public class RequestQueue {
     private final Set<Request<?>> mCurrentRequests = new HashSet<Request<?>>();
     private final Set<Request<?>> mFailRequests = new HashSet<Request<?>>();
     private final PriorityBlockingQueue<Request<?>> mNetworkQueue = new PriorityBlockingQueue<>();
+    private final SparseArray<Request<?>> mWaitMap = new SparseArray<>();
+
     private final NetworkDispatcher[] mDispatchers;
 
 
@@ -44,6 +48,19 @@ public class RequestQueue {
             if (item != null) {
                 item.quit();
             }
+        }
+    }
+
+    public void addWaitTask(String phone ,Request<?> task){
+        if(!StringUtil.isNullOrEmpty(phone) && task != null)
+            mWaitMap.put(phone.hashCode(), task);
+    }
+
+    public void runWaitTask(String phone){
+        if(!StringUtil.isNullOrEmpty(phone)){
+            Request<?> task = mWaitMap.get(phone.hashCode());
+            add(task);
+            mWaitMap.remove(phone.hashCode());
         }
     }
 

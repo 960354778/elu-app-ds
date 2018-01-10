@@ -18,6 +18,8 @@ import velites.java.utility.log.LogHub;
 public class RecordService extends Service{
     private static final String RECORD_SERVICE_ACTION = "com.qingyun.zhiyunelu.ds.record.RecordService";
 
+    private WaitExtractTaskDispatcher mWaitTask;
+
     public static void startRS(int state, int type, String phoneNum){
         Intent intent = new Intent();
         intent.setClassName(AppAssistant.getDefaultContext().getPackageName(), RECORD_SERVICE_ACTION);
@@ -30,6 +32,7 @@ public class RecordService extends Service{
     @Override
     public void onCreate() {
         super.onCreate();
+        mWaitTask = new WaitExtractTaskDispatcher();
         LogHub.log(new LogEntry(LogHub.LOG_LEVEL_VERBOSE, this, "init service"));
     }
 
@@ -42,14 +45,14 @@ public class RecordService extends Service{
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if(intent != null){
+            String phone = intent.getStringExtra("phoneNum");
             int state = intent.getIntExtra("state", -1);
             LogHub.log(new LogEntry(LogHub.LOG_LEVEL_VERBOSE, this, "onStartCommand state:%d type:%d phonenum:%s", intent.getIntExtra("state", -1), intent.getIntExtra("type", -1), intent.getStringExtra("phoneNum")));
             if(state == TelephonyManager.CALL_STATE_OFFHOOK){
-                RecordTest.startRecord(intent.getStringExtra("phoneNum"));
                 LogHub.log(new LogEntry(LogHub.LOG_LEVEL_VERBOSE, this, "start record audio for  phonenum:%s", intent.getStringExtra("phoneNum")));
             }else if(state == TelephonyManager.CALL_STATE_IDLE){
                 LogHub.log(new LogEntry(LogHub.LOG_LEVEL_VERBOSE, this, "stop record audio for  phonenum:%s", intent.getStringExtra("phoneNum")));
-                RecordTest.stopRecord();
+                AppAssistant.getRequestQueue().runWaitTask(phone);
             }
         }
 
