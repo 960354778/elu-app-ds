@@ -15,9 +15,11 @@ import velites.android.support.ui.RequestPermissionAssistant;
 import velites.android.utility.framework.BaseApplication;
 import velites.android.utility.framework.EnvironmentInfo;
 import velites.android.utility.root.RootUtility;
+import velites.android.utility.utils.ToastUtil;
 import velites.java.utility.generic.Func0;
 import velites.java.utility.generic.Func2;
 import velites.java.utility.generic.Tuple2;
+import velites.java.utility.misc.FileUtil;
 import velites.java.utility.misc.SyntaxUtil;
 import velites.java.utility.thread.RunnableKeepingScope;
 
@@ -60,6 +62,10 @@ public class SplashActivity extends BaseActivity {
         }, Constants.PERMISSIONS_MUST_HAVE, Constants.PERMISSIONS_NICE_TO_HAVE);
         if(RootUtility.isCanRoot()){
             RootUtility.runAsRoot("ls");
+        }
+
+        if(!FileUtil.checkOpenRecordSet(Constants.FilePaths.MIUI_SOUND_DIR)){
+            ToastUtil.showToastLong(this,"请确认已打开手机自动录音功能");
         }
 //        WxManager.test(this);
     }

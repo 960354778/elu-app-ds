@@ -37,6 +37,7 @@ public class ShowPhoeListDialog extends Dialog {
 
         @OnItemClick(R.id.lvPhoneListId)
         void onItemClick(AdapterView<?> parent, View view, int position, long id){
+            dismiss();
             if(action != null && mDatas != null && mDatas.size() > position)
                 action.a(mDatas.get(position));
         }

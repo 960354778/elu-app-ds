@@ -7,6 +7,8 @@ import java.util.Set;
 import java.util.concurrent.PriorityBlockingQueue;
 
 import velites.java.utility.generic.Func1;
+import velites.java.utility.log.LogEntry;
+import velites.java.utility.log.LogHub;
 import velites.java.utility.misc.StringUtil;
 
 /**
@@ -52,19 +54,24 @@ public class RequestQueue {
     }
 
     public void addWaitTask(String phone ,Request<?> task){
-        if(!StringUtil.isNullOrEmpty(phone) && task != null)
+        LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, this, "add wait task tag %s", task != null? task.getTag():"null"));
+        if(!StringUtil.isNullOrEmpty(phone) && task != null){
             mWaitMap.put(phone.hashCode(), task);
+        }
     }
 
     public void runWaitTask(String phone){
         if(!StringUtil.isNullOrEmpty(phone)){
+            LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, this, "run wait task phone %s",phone));
             Request<?> task = mWaitMap.get(phone.hashCode());
             add(task);
             mWaitMap.remove(phone.hashCode());
         }
+        runFailRequest();
     }
 
     public <T> Request<T> addFail(Request<T> request){
+        LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, this, "add fail task to queue tag: %s",request.getTag()));
         request.setRequestQueue(this);
         synchronized (mFailRequests){
             mFailRequests.add(request);

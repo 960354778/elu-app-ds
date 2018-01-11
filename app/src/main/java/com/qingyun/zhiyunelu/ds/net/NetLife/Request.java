@@ -8,6 +8,8 @@ import android.support.annotation.NonNull;
 
 public abstract class Request<T> implements Comparable<Request<T>> {
 
+    private final int DEFAULT_REPEAT_NUM = 3;
+    private int mRepeatRequest = DEFAULT_REPEAT_NUM;
     private Priority mPriority = Priority.NORMAL;
     private final byte[] mLock = new byte[0];
     private RequestQueue mRequestQueue;
@@ -85,6 +87,14 @@ public abstract class Request<T> implements Comparable<Request<T>> {
 
     public String getTaskId() {
         return mTaskId;
+    }
+
+    public int getmRepeatRequest() {
+        return mRepeatRequest;
+    }
+
+    public void setmRepeatRequest(int mRepeatRequest) {
+        this.mRepeatRequest = mRepeatRequest;
     }
 
     public void setTaskId(String mTaskId) {

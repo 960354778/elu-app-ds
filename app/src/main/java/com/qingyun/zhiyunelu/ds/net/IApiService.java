@@ -7,9 +7,13 @@ import com.qingyun.zhiyunelu.ds.data.PageInfo;
 import com.qingyun.zhiyunelu.ds.data.RecordInfo;
 
 import io.reactivex.Observable;
+import okhttp3.MultipartBody;
 import retrofit2.http.Body;
 import retrofit2.http.Header;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
+import retrofit2.http.Query;
 
 /**
  * Created by luohongzhen on 14/12/2017.
@@ -35,4 +39,7 @@ public interface IApiService {
     @POST("TaskDetail/RecordCalledOut")
     Observable<RecordInfo> recordCalledOut(@Header("token") String token, @Body RecordInfo.RecordRequestBody params);
 
+    @Multipart
+    @POST("TaskDetail/UploadAudioToRecord")
+    Observable<RecordInfo> upLoadRecord(@Header("token") String token, @Query("taskRecordId") String taskRecordId,@Query("hash") String hash, @Part MultipartBody.Part file);
 }

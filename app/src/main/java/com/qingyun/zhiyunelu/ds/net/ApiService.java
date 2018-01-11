@@ -12,6 +12,7 @@ import com.qingyun.zhiyunelu.ds.data.RecordInfo;
 import java.util.Map;
 
 import io.reactivex.Observable;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -81,5 +82,12 @@ public class ApiService {
         String token = AppAssistant.getPrefs().getStr(Constants.PrefsKey.AUTH_TOKEN_KEY);
         return createJsonApi(Constants.BASE_URL).recordCalledOut(token,body);
     }
+
+    public Observable<RecordInfo> upLoadRecord(String params,String sha1, MultipartBody.Part file){
+        String token = AppAssistant.getPrefs().getStr(Constants.PrefsKey.AUTH_TOKEN_KEY);
+        return createJsonApi(Constants.BASE_URL).upLoadRecord(token, params,sha1, file);
+    }
+
+
 
 }

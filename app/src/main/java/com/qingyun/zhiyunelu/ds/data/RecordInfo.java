@@ -23,6 +23,10 @@ public class RecordInfo implements Parcelable {
     private String feedback;
     private String materialId;
 
+    private RecordInfo error;
+    private String code;
+    private String msg;
+
 
     @Override
     public int describeContents() {
@@ -42,6 +46,9 @@ public class RecordInfo implements Parcelable {
         dest.writeString(this.cooperationType);
         dest.writeString(this.feedback);
         dest.writeString(this.materialId);
+        dest.writeParcelable(this.error, flags);
+        dest.writeString(this.code);
+        dest.writeString(this.msg);
     }
 
     public RecordInfo() {
@@ -59,6 +66,9 @@ public class RecordInfo implements Parcelable {
         this.cooperationType = in.readString();
         this.feedback = in.readString();
         this.materialId = in.readString();
+        this.error = in.readParcelable(RecordInfo.class.getClassLoader());
+        this.code = in.readString();
+        this.msg = in.readString();
     }
 
     public static final Parcelable.Creator<RecordInfo> CREATOR = new Parcelable.Creator<RecordInfo>() {
@@ -72,6 +82,18 @@ public class RecordInfo implements Parcelable {
             return new RecordInfo[size];
         }
     };
+
+    public RecordInfo getError() {
+        return error;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
 
     public long getTimestamp() {
         return timestamp;
@@ -159,5 +181,25 @@ public class RecordInfo implements Parcelable {
                 return new RecordRequestBody[size];
             }
         };
+    }
+
+    @Override
+    public String toString() {
+        return "RecordInfo{" +
+                "timestamp=" + timestamp +
+                ", data=" + data +
+                ", callStatus='" + callStatus + '\'' +
+                ", operationUser='" + operationUser + '\'' +
+                ", taskRecordId='" + taskRecordId + '\'' +
+                ", taskId='" + taskId + '\'' +
+                ", execType='" + execType + '\'' +
+                ", execDate='" + execDate + '\'' +
+                ", cooperationType='" + cooperationType + '\'' +
+                ", feedback='" + feedback + '\'' +
+                ", materialId='" + materialId + '\'' +
+                ", error=" + error +
+                ", code='" + code + '\'' +
+                ", msg='" + msg + '\'' +
+                '}';
     }
 }

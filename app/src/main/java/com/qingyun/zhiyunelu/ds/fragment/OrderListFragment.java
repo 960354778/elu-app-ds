@@ -1,7 +1,9 @@
 package com.qingyun.zhiyunelu.ds.fragment;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -140,11 +142,11 @@ public class OrderListFragment extends BaseListFragment<OrderInfo> {
                 public void onClick(View v) {
                     int index = (Integer) v.getTag();
                     final OrderInfo itemInfo = datas.get(index);
-                    ShowPhoeListDialog dialog = new ShowPhoeListDialog(getActivity(), R.style.CustomDialog, datas.get(index).getPhones(), new Action1<String>() {
+                    final ShowPhoeListDialog dialog = new ShowPhoeListDialog(getActivity(), R.style.CustomDialog, datas.get(index).getPhones(), new Action1<String>() {
                         @Override
                         public void a(String arg1) {
                             if (!StringUtil.isNullOrEmpty(arg1)) {
-                                RecordRequest request = new RecordRequest(arg1, FileUtil.getRecentlyMiUiSoundPath(arg1, Constants.FilePaths.MIUI_SOUND_DIR), itemInfo.getTaskId());
+                                RecordRequest request = new RecordRequest(arg1, null, itemInfo.getTaskId());
                                 AppAssistant.getRequestQueue().addWaitTask(arg1, request);
                                 Intent intent = new Intent(Intent.ACTION_CALL);
                                 Uri data = Uri.parse("tel:" + arg1);
