@@ -39,6 +39,7 @@ public final class Constants {
         public static final String WX_PACKAGE = "com.tencent.mm";
 
         public static final String MIUI_SOUND_DIR = Environment.getExternalStorageDirectory().getAbsolutePath()+"/MIUI/sound_recorder/call_rec/";
+        public static final String CARCH_LOG_DIR = Environment.getExternalStorageDirectory().getAbsolutePath()+"/zhiyun/cache/";
     }
 
     public static final class PrefsKey{

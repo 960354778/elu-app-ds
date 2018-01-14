@@ -11,8 +11,12 @@ import com.qingyun.zhiyunelu.ds.net.NetLife.RequestQueue;
 import com.qingyun.zhiyunelu.ds.op.Prefs;
 
 import velites.android.utility.framework.EnvironmentInfo;
+import velites.android.utility.logger.ReportLogLooperProcessor;
 import velites.android.utility.logger.SingleLooperLogProcessor;
+import velites.java.utility.log.AggregatedLogProcessor;
 import velites.java.utility.log.LogHub;
+import velites.java.utility.log.LogProcessor;
+import velites.java.utility.log.LogReport;
 import velites.java.utility.misc.ExceptionUtil;
 import velites.java.utility.thread.BaseInitializer;
 
@@ -21,7 +25,8 @@ import velites.java.utility.thread.BaseInitializer;
  */
 
 public final class AppAssistant {
-    private AppAssistant() {}
+    private AppAssistant() {
+    }
 
     private static BaseInitializer<Context> initializer = new BaseInitializer<Context>(false, null) {
         @Override
@@ -40,7 +45,18 @@ public final class AppAssistant {
             showLog = ChannelConfig.FORCE_SHOW_LOG || debug;
             EnvironmentInfo.ensureInit(ctx, channel, buildType);
             if (showLog) {
-                LogHub.setProcessor(new SingleLooperLogProcessor());
+                LogReport.initialize(new LogReport.Builder()
+                        .setEnable(true)
+                        .setReportDir(Constants.FilePaths.CARCH_LOG_DIR)
+                        .setLogProcessor(new SingleLooperLogProcessor())
+                        .setReportProcessor(new ReportLogLooperProcessor())
+                        .builder()
+                );
+                LogProcessor log = LogReport.getBuilder().getLogProcessor();
+                LogProcessor report = LogReport.getBuilder().getReportProcessor();
+
+                LogHub.setProcessor(new AggregatedLogProcessor(report,log, report));
+
             }
             prefs = new Prefs(ctx);
             apiService = new ApiService();
@@ -112,7 +128,7 @@ public final class AppAssistant {
         return apiService;
     }
 
-    public static RequestQueue getRequestQueue(){
+    public static RequestQueue getRequestQueue() {
         initializer.awaitInitializedNoThrows(null);
         return requestQueue;
     }

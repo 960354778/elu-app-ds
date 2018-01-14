@@ -64,7 +64,7 @@ public class SplashActivity extends BaseActivity {
             RootUtility.runAsRoot("ls");
         }
 
-        if(!FileUtil.checkOpenRecordSet(Constants.FilePaths.MIUI_SOUND_DIR)){
+        if(!FileUtil.isExistsForFile(Constants.FilePaths.MIUI_SOUND_DIR)){
             ToastUtil.showToastLong(this,"请确认已打开手机自动录音功能");
         }
 //        WxManager.test(this);
