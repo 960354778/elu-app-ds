@@ -90,6 +90,14 @@
                     android:id="@+id/tv6Id"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/space_medium"
+                    android:textColor="@color/c_000000"
+                    android:textSize="@dimen/text_medium" />
+
+                <TextView
+                    android:id="@+id/tv7Id"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:textColor="@color/c_000000"
                     android:textSize="@dimen/text_medium" />
             </LinearLayout>

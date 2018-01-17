@@ -61,7 +61,8 @@
         android:layout_below="@+id/LLLoginTab"
         android:layout_alignParentRight="true"
         android:layout_margin="10dp"
-        android:layout_height="90dp" />
+        android:layout_height="90dp"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/tvDoctersTab"

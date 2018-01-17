@@ -57,19 +57,19 @@ public class ApiService {
             return createJsonApi(Constants.BASE_URL).login(body);
     }
 
-    public Observable<OrderInfo> getOrderList(int request, Map<String, String> params){
-        PageInfo paramsInfo = new PageInfo(Integer.valueOf(params.get("pageNumber")), Constants.PAGE_SIZE);
+    public Observable<OrderInfo> getOrderList(int request, Map<String, Object> params){
+        params.put("pageSize", Constants.PAGE_SIZE);
         String token = AppAssistant.getPrefs().getStr(Constants.PrefsKey.AUTH_TOKEN_KEY);
         try{
             switch (request){
                 case Constants.Codes.REQUEST_NET_MY_DOCTER_LIST_TAG:
-                    return createJsonApi(Constants.BASE_URL).getMyDoctersList(token, paramsInfo);
+                    return createJsonApi(Constants.BASE_URL).getMyDoctersList(token, params);
                 case Constants.Codes.REQUEST_NET_MY_HOSPITAL_LIST_TAG:
-                    return createJsonApi(Constants.BASE_URL).getMyHospitalList(token, paramsInfo);
+                    return createJsonApi(Constants.BASE_URL).getMyHospitalList(token, params);
                 case Constants.Codes.REQUEST_NET_DOCTER_LIST_TAG:
-                    return createJsonApi(Constants.BASE_URL).getDoctersList(token, paramsInfo);
+                    return createJsonApi(Constants.BASE_URL).getDoctersList(token, params);
                 case Constants.Codes.REQUEST_NET_HOSPITAL_LIST_TAG:
-                    return createJsonApi(Constants.BASE_URL).getHospitalList(token, paramsInfo);
+                    return createJsonApi(Constants.BASE_URL).getHospitalList(token, params);
             }
         }catch (Exception e){
             e.printStackTrace();

@@ -19,6 +19,7 @@ public class OrderInfo implements Parcelable {
     private String doctorName;
     private String hospitalName;
     private String departmentName;
+    private String representativeName;
     private String brandName;
     private String endDate;
     private String provinceName;
@@ -43,6 +44,7 @@ public class OrderInfo implements Parcelable {
         dest.writeString(this.hospitalName);
         dest.writeString(this.departmentName);
         dest.writeString(this.brandName);
+        dest.writeString(this.representativeName);
         dest.writeString(this.endDate);
         dest.writeString(this.provinceName);
         dest.writeString(this.cityName);
@@ -65,6 +67,7 @@ public class OrderInfo implements Parcelable {
         this.hospitalName = in.readString();
         this.departmentName = in.readString();
         this.brandName = in.readString();
+        this.representativeName = in.readString();
         this.endDate = in.readString();
         this.provinceName = in.readString();
         this.cityName = in.readString();
@@ -140,6 +143,10 @@ public class OrderInfo implements Parcelable {
         return taskId;
     }
 
+    public String getRepresentativeName() {
+        return representativeName;
+    }
+
     @Override
     public String toString() {
         return "OrderInfo{" +
@@ -151,6 +158,7 @@ public class OrderInfo implements Parcelable {
                 ", doctorName='" + doctorName + '\'' +
                 ", hospitalName='" + hospitalName + '\'' +
                 ", departmentName='" + departmentName + '\'' +
+                ", representativeName='" + representativeName + '\'' +
                 ", brandName='" + brandName + '\'' +
                 ", endDate='" + endDate + '\'' +
                 ", provinceName='" + provinceName + '\'' +

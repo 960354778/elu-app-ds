@@ -6,6 +6,8 @@ import com.qingyun.zhiyunelu.ds.data.OrderInfo;
 import com.qingyun.zhiyunelu.ds.data.PageInfo;
 import com.qingyun.zhiyunelu.ds.data.RecordInfo;
 
+import java.util.Map;
+
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import retrofit2.http.Body;
@@ -25,16 +27,16 @@ public interface IApiService {
     Observable<LoginInfo> login(@Body LoginInfo.LoginRequest body);
 
     @POST("MyTask/DoctorTasks")
-    Observable<OrderInfo> getMyDoctersList(@Header("token") String token, @Body PageInfo params );
+    Observable<OrderInfo> getMyDoctersList(@Header("token") String token, @Body Map<String, Object> params );
 
     @POST("MyTask/HospitalTasks")
-    Observable<OrderInfo> getMyHospitalList(@Header("token") String token,@Body PageInfo params);
+    Observable<OrderInfo> getMyHospitalList(@Header("token") String token,@Body Map<String, Object> params);
 
     @POST("Task/GetDoctorTaskList")
-    Observable<OrderInfo> getDoctersList(@Header("token") String token, @Body PageInfo params);
+    Observable<OrderInfo> getDoctersList(@Header("token") String token, @Body Map<String, Object> params);
 
     @POST("Task/GetHospitalTaskList")
-    Observable<OrderInfo> getHospitalList(@Header("token") String token, @Body PageInfo params);
+    Observable<OrderInfo> getHospitalList(@Header("token") String token, @Body Map<String, Object> params);
 
     @POST("TaskDetail/RecordCalledOut")
     Observable<RecordInfo> recordCalledOut(@Header("token") String token, @Body RecordInfo.RecordRequestBody params);

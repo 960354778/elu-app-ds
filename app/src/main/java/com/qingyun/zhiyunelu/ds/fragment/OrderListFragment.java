@@ -22,6 +22,10 @@ import com.qingyun.zhiyunelu.ds.data.OrderInfo;
 import com.qingyun.zhiyunelu.ds.record.RecordRequest;
 import com.qingyun.zhiyunelu.ds.widget.ShowPhoeListDialog;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -128,38 +132,60 @@ public class OrderListFragment extends BaseListFragment<OrderInfo> {
             fillItem(viewHolder.tt3, departmentName, "科室： %s");
             String brandName = info.getBrandName();
             fillItem(viewHolder.tt4, brandName, "品牌： %s");
+            String repName = info.getRepresentativeName();
+            fillItem(viewHolder.tt5, repName, "分配专员： %s");
             StringBuilder builder = new StringBuilder();
             String provinceName = info.getProvinceName();
+            builder.append(provinceName);
             String cityName = info.getCityName();
+            if (!StringUtil.isNullOrEmpty(cityName)) {
+                builder.append("--").append(cityName);
+            }
             String districtName = info.getDistrictName();
-            String address = builder.append(provinceName).append("--").append(cityName).append("--").append(districtName).toString();
-            fillItem(viewHolder.tt5, address, "地址： %s");
+            if (!StringUtil.isNullOrEmpty(districtName)) {
+                builder.append("--").append(districtName);
+            }
+            fillItem(viewHolder.tt6, builder.toString(), "地址： %s");
             String endDate = info.getEndDate();
-            fillItem(viewHolder.tt6, endDate.replace("T", " "), "时间:  %s");
+            Date dt = null;
+            if (StringUtil.isNullOrEmpty(endDate)) {
+                try {
+                    DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+                    dt = df.parse(endDate.split("T")[0]);
+                    dt = new Date(dt.getTime() + 1000 * 60 * 60 * 24);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+            fillItem(viewHolder.tt7, dt == null ? null : new SimpleDateFormat("YYYY-MM-DD").format(dt), "截止日期:  %s");
             viewHolder.itemLayout.setTag(position);
-            viewHolder.itemLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int index = (Integer) v.getTag();
-                    final OrderInfo itemInfo = datas.get(index);
-                    final ShowPhoeListDialog dialog = new ShowPhoeListDialog(getActivity(), R.style.CustomDialog, datas.get(index).getPhones(), new Action1<String>() {
-                        @Override
-                        public void a(String arg1) {
-                            if (!StringUtil.isNullOrEmpty(arg1)) {
-                                RecordRequest request = new RecordRequest(arg1, null, itemInfo.getTaskId());
-                                AppAssistant.getRequestQueue().addWaitTask(arg1, request);
-                                Intent intent = new Intent(Intent.ACTION_CALL);
-                                Uri data = Uri.parse("tel:" + arg1);
-                                intent.setData(data);
-                                getActivity().startActivity(intent);
+            if (adpaterType == 0) {
+                viewHolder.itemLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int index = (Integer) v.getTag();
+                        final OrderInfo itemInfo = datas.get(index);
+                        final ShowPhoeListDialog dialog = new ShowPhoeListDialog(getActivity(), R.style.CustomDialog, datas.get(index).getPhones(), new Action1<String>() {
+                            @Override
+                            public void a(String arg1) {
+                                if (!StringUtil.isNullOrEmpty(arg1)) {
+                                    RecordRequest request = new RecordRequest(arg1, null, itemInfo.getTaskId());
+                                    AppAssistant.getRequestQueue().addWaitTask(arg1, request);
+                                    Intent intent = new Intent(Intent.ACTION_CALL);
+                                    Uri data = Uri.parse("tel:" + arg1);
+                                    intent.setData(data);
+                                    getActivity().startActivity(intent);
+
+                                }
 
                             }
-
-                        }
-                    });
-                    dialog.show();
-                }
-            });
+                        });
+                        dialog.show();
+                    }
+                });
+            } else {
+                viewHolder.callPhone.setVisibility(View.INVISIBLE);
+            }
         }
 
         private void fillItem(TextView tv, String content, String formatStr) {
@@ -203,6 +229,8 @@ public class OrderListFragment extends BaseListFragment<OrderInfo> {
         TextView tt5;
         @BindView(R.id.tv6Id)
         TextView tt6;
+        @BindView(R.id.tv7Id)
+        TextView tt7;
         @BindView(R.id.ivCallId)
         ImageView callPhone;
 
@@ -212,10 +240,10 @@ public class OrderListFragment extends BaseListFragment<OrderInfo> {
     }
 
     private void loadData(int requestType, int pageNum) {
-        HashMap<String, String> params = new HashMap<>();
-        params.put("pageNumber", pageNum + "");
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("pageNumber", pageNum);
         if (adpaterType == 0 || adpaterType == 1)
-            params.put("taskStatus", adpaterType == 0 ? "Undo" : (adpaterType == 1 ? "Done" : ""));
+            params.put("taskStatuses", adpaterType == 0 ? new String[] {"Undo", "Booked", "Processing"} : (adpaterType == 1 ? new String[] {"Completed"} : null));
         try{
             AppAssistant.getApi().getOrderList(requestType, params)
                     .subscribeOn(Schedulers.io())
