@@ -47,12 +47,10 @@ android {
             signingConfig signingConfigs.release
         }
     }
-    /*
     compileOptions {
         sourceCompatibility rootProject.ext.android.java_version
         targetCompatibility rootProject.ext.android.java_version
     }
-    */
     flavorDimensions FLAVOR_CHANNEL, FLAVOR_DEVICE
     productFlavors {
         dev {
