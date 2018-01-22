@@ -13,6 +13,7 @@ import java.util.List;
 public class OrderInfo implements Parcelable {
     private long timestamp;
     private OrderInfo  data;
+    private OrderInfo doctorTasks;
     private List<OrderInfo> list;
     private List<String> phones;
     private PageInfo page;
@@ -37,6 +38,7 @@ public class OrderInfo implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(this.timestamp);
         dest.writeParcelable(this.data, flags);
+        dest.writeParcelable(this.doctorTasks, flags);
         dest.writeList(this.list);
         dest.writeList(this.phones);
         dest.writeParcelable(this.page, flags);
@@ -58,6 +60,7 @@ public class OrderInfo implements Parcelable {
     protected OrderInfo(Parcel in) {
         this.timestamp = in.readLong();
         this.data = in.readParcelable(OrderInfo.class.getClassLoader());
+        this.doctorTasks = in.readParcelable(OrderInfo.class.getClassLoader());
         this.list = new ArrayList<OrderInfo>();
         in.readList(this.list, OrderInfo.class.getClassLoader());
         this.phones = new ArrayList<>();
@@ -93,6 +96,10 @@ public class OrderInfo implements Parcelable {
 
     public OrderInfo getData() {
         return data;
+    }
+
+    public OrderInfo getDoctorTasks() {
+        return doctorTasks;
     }
 
     public List<OrderInfo> getList() {

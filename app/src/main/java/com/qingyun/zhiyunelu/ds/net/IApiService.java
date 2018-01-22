@@ -11,6 +11,7 @@ import java.util.Map;
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
@@ -26,7 +27,10 @@ public interface IApiService {
     @POST("user/login")
     Observable<LoginInfo> login(@Body LoginInfo.LoginRequest body);
 
-    @POST("MyTask/DoctorTasks")
+    @GET("MyTask/Load")
+    Observable<OrderInfo> getMyTasks(@Header("token") String token);
+
+    @POST("MyTask/DoctorTasksAllReps")
     Observable<OrderInfo> getMyDoctersList(@Header("token") String token, @Body Map<String, Object> params );
 
     @POST("MyTask/HospitalTasks")

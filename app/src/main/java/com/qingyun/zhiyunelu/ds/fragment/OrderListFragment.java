@@ -198,10 +198,13 @@ public class OrderListFragment extends BaseListFragment<OrderInfo> {
 
         @Override
         public void updateData(OrderInfo args) {
-            orderInfo = args;
+            orderInfo = args == null ? null : args.getDoctorTasks();
+            if (orderInfo == null) {
+                orderInfo = args;
+            }
             if (orderInfo != null && orderInfo.getList() != null) {
-                if (args.getPage() != null) {
-                    int index = args.getPage().getPageNumber();
+                if (orderInfo.getPage() != null) {
+                    int index = orderInfo.getPage().getPageNumber();
                     if (index == 1) {
                         datas = orderInfo.getList();
                     } else {
