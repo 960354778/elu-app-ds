@@ -77,7 +77,6 @@ public final class AppAssistant {
     private static ApiService apiService;
     private static RequestQueue requestQueue;
 
-
     public static Context getDefaultContext() {
         initializer.awaitInitializedNoThrows(null);
         return defaultContext;
@@ -132,7 +131,6 @@ public final class AppAssistant {
         initializer.awaitInitializedNoThrows(null);
         return requestQueue;
     }
-
 
     public static final void ensureInit(Context ctx) {
         initializer.ensureInit(ctx);
