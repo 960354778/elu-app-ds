@@ -1,6 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 apply from: 'config.gradle'
 if (hasProperty('extraConfig')) {
+    print("loading extra config from: \"${extraConfig}\"...\n")
     apply from: extraConfig
 }
 

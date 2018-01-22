@@ -148,7 +148,7 @@ public class OrderListFragment extends BaseListFragment<OrderInfo> {
             fillItem(viewHolder.tt6, builder.toString(), "地址： %s");
             String endDate = info.getEndDate();
             Date dt = null;
-            if (StringUtil.isNullOrEmpty(endDate)) {
+            if (!StringUtil.isNullOrEmpty(endDate)) {
                 try {
                     DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
                     dt = df.parse(endDate.split("T")[0]);

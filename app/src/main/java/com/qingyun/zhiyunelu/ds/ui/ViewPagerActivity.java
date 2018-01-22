@@ -32,7 +32,8 @@ public class ViewPagerActivity extends BaseTemplatedActivity {
     }
 
     private ViewPagerAdatper mPagerAdapter;
-    private final String[] tabs = {"未执行", "已执行", "全部"};
+    private final String[] tabs = {"待执行"};
+//    private final String[] tabs = {"未执行", "已执行", "全部"};
 
     class Widgets {
         @BindView(R.id.vpPagerId)
