@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.qingyun.zhiyunelu.ds.AppAssistant;
 import com.qingyun.zhiyunelu.ds.Constants;
 import com.qingyun.zhiyunelu.ds.R;
+import com.qingyun.zhiyunelu.ds.alipush.AliPushCenter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -107,8 +108,12 @@ public class MainActivity extends BaseTemplatedActivity {
                 displayName = "已登录";
             }
             widgets.mLogoutTab.setVisibility(View.VISIBLE);
+
+            AliPushCenter.getInstance().bindAccount(displayName);
+
         }else{
             widgets.mLogoutTab.setVisibility(View.GONE);
+            AliPushCenter.getInstance().unbindAccount();
         }
         widgets.mLoginTab.setText(displayName);
     }

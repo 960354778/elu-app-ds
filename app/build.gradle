@@ -19,6 +19,15 @@ android {
         versionName rootProject.ext.android.versionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         manifestPlaceholders += [CommonOrientation: "portrait"]
+        ndk {
+            abiFilter 'armeabi'
+        }
+    }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
     }
 
     signingConfigs {
