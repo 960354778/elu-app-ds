@@ -1,5 +1,6 @@
 package com.qingyun.zhiyunelu.ds;
 
+import com.qingyun.zhiyunelu.ds.alipush.AliPushCenter;
 import com.qingyun.zhiyunelu.ds.bcst.CallPhoneBCSTR;
 
 import velites.android.utility.framework.BaseApplication;
@@ -14,5 +15,6 @@ public class App extends BaseApplication {
         super.onCreate();
         AppAssistant.ensureInit(this);
         CallPhoneBCSTR.ensureInit(this);
+        AliPushCenter.getInstance().initPush(this);
     }
 }
