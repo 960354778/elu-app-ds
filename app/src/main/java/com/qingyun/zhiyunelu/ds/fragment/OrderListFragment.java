@@ -157,7 +157,7 @@ public class OrderListFragment extends BaseListFragment<OrderInfo> {
                     e.printStackTrace();
                 }
             }
-            fillItem(viewHolder.tt7, dt == null ? null : new SimpleDateFormat("YYYY-MM-DD").format(dt), "截止日期:  %s");
+            fillItem(viewHolder.tt7, dt == null ? null : new SimpleDateFormat("yyyy-MM-dd").format(dt), "截止日期:  %s");
             viewHolder.itemLayout.setTag(position);
             if (adpaterType == 0) {
                 viewHolder.itemLayout.setOnClickListener(new View.OnClickListener() {
