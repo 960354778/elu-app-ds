@@ -3,7 +3,6 @@ package com.qingyun.zhiyunelu.ds.net;
 
 import com.qingyun.zhiyunelu.ds.data.LoginInfo;
 import com.qingyun.zhiyunelu.ds.data.OrderInfo;
-import com.qingyun.zhiyunelu.ds.data.PageInfo;
 import com.qingyun.zhiyunelu.ds.data.RecordInfo;
 
 import java.util.Map;
@@ -47,5 +46,5 @@ public interface IApiService {
 
     @Multipart
     @POST("TaskDetail/UploadAudioToRecord")
-    Observable<RecordInfo> upLoadRecord(@Header("token") String token, @Query("taskRecordId") String taskRecordId,@Query("hash") String hash, @Part MultipartBody.Part file);
+    Observable<RecordInfo> upLoadRecord(@Header("token") String token, @Query("taskRecordId") String taskRecordId,@Query("hash") String hash, @Part MultipartBody.Part file, @Query("duration") String time);
 }

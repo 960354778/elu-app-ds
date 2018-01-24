@@ -50,6 +50,7 @@ public final class Constants {
         public static final String ACCOUNT_NAME_KEY = "accountName";
         public static final String ACCOUNT_PWD_KEY = "accountPwd";
         public static final String LOGIN_NAME = "loginName";
+        public static final String DISPLAY_NAME = "displayName";
 
     }
 

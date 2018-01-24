@@ -30,6 +30,7 @@ public class RecordRequest extends Request {
         setmRequestCompListener(listener);
         setTaskId(taskId);
         setPhone(phone);
+        setStartTime(System.currentTimeMillis());
     }
 
     public RecordRequest(String phone, String path, String taskId) {
@@ -41,7 +42,7 @@ public class RecordRequest extends Request {
         //TODO upload sound
         try {
             final RecordInfo[] data = {null};
-            AppAssistant.getApi().recordCalledOut(new RecordInfo.RecordRequestBody(getTaskId()))
+            AppAssistant.getApi().recordCalledOut(new RecordInfo.RecordRequestBody(getTaskId(),getPhone()))
                     .subscribe(new Consumer<RecordInfo>() {
                         @Override
                         public void accept(RecordInfo recordInfo){
@@ -65,7 +66,8 @@ public class RecordRequest extends Request {
                                     if (file.exists()) {
                                         RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
                                         MultipartBody.Part filePart = MultipartBody.Part.createFormData("mp3", file.getName(), requestFile);
-                                        AppAssistant.getApi().upLoadRecord(taskRecordId, EncryptUtil.getFileSha1(file.getAbsolutePath()), filePart)
+                                        long startTime = getStartTime();
+                                        AppAssistant.getApi().upLoadRecord(taskRecordId, EncryptUtil.getFileSha1(file.getAbsolutePath()), filePart, startTime > 0? (System.currentTimeMillis() - startTime)+"": "0")
                                                 .subscribe(new Consumer<RecordInfo>() {
                                                     @Override
                                                     public void accept(RecordInfo recordInfo) throws Exception {

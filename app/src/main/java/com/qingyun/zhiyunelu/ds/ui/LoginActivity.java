@@ -64,7 +64,8 @@ public class LoginActivity extends BaseTemplatedActivity {
                             LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, "LoginActivity","thread name:%s loginInfo: %s", Thread.currentThread().getName(), loginInfo.toString()));
                             if(loginInfo != null && loginInfo.getToken() != null &&  !StringUtil.isNullOrEmpty(loginInfo.getToken().getValue())){
                                 AppAssistant.getPrefs().setStr(Constants.PrefsKey.AUTH_TOKEN_KEY, loginInfo.getToken().getValue());
-                                AppAssistant.getPrefs().setStr(Constants.PrefsKey.LOGIN_NAME, loginInfo.getData() != null ?loginInfo.getData().getDisplayName():"");
+                                AppAssistant.getPrefs().setStr(Constants.PrefsKey.LOGIN_NAME, loginInfo.getToken().getAccount() != null ?loginInfo.getToken().getAccount().getLoginName():"");
+                                AppAssistant.getPrefs().setStr(Constants.PrefsKey.DISPLAY_NAME, loginInfo.getToken().getAccount() != null ?loginInfo.getToken().getAccount().getDisplayName():"");
                                 AppAssistant.getPrefs().setLong(Constants.PrefsKey.AUTH_EXPIRE_KEY, loginInfo.getToken().getExpire());
                                 ToastUtil.showToastShort(AppAssistant.getDefaultContext(), "登录成功");
                                 finish();

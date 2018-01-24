@@ -42,11 +42,12 @@
 
         <meta-data
             android:name="com.alibaba.app.appkey"
-            android:value="24779040" />
+            android:value="24778582" />
+        <!--24779040 prd-->
         <meta-data
             android:name="com.alibaba.app.appsecret"
-            android:value="7575327c6d81b950ee3caba3902cba7a" />
-
+            android:value="39cea82e7bebbd90efb8a381264a0ce7" />
+        <!--7575327c6d81b950ee3caba3902cba7a prd-->
 
         <activity
             android:name=".ui.SplashActivity"
@@ -68,6 +69,9 @@
             android:screenOrientation="${CommonOrientation}" />
         <activity
             android:name=".ui.ViewPagerActivity"
+            android:screenOrientation="${CommonOrientation}" />
+        <activity
+            android:name=".ui.NotifyShowActivity"
             android:screenOrientation="${CommonOrientation}" />
 
         <receiver android:name=".bcst.CallPhoneBCSTR">

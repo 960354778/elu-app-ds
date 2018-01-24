@@ -11,14 +11,15 @@ import java.util.List;
 
 public class LoginInfo implements Parcelable {
     private long timestamp;
-    private LoginInfo data;
     private String displayName;
     private List<String> permissions;
     private LoginInfo token;
+    private LoginInfo account;
     private String code;
     private String message;
     private String value;
     private long expire;
+    private String loginName;
 
 
 
@@ -31,14 +32,15 @@ public class LoginInfo implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(this.timestamp);
-        dest.writeParcelable(this.data, flags);
         dest.writeString(this.displayName);
         dest.writeStringList(this.permissions);
         dest.writeParcelable(this.token, flags);
+        dest.writeParcelable(this.account, flags);
         dest.writeString(this.code);
         dest.writeString(this.message);
         dest.writeString(this.value);
         dest.writeLong(this.expire);
+        dest.writeString(this.loginName);
     }
 
     public LoginInfo() {
@@ -46,14 +48,15 @@ public class LoginInfo implements Parcelable {
 
     protected LoginInfo(Parcel in) {
         this.timestamp = in.readLong();
-        this.data = in.readParcelable(LoginInfo.class.getClassLoader());
         this.displayName = in.readString();
         this.permissions = in.createStringArrayList();
         this.token = in.readParcelable(LoginInfo.class.getClassLoader());
+        this.account = in.readParcelable(LoginInfo.class.getClassLoader());
         this.code = in.readString();
         this.message = in.readString();
         this.value = in.readString();
         this.expire = in.readLong();
+        this.loginName = in.readString();
 
     }
 
@@ -73,9 +76,6 @@ public class LoginInfo implements Parcelable {
         return timestamp;
     }
 
-    public LoginInfo getData() {
-        return data;
-    }
 
     public String getDisplayName() {
         return displayName;
@@ -98,16 +98,27 @@ public class LoginInfo implements Parcelable {
         return expire;
     }
 
+    public LoginInfo getAccount() {
+        return account;
+    }
+
+    public String getLoginName() {
+        return loginName;
+    }
+
     @Override
     public String toString() {
         return "LoginInfo{" +
                 "timestamp=" + timestamp +
-                ", data=" + data +
                 ", displayName='" + displayName + '\'' +
                 ", permissions=" + permissions +
-                ", token='" + token + '\'' +
+                ", token=" + token +
+                ", account=" + account +
                 ", code='" + code + '\'' +
                 ", message='" + message + '\'' +
+                ", value='" + value + '\'' +
+                ", expire=" + expire +
+                ", loginName='" + loginName + '\'' +
                 '}';
     }
 

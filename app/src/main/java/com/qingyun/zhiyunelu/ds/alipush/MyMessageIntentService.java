@@ -5,8 +5,13 @@ import android.util.Log;
 
 import com.alibaba.sdk.android.push.AliyunMessageIntentService;
 import com.alibaba.sdk.android.push.notification.CPushMessage;
+import com.google.gson.Gson;
+import com.qingyun.zhiyunelu.ds.data.OrderInfo;
+import com.qingyun.zhiyunelu.ds.ui.NotifyShowActivity;
 
 import java.util.Map;
+
+import velites.java.utility.misc.StringUtil;
 
 /**
  * 为避免推送广播被系统拦截的小概率事件,我们推荐用户通过IntentService处理消息互调,接入步骤:
@@ -54,6 +59,12 @@ public class MyMessageIntentService extends AliyunMessageIntentService {
     @Override
     protected void onMessage(Context context, CPushMessage cPushMessage) {
         Log.i(REC_TAG,"收到一条推送消息 ： " + cPushMessage.getTitle() + ", content:" + cPushMessage.getContent());
+
+        String content = cPushMessage.getContent();
+        if(!StringUtil.isNullOrEmpty(content)){
+            OrderInfo info = new Gson().fromJson(content, OrderInfo.class);
+            NotifyShowActivity.launchMe(context, info);
+        }
     }
 
     /**

@@ -15,6 +15,8 @@ public abstract class Request<T> implements Comparable<Request<T>> {
     private RequestQueue mRequestQueue;
     private boolean mCanceled = false;
 
+    private long startTime;
+
     private String mTaskId;
     private String mPhone;
 
@@ -72,6 +74,13 @@ public abstract class Request<T> implements Comparable<Request<T>> {
         }
     }
 
+    public long getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(long startTime) {
+        this.startTime = startTime;
+    }
 
     public void cancel() {
         synchronized (mLock) {
