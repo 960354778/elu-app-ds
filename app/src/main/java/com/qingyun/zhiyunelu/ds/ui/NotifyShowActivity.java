@@ -160,7 +160,7 @@ public class NotifyShowActivity extends BaseTemplatedActivity {
 
     @Override
     protected String getTitleStr() {
-        return "通知";
+        return "拨打工单电话";
     }
 
 }

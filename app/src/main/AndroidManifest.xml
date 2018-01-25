@@ -42,16 +42,14 @@
 
         <meta-data
             android:name="com.alibaba.app.appkey"
-            android:value="24778582" />
-        <!--24779040 prd-->
+            android:value="${aliPushAppKey}" />
         <meta-data
             android:name="com.alibaba.app.appsecret"
-            android:value="39cea82e7bebbd90efb8a381264a0ce7" />
-        <!--7575327c6d81b950ee3caba3902cba7a prd-->
+            android:value="${aliPushAppSecret}" />
 
         <activity
             android:name=".ui.SplashActivity"
-            android:screenOrientation="${CommonOrientation}">
+            android:screenOrientation="${commonOrientation}">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -59,20 +57,20 @@
         </activity>
         <activity
             android:name=".ui.MainActivity"
-            android:screenOrientation="${CommonOrientation}"></activity>
+            android:screenOrientation="${commonOrientation}"></activity>
         <activity
             android:name=".ui.SettingsActivity"
             android:label="@string/label_settings"
-            android:screenOrientation="${CommonOrientation}" />
+            android:screenOrientation="${commonOrientation}" />
         <activity
             android:name=".ui.LoginActivity"
-            android:screenOrientation="${CommonOrientation}" />
+            android:screenOrientation="${commonOrientation}" />
         <activity
             android:name=".ui.ViewPagerActivity"
-            android:screenOrientation="${CommonOrientation}" />
+            android:screenOrientation="${commonOrientation}" />
         <activity
             android:name=".ui.NotifyShowActivity"
-            android:screenOrientation="${CommonOrientation}" />
+            android:screenOrientation="${commonOrientation}" />
 
         <receiver android:name=".bcst.CallPhoneBCSTR">
             <intent-filter>

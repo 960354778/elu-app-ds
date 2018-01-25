@@ -18,7 +18,7 @@ android {
         versionCode rootProject.ext.android.versionCode
         versionName rootProject.ext.android.versionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        manifestPlaceholders += [CommonOrientation: "portrait"]
+        manifestPlaceholders += [commonOrientation: "portrait", aliPushAppKey: rootProject.ext.config.aliPushAppKey, aliPushAppSecret: rootProject.ext.config.aliPushAppSecret]
         ndk {
             abiFilter 'armeabi'
         }
