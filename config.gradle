@@ -37,6 +37,7 @@ ext {
     config = [
         releaseKeyConfigPath: 'key/elu-ds.signing.properties',
         aliPushAppKey: '24778582',
-        aliPushAppSecret: '39cea82e7bebbd90efb8a381264a0ce7'
+        aliPushAppSecret: '39cea82e7bebbd90efb8a381264a0ce7',
+        outputDir: ''
     ]
 }

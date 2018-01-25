@@ -32,11 +32,12 @@ android {
 
     signingConfigs {
         release {
-            File sf = new File(rootProject.projectDir.toString(), rootProject.ext.config.releaseKeyConfigPath)
+            File sf = resolvePath(rootProject.projectDir.toString(), normalizePath(rootProject.ext.config.releaseKeyConfigPath)).toFile()
+            print("loading signing info from: \"${sf}\"(existing: ${sf.exists()})...\n")
             if (sf.exists()) {
                 Properties props = new Properties()
                 props.load(new FileInputStream(sf))
-                storeFile new File(sf.parent, props.getProperty('signing.release.keyStore'))
+                storeFile resolvePath(sf.parent, normalizePath(props.getProperty('signing.release.keyStore'))).toFile()
                 keyAlias props.getProperty('signing.release.keyAlias')
                 def pStore = props.getProperty('signing.release.storePassword')
                 if (pStore) {
@@ -102,7 +103,7 @@ android {
             variant.setIgnore(buildTypeName == buildTypes.release.name && debugOnlyChannels.contains(channel))
         }
     }
-    processApkOutputs(rootProject.ext.android.apk_name_prefix)
+    processApkOutputs(rootProject.ext.android.apk_name_prefix, normalizePath(rootProject.ext.config.outputDir))
 }
 
 dependencies {
