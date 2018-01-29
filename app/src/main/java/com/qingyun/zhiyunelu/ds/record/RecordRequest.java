@@ -17,12 +17,16 @@ import velites.java.utility.log.LogHub;
 import velites.java.utility.misc.EncryptUtil;
 import velites.java.utility.misc.FileUtil;
 import velites.java.utility.misc.StringUtil;
+import velites.java.utility.thread.ThreadUtil;
 
 /**
  * Created by luohongzhen on 08/01/2018.
  */
 
 public class RecordRequest extends Request {
+
+    private final String TAG = RecordRequest.class.getSimpleName();
+    private String taskRecordId;
 
     public RecordRequest(String phone, String path, String taskId, NetworkRequestCompleteListener listener) {
         setmTag(String.format("%s_%s", phone, System.currentTimeMillis() + ""));
@@ -37,61 +41,80 @@ public class RecordRequest extends Request {
         this(phone, path, taskId, null);
     }
 
+    public void sendRequest(){
+        ThreadUtil.runInNewThread(new Runnable() {
+            @Override
+            public void run() {
+                recordCallOut();
+            }
+        },TAG, null);
+    }
+
+    private void recordCallOut() {
+        AppAssistant.getApi().recordCalledOut(new RecordInfo.RecordRequestBody(getTaskId(), getPhone()))
+                .subscribe(new Consumer<RecordInfo>() {
+                    @Override
+                    public void accept(RecordInfo recordInfo) throws Exception {
+                        try {
+                            LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, this, "phone %s recordCallOut request info:%s", getPhone(), recordInfo == null ? "fail" : recordInfo.toString()));
+                            taskRecordId = recordInfo.getData().getTaskRecordId();
+                            if (StringUtil.isNullOrEmpty(taskRecordId)) {
+                                throw new NullPointerException("taskRecordId is null");
+                            }
+                            AppAssistant.getRequestQueue().addWaitTask(getPhone(), RecordRequest.this);
+                        } catch (Exception e) {
+                            LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, this, "recordCallOut request error:%s", e.getMessage()));
+                        }
+                    }
+                });
+    }
+
     @Override
     public Response<RecordInfo> performRequest() {
-        //TODO upload sound
         try {
             final RecordInfo[] data = {null};
-            AppAssistant.getApi().recordCalledOut(new RecordInfo.RecordRequestBody(getTaskId(),getPhone()))
-                    .subscribe(new Consumer<RecordInfo>() {
-                        @Override
-                        public void accept(RecordInfo recordInfo){
-                            try{
-                                LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, this, "phone %s recordCallOut request info:%s", getPhone(), recordInfo == null ? "fail" : recordInfo.toString()));
-                                if (recordInfo != null) {
-                                    String taskRecordId = recordInfo.getData().getTaskRecordId();
-                                    if (StringUtil.isNullOrEmpty(taskRecordId)) {
-                                        throw new NullPointerException("taskRecordId is null");
-                                    }
-                                    String url = getmUrl();
-                                    if (url == null) {
-                                        url = FileUtil.getRecentlyMiUiSoundPath(getPhone(), Constants.FilePaths.MIUI_SOUND_DIR);
-                                        setmUrl(url);
-                                    }
-                                    if (url == null) {
-                                        LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, this, "phone %s recordCallOut request but path is null", getPhone()));
-                                    }
+            AppAssistant.getApi().recordCalledOut(new RecordInfo.RecordRequestBody(getTaskId(), getPhone()));
+            try {
+                LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, this, "phone %s recordCallOut", getPhone()));
+                if (StringUtil.isNullOrEmpty(taskRecordId)) {
+                    throw new NullPointerException("taskRecordId is null");
+                }
+                String url = getmUrl();
+                if (url == null) {
+                    url = FileUtil.getRecentlyMiUiSoundPath(getPhone(), Constants.FilePaths.MIUI_SOUND_DIR);
+                    setmUrl(url);
+                }
+                if (url == null) {
+                    LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, this, "phone %s recordCallOut request but path is null", getPhone()));
+                }
 
-                                    File file = new File(getmUrl());
-                                    if (file.exists()) {
-                                        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-                                        MultipartBody.Part filePart = MultipartBody.Part.createFormData("mp3", file.getName(), requestFile);
-                                        long startTime = getStartTime();
-                                        AppAssistant.getApi().upLoadRecord(taskRecordId, EncryptUtil.getFileSha1(file.getAbsolutePath()), filePart, startTime > 0? (System.currentTimeMillis() - startTime)+"": "0")
-                                                .subscribe(new Consumer<RecordInfo>() {
-                                                    @Override
-                                                    public void accept(RecordInfo recordInfo) throws Exception {
-                                                        LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, this, "phone:%s upload request info:%s", getPhone(), recordInfo == null ? "fail" : recordInfo.toString()));
-                                                        if (recordInfo != null) {
-                                                            if (recordInfo.getError() != null && recordInfo.getError().getCode() != null) {
-                                                                int num = getmRepeatRequest();
-                                                                if (num > 0) {
-                                                                    setmRepeatRequest(--num);
-                                                                    performRequest();
-                                                                    return;
-                                                                }
-                                                            }
-                                                            data[0] = recordInfo;
-                                                        }
-                                                    }
-                                                });
+                File file = new File(getmUrl());
+                if (file.exists()) {
+                    RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+                    MultipartBody.Part filePart = MultipartBody.Part.createFormData("mp3", file.getName(), requestFile);
+                    long startTime = getStartTime();
+                    AppAssistant.getApi().upLoadRecord(taskRecordId, EncryptUtil.getFileSha1(file.getAbsolutePath()), filePart, startTime > 0 ? (System.currentTimeMillis() - startTime) + "" : "0")
+                            .subscribe(new Consumer<RecordInfo>() {
+                                @Override
+                                public void accept(RecordInfo recordInfo) throws Exception {
+                                    LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, this, "phone:%s upload request info:%s", getPhone(), recordInfo == null ? "fail" : recordInfo.toString()));
+                                    if (recordInfo != null) {
+                                        if (recordInfo.getError() != null && recordInfo.getError().getCode() != null) {
+                                            int num = getmRepeatRequest();
+                                            if (num > 0) {
+                                                setmRepeatRequest(--num);
+                                                performRequest();
+                                                return;
+                                            }
+                                        }
+                                        data[0] = recordInfo;
                                     }
                                 }
-                            }catch (Exception e1){
-                                LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, this, "recordCallOut request error:%s", e1.getMessage()));
-                            }
-                        }
-                    });
+                            });
+                }
+            } catch (Exception e1) {
+                LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, this, "recordCallOut request error:%s", e1.getMessage()));
+            }
 
             if (data[0] != null) {
                 return Response.success(data[0]);

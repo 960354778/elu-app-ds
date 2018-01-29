@@ -92,6 +92,9 @@ public class RequestQueue {
     }
 
     public <T> Request<T> add(Request<T> request) {
+        if(request == null)
+            return null;
+
         request.setRequestQueue(this);
         synchronized (mCurrentRequests) {
             mCurrentRequests.add(request);

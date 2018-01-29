@@ -169,8 +169,7 @@ public class OrderListFragment extends BaseListFragment<OrderInfo> {
                             @Override
                             public void a(String arg1) {
                                 if (!StringUtil.isNullOrEmpty(arg1)) {
-                                    RecordRequest request = new RecordRequest(arg1, null, itemInfo.getTaskId());
-                                    AppAssistant.getRequestQueue().addWaitTask(arg1, request);
+                                    new RecordRequest(arg1, null, itemInfo.getTaskId()).sendRequest();
                                     Intent intent = new Intent(Intent.ACTION_CALL);
                                     Uri data = Uri.parse("tel:" + arg1);
                                     intent.setData(data);
