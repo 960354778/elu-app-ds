@@ -17,8 +17,8 @@ public class App extends BaseApplication {
         if(SystemUtil.isAppProcess(this)){
             AppAssistant.ensureInit(this);
             CallPhoneBCSTR.ensureInit(this);
-            AliPushCenter.getInstance().initPush(this);
         }
+        AliPushCenter.getInstance().initPush(this);
     }
 
 

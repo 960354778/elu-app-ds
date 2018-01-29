@@ -73,8 +73,8 @@ public class RecordRequest extends Request {
     public Response<RecordInfo> performRequest() {
         try {
             final RecordInfo[] data = {null};
-            AppAssistant.getApi().recordCalledOut(new RecordInfo.RecordRequestBody(getTaskId(), getPhone()));
             try {
+
                 LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, this, "phone %s recordCallOut", getPhone()));
                 if (StringUtil.isNullOrEmpty(taskRecordId)) {
                     throw new NullPointerException("taskRecordId is null");
@@ -90,6 +90,17 @@ public class RecordRequest extends Request {
 
                 File file = new File(getmUrl());
                 if (file.exists()) {
+
+                    long oldSize = 0;
+                    do {
+                        oldSize = file.length();
+                        try {
+                            Thread.sleep(1000);
+                            LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, this, "wait record video file write complete oldsize:%s, nowsize%s", oldSize + "", file.length() + ""));
+                        } catch (InterruptedException ie) {
+                        }
+                    }while(oldSize != file.length());
+
                     RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
                     MultipartBody.Part filePart = MultipartBody.Part.createFormData("mp3", file.getName(), requestFile);
                     long startTime = getStartTime();
