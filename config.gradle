@@ -8,7 +8,7 @@ ext {
             buildToolsVersion: '26.0.2',
             minSdkVersion: 21,
             targetSdkVersion: 26,
-            versionCode: 10000,
+            versionCode: 1000,
             versionName: '1.0.0',
             applicationId: "com.qingyun.zhiyunelu.ds",
             apk_name_prefix: "zhiyunDS",
