@@ -90,16 +90,23 @@ public class RecordRequest extends Request {
 
                 File file = new File(getmUrl());
                 if (file.exists()) {
-
+                    int sameTimes = 0;
                     long oldSize = 0;
-                    do {
+                    while (sameTimes < 20) {
                         oldSize = file.length();
                         try {
                             Thread.sleep(1000);
-                            LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, this, "wait record video file write complete oldsize:%s, nowsize%s", oldSize + "", file.length() + ""));
+                            long newSize = file.length();
+                            if (oldSize != newSize) {
+                                oldSize = newSize;
+                                sameTimes = 0;
+                            } else {
+                                sameTimes++;
+                            }
+                            LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, this, "wait record video file write complete oldsize: %d, nowsize: %d, sameTimes: %d", oldSize, newSize, sameTimes));
                         } catch (InterruptedException ie) {
                         }
-                    }while(oldSize != file.length());
+                    }
 
                     RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
                     MultipartBody.Part filePart = MultipartBody.Part.createFormData("mp3", file.getName(), requestFile);
