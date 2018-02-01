@@ -1,5 +1,7 @@
 package com.qingyun.zhiyunelu.ds.record;
 
+import android.text.TextUtils;
+
 import com.qingyun.zhiyunelu.ds.AppAssistant;
 import com.qingyun.zhiyunelu.ds.Constants;
 import com.qingyun.zhiyunelu.ds.data.RecordInfo;
@@ -79,57 +81,51 @@ public class RecordRequest extends Request {
                 if (StringUtil.isNullOrEmpty(taskRecordId)) {
                     throw new NullPointerException("taskRecordId is null");
                 }
-                String url = getmUrl();
-                if (url == null) {
-                    url = FileUtil.getRecentlyMiUiSoundPath(getPhone(), Constants.FilePaths.MIUI_SOUND_DIR);
-                    setmUrl(url);
+                int sameTimes = 0;
+                File file = null;
+                long oldSize = 0;
+                while (sameTimes < 16) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException ie) {
+                    }
+                    String url = FileUtil.getRecentlyMiUiSoundPath(getPhone(), Constants.FilePaths.MIUI_SOUND_DIR);
+                    File newFile = url == null ? null : new File(url);
+                    long newSize = newFile != null && newFile.exists() ? newFile.length() : 0;
+                    if ((newFile == null && file == null || newFile != null && newFile.equals(file)) && oldSize == newSize) {
+                        sameTimes++;
+                    } else {
+                        file = newFile;
+                        oldSize = newSize;
+                        sameTimes = 0;
+                    }
+                    LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, this, "wait record video file write complete oldsize: %d, nowsize: %d, sameTimes: %d", oldSize, newSize, sameTimes));
                 }
-                if (url == null) {
+                if (file == null) {
                     LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, this, "phone %s recordCallOut request but path is null", getPhone()));
                 }
 
-                File file = new File(getmUrl());
-                if (file.exists()) {
-                    int sameTimes = 0;
-                    long oldSize = 0;
-                    while (sameTimes < 20) {
-                        oldSize = file.length();
-                        try {
-                            Thread.sleep(1000);
-                            long newSize = file.length();
-                            if (oldSize != newSize) {
-                                oldSize = newSize;
-                                sameTimes = 0;
-                            } else {
-                                sameTimes++;
-                            }
-                            LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, this, "wait record video file write complete oldsize: %d, nowsize: %d, sameTimes: %d", oldSize, newSize, sameTimes));
-                        } catch (InterruptedException ie) {
-                        }
-                    }
-
-                    RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-                    MultipartBody.Part filePart = MultipartBody.Part.createFormData("mp3", file.getName(), requestFile);
-                    long startTime = getStartTime();
-                    AppAssistant.getApi().upLoadRecord(taskRecordId, EncryptUtil.getFileSha1(file.getAbsolutePath()), filePart, startTime > 0 ? (System.currentTimeMillis() - startTime) + "" : "0")
-                            .subscribe(new Consumer<RecordInfo>() {
-                                @Override
-                                public void accept(RecordInfo recordInfo) throws Exception {
-                                    LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, this, "phone:%s upload request info:%s", getPhone(), recordInfo == null ? "fail" : recordInfo.toString()));
-                                    if (recordInfo != null) {
-                                        if (recordInfo.getError() != null && recordInfo.getError().getCode() != null) {
-                                            int num = getmRepeatRequest();
-                                            if (num > 0) {
-                                                setmRepeatRequest(--num);
-                                                performRequest();
-                                                return;
-                                            }
+                RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+                MultipartBody.Part filePart = MultipartBody.Part.createFormData("mp3", file.getName(), requestFile);
+                long startTime = getStartTime();
+                AppAssistant.getApi().upLoadRecord(taskRecordId, EncryptUtil.getFileSha1(file.getAbsolutePath()), filePart, startTime > 0 ? (System.currentTimeMillis() - startTime) + "" : "0")
+                        .subscribe(new Consumer<RecordInfo>() {
+                            @Override
+                            public void accept(RecordInfo recordInfo) throws Exception {
+                                LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, this, "phone:%s upload request info:%s", getPhone(), recordInfo == null ? "fail" : recordInfo.toString()));
+                                if (recordInfo != null) {
+                                    if (recordInfo.getError() != null && recordInfo.getError().getCode() != null) {
+                                        int num = getmRepeatRequest();
+                                        if (num > 0) {
+                                            setmRepeatRequest(--num);
+                                            performRequest();
+                                            return;
                                         }
-                                        data[0] = recordInfo;
                                     }
+                                    data[0] = recordInfo;
                                 }
-                            });
-                }
+                            }
+                        });
             } catch (Exception e1) {
                 LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, this, "recordCallOut request error:%s", e1.getMessage()));
             }
