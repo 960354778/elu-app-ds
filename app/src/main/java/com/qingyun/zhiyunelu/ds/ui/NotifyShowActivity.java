@@ -55,6 +55,8 @@ public class NotifyShowActivity extends BaseTemplatedActivity {
         TextView tt6;
         @BindView(R.id.tv7Id)
         TextView tt7;
+        @BindView(R.id.tv8Id)
+        TextView tt8;
         @BindView(R.id.itemLayoutId)
         LinearLayout itemLayout;
     }
@@ -88,16 +90,18 @@ public class NotifyShowActivity extends BaseTemplatedActivity {
     }
 
     private void fillData(){
+        String taskCode = info.getTaskCode();
+        fillItem(widgets.tt1, taskCode, "工单编号： %s", true);
         String docterName = info.getDoctorName();
-        fillItem(widgets.tt1, docterName, "医生： %s");
+        fillItem(widgets.tt2, docterName, "医生： %s");
         String hospitalName = info.getHospitalName();
-        fillItem(widgets.tt2, hospitalName, "医院： %s");
+        fillItem(widgets.tt3, hospitalName, "医院： %s");
         String departmentName = info.getDepartmentName();
-        fillItem(widgets.tt3, departmentName, "科室： %s");
+        fillItem(widgets.tt4, departmentName, "科室： %s");
         String brandName = info.getBrandName();
-        fillItem(widgets.tt4, brandName, "品牌： %s");
+        fillItem(widgets.tt5, brandName, "品牌： %s");
         String repName = info.getRepresentativeName();
-        fillItem(widgets.tt5, repName, "分配专员： %s");
+        fillItem(widgets.tt6, repName, "分配专员： %s");
         StringBuilder builder = new StringBuilder();
         String provinceName = info.getProvinceName();
         builder.append(provinceName);
@@ -109,7 +113,7 @@ public class NotifyShowActivity extends BaseTemplatedActivity {
         if (!StringUtil.isNullOrEmpty(districtName)) {
             builder.append("--").append(districtName);
         }
-        fillItem(widgets.tt6, builder.toString(), "地址： %s");
+        fillItem(widgets.tt7, builder.toString(), "地址： %s");
         String endDate = info.getEndDate();
         Date dt = null;
         if (!StringUtil.isNullOrEmpty(endDate)) {
@@ -121,7 +125,7 @@ public class NotifyShowActivity extends BaseTemplatedActivity {
                 e.printStackTrace();
             }
         }
-        fillItem(widgets.tt7, dt == null ? null : new SimpleDateFormat("yyyy-MM-dd").format(dt), "截止日期:  %s");
+        fillItem(widgets.tt8, dt == null ? null : new SimpleDateFormat("yyyy-MM-dd").format(dt), "截止日期:  %s");
         widgets.itemLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -144,9 +148,14 @@ public class NotifyShowActivity extends BaseTemplatedActivity {
             });
     }
 
+
     private void fillItem(TextView tv, String content, String formatStr) {
-        tv.setText(StringUtil.isNullOrEmpty(content) ? "" : String.format(formatStr, content));
-        if (StringUtil.isNullOrEmpty(content))
+        fillItem(tv, content, formatStr, false);
+    }
+
+    private void fillItem(TextView tv, String content, String formatStr, boolean force) {
+        tv.setText(!force && StringUtil.isNullOrEmpty(content) ? "" : String.format(formatStr, content));
+        if (!force && StringUtil.isNullOrEmpty(content))
             tv.setVisibility(View.GONE);
         else
             tv.setVisibility(View.VISIBLE);

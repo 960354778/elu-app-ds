@@ -3,7 +3,7 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/itemLayoutId"
     android:layout_width="match_parent"
-    android:layout_height="150dp"
+    android:layout_height="200dp"
     android:layout_gravity="center"
     android:orientation="horizontal"
     android:padding="@dimen/space_medium">
@@ -96,6 +96,14 @@
 
                 <TextView
                     android:id="@+id/tv7Id"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/space_medium"
+                    android:textColor="@color/c_000000"
+                    android:textSize="@dimen/text_medium" />
+
+                <TextView
+                    android:id="@+id/tv8Id"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/c_000000"

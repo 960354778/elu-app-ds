@@ -124,16 +124,18 @@ public class OrderListFragment extends BaseListFragment<OrderInfo> {
         public void bindView(RecyclerView.ViewHolder holder, int position) {
             ViewHolder viewHolder = (ViewHolder) holder;
             OrderInfo info = datas.get(position);
+            String taskCode = info.getTaskCode();
+            fillItem(viewHolder.tt1, taskCode, "工单编号： %s", true);
             String docterName = info.getDoctorName();
-            fillItem(viewHolder.tt1, docterName, "医生： %s");
+            fillItem(viewHolder.tt2, docterName, "医生： %s");
             String hospitalName = info.getHospitalName();
-            fillItem(viewHolder.tt2, hospitalName, "医院： %s");
+            fillItem(viewHolder.tt3, hospitalName, "医院： %s");
             String departmentName = info.getDepartmentName();
-            fillItem(viewHolder.tt3, departmentName, "科室： %s");
+            fillItem(viewHolder.tt4, departmentName, "科室： %s");
             String brandName = info.getBrandName();
-            fillItem(viewHolder.tt4, brandName, "品牌： %s");
+            fillItem(viewHolder.tt5, brandName, "品牌： %s");
             String repName = info.getRepresentativeName();
-            fillItem(viewHolder.tt5, repName, "分配专员： %s");
+            fillItem(viewHolder.tt6, repName, "分配专员： %s");
             StringBuilder builder = new StringBuilder();
             String provinceName = info.getProvinceName();
             builder.append(provinceName);
@@ -145,7 +147,7 @@ public class OrderListFragment extends BaseListFragment<OrderInfo> {
             if (!StringUtil.isNullOrEmpty(districtName)) {
                 builder.append("--").append(districtName);
             }
-            fillItem(viewHolder.tt6, builder.toString(), "地址： %s");
+            fillItem(viewHolder.tt7, builder.toString(), "地址： %s");
             String endDate = info.getEndDate();
             Date dt = null;
             if (!StringUtil.isNullOrEmpty(endDate)) {
@@ -157,7 +159,7 @@ public class OrderListFragment extends BaseListFragment<OrderInfo> {
                     e.printStackTrace();
                 }
             }
-            fillItem(viewHolder.tt7, dt == null ? null : new SimpleDateFormat("yyyy-MM-dd").format(dt), "截止日期:  %s");
+            fillItem(viewHolder.tt8, dt == null ? null : new SimpleDateFormat("yyyy-MM-dd").format(dt), "截止日期:  %s");
             viewHolder.itemLayout.setTag(position);
             if (adpaterType == 0) {
                 viewHolder.itemLayout.setOnClickListener(new View.OnClickListener() {
@@ -188,8 +190,12 @@ public class OrderListFragment extends BaseListFragment<OrderInfo> {
         }
 
         private void fillItem(TextView tv, String content, String formatStr) {
-            tv.setText(StringUtil.isNullOrEmpty(content) ? "" : String.format(formatStr, content));
-            if (StringUtil.isNullOrEmpty(content))
+            fillItem(tv, content, formatStr, false);
+        }
+
+        private void fillItem(TextView tv, String content, String formatStr, boolean force) {
+            tv.setText(!force && StringUtil.isNullOrEmpty(content) ? "" : String.format(formatStr, content));
+            if (!force && StringUtil.isNullOrEmpty(content))
                 tv.setVisibility(View.GONE);
             else
                 tv.setVisibility(View.VISIBLE);
@@ -233,6 +239,8 @@ public class OrderListFragment extends BaseListFragment<OrderInfo> {
         TextView tt6;
         @BindView(R.id.tv7Id)
         TextView tt7;
+        @BindView(R.id.tv8Id)
+        TextView tt8;
         @BindView(R.id.ivCallId)
         ImageView callPhone;
 
