@@ -213,7 +213,7 @@ public class WxManager {
             }
         }, Thread.NORM_PRIORITY);
         LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, WxManager.class, "ini wx manager"));
-        handlerUtil.sendEmptyMessageDelayed(MSG_TAG_UPLOAD_WX, Constants.UPLOAD_WX_CYCLE);
+        handlerUtil.sendEmptyMessageAtTime(MSG_TAG_UPLOAD_WX, Constants.UPLOAD_WX_CYCLE);
     }
 
     public static void startUpload() {
