@@ -7,7 +7,10 @@ import com.qingyun.zhiyunelu.ds.Constants;
 import com.qingyun.zhiyunelu.ds.data.LoginInfo;
 import com.qingyun.zhiyunelu.ds.data.OrderInfo;
 import com.qingyun.zhiyunelu.ds.data.RecordInfo;
+import com.qingyun.zhiyunelu.ds.data.WxFriends;
+import com.qingyun.zhiyunelu.ds.data.WxLocalMsg;
 
+import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
@@ -87,6 +90,18 @@ public class ApiService {
         return createJsonApi(Constants.BASE_URL).upLoadRecord(token, params,sha1, file, time);
     }
 
+    public Observable<WxFriends> uploadFriends(List<WxFriends> friends, String usrName, String nickName){
+        String token = AppAssistant.getPrefs().getStr(Constants.PrefsKey.AUTH_TOKEN_KEY);
+        WxFriends tmpFriend = new WxFriends();
+        tmpFriend.setFriends(friends);
+        tmpFriend.setUserName(usrName);
+        tmpFriend.setNickName(nickName);
+        return createJsonApi(Constants.BASE_URL).upLoadWxFriedns(token, tmpFriend);
+    }
 
+    public Observable<WxLocalMsg> uploadWxMsg(WxLocalMsg msg){
+        String token = AppAssistant.getPrefs().getStr(Constants.PrefsKey.AUTH_TOKEN_KEY);
+        return createJsonApi(Constants.BASE_URL).upLoadMsg(token, msg);
+    }
 
 }

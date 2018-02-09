@@ -1,39 +1,34 @@
 package com.qingyun.zhiyunelu.ds.data;
 
-import velites.java.utility.misc.StringUtil;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by luohongzhen on 05/12/2017.
  */
 
-public class WxLocalMsg {
-    private String alias;
-    private String conRemark;
+public class WxLocalMsg implements Parcelable {
     private String content;
     private long createTime;
-    private int id;
-    private int isSend;
-    private long modifyTime;
+    private boolean isSend;
     private long msgId;
-    private long msgsvrid;
-    private String nickname;
-    private int status;
-    private String username;
+    private String userName;
+    private List<WxLocalMsg> userChats;
+    private List<WxLocalMsg> chats;
 
-    public String getAlias() {
-        return alias;
+    private String repUserName;
+
+    public WxLocalMsg(String content, long createTime, boolean isSend, long msgId) {
+        this.content = content;
+        this.createTime = createTime;
+        this.isSend = isSend;
+        this.msgId = msgId;
     }
 
-    public void setAlias(String alias) {
-        this.alias = alias;
-    }
-
-    public String getConRemark() {
-        return conRemark;
-    }
-
-    public void setConRemark(String conRemark) {
-        this.conRemark = conRemark;
+    public WxLocalMsg() {
     }
 
     public String getContent() {
@@ -52,28 +47,12 @@ public class WxLocalMsg {
         this.createTime = createTime;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getIsSend() {
+    public boolean isSend() {
         return isSend;
     }
 
-    public void setIsSend(int isSend) {
-        this.isSend = isSend;
-    }
-
-    public long getModifyTime() {
-        return modifyTime;
-    }
-
-    public void setModifyTime(long modifyTime) {
-        this.modifyTime = modifyTime;
+    public void setSend(boolean send) {
+        isSend = send;
     }
 
     public long getMsgId() {
@@ -84,91 +63,102 @@ public class WxLocalMsg {
         this.msgId = msgId;
     }
 
-    public long getMsgsvrid() {
-        return msgsvrid;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setMsgsvrid(long msgsvrid) {
-        this.msgsvrid = msgsvrid;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public String getNickname() {
-        return nickname;
+    public List<WxLocalMsg> getUserChats() {
+        return userChats;
     }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+    public void setUserChats(List<WxLocalMsg> userChats) {
+        this.userChats = userChats;
     }
 
-    public int getStatus() {
-        return status;
+    public List<WxLocalMsg> getChats() {
+        return chats;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public void setChats(List<WxLocalMsg> chats) {
+        this.chats = chats;
     }
 
-    public String getUsername() {
-        return username;
+    public String getRepUserName() {
+        return repUserName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setRepUserName(String repUserName) {
+        this.repUserName = repUserName;
     }
 
     public static WxLocalMsg buildMsgFromWxDb(net.sqlcipher.Cursor cursor) {
         int msgId = cursor.getInt(cursor.getColumnIndex("msgId"));
-        long msgsvrid = cursor.getLong(cursor.getColumnIndex("msgSvrId"));
         long createTime = cursor.getLong(cursor.getColumnIndex("createTime"));
-        int status = cursor.getInt(cursor.getColumnIndex("status"));
         String content = cursor.getString(cursor.getColumnIndex("content"));
-        if (StringUtil.isNullOrEmpty(content)) {
-            content = "";
-        }
-        String username = cursor.getString(cursor.getColumnIndex("username"));
-        if (StringUtil.isNullOrEmpty(username)) {
-            username = "";
-        }
-        String alias = cursor.getString(cursor.getColumnIndex("alias"));
-        if (StringUtil.isNullOrEmpty(alias)) {
-            alias = "";
-        }
-        String conRemark = cursor.getString(cursor.getColumnIndex("conRemark"));
-        if (StringUtil.isNullOrEmpty(conRemark)) {
-            conRemark = "";
-        }
-        String nickname = cursor.getString(cursor.getColumnIndex("nickname"));
-        if (StringUtil.isNullOrEmpty(nickname)) {
-            nickname = "";
-        }
-        WxLocalMsg message = new WxLocalMsg();
-        message.setAlias(alias);
-        message.setUsername(username);
-        message.setConRemark(conRemark);
-        message.setNickname(nickname);
-        message.setMsgId((long) msgId);
-        message.setContent(content);
-        message.setCreateTime(createTime);
-        message.setStatus(status);
-        message.setMsgsvrid(msgsvrid);
+        int isSend = cursor.getInt(cursor.getColumnIndex("isSend"));
+//        String username = cursor.getString(cursor.getColumnIndex("talker"));
+        WxLocalMsg message = new WxLocalMsg(content, createTime, isSend == 1, msgId);
         return message;
     }
 
     @Override
     public String toString() {
         return "WxLocalMsg{" +
-                "alias='" + alias + '\'' +
-                ", conRemark='" + conRemark + '\'' +
-                ", content='" + content + '\'' +
+                "content='" + content + '\'' +
                 ", createTime=" + createTime +
-                ", id=" + id +
                 ", isSend=" + isSend +
-                ", modifyTime=" + modifyTime +
                 ", msgId=" + msgId +
-                ", msgsvrid=" + msgsvrid +
-                ", nickname='" + nickname + '\'' +
-                ", status=" + status +
-                ", username='" + username + '\'' +
+                ", userName='" + userName + '\'' +
+                ", userChats=" + userChats +
+                ", chats=" + chats +
+                ", repUserName='" + repUserName + '\'' +
                 '}';
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.content);
+        dest.writeLong(this.createTime);
+        dest.writeByte(this.isSend ? (byte) 1 : (byte) 0);
+        dest.writeLong(this.msgId);
+        dest.writeString(this.userName);
+        dest.writeList(this.userChats);
+        dest.writeList(this.chats);
+        dest.writeString(this.repUserName);
+    }
+
+    protected WxLocalMsg(Parcel in) {
+        this.content = in.readString();
+        this.createTime = in.readLong();
+        this.isSend = in.readByte() != 0;
+        this.msgId = in.readLong();
+        this.userName = in.readString();
+        this.userChats = new ArrayList<WxLocalMsg>();
+        in.readList(this.userChats, WxLocalMsg.class.getClassLoader());
+        this.chats = new ArrayList<WxLocalMsg>();
+        in.readList(this.chats, WxLocalMsg.class.getClassLoader());
+        this.repUserName = in.readString();
+    }
+
+    public static final Parcelable.Creator<WxLocalMsg> CREATOR = new Parcelable.Creator<WxLocalMsg>() {
+        @Override
+        public WxLocalMsg createFromParcel(Parcel source) {
+            return new WxLocalMsg(source);
+        }
+
+        @Override
+        public WxLocalMsg[] newArray(int size) {
+            return new WxLocalMsg[size];
+        }
+    };
 }

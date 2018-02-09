@@ -61,13 +61,15 @@ public class SplashActivity extends BaseActivity {
             }
         }, Constants.PERMISSIONS_MUST_HAVE, Constants.PERMISSIONS_NICE_TO_HAVE);
         if(RootUtility.isCanRoot()){
-            RootUtility.runAsRoot("ls");
+           if(!RootUtility.runAsRoot("ls")){
+               ToastUtil.showToastLong(this, "请先root手机");
+           }
         }
 
         if(!FileUtil.isExistsForFile(Constants.FilePaths.MIUI_SOUND_DIR)){
             ToastUtil.showToastLong(this,"请确认已打开手机自动录音功能");
         }
-//        WxManager.test(this);
+
     }
 
     @Override

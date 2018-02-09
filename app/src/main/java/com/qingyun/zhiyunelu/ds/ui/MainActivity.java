@@ -11,6 +11,7 @@ import com.qingyun.zhiyunelu.ds.AppAssistant;
 import com.qingyun.zhiyunelu.ds.Constants;
 import com.qingyun.zhiyunelu.ds.R;
 import com.qingyun.zhiyunelu.ds.alipush.AliPushCenter;
+import com.qingyun.zhiyunelu.ds.wechat.WxManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -125,6 +126,7 @@ public class MainActivity extends BaseTemplatedActivity {
                 AliPushCenter.getInstance().bindAccount(displayName);
             }
             widgets.mLogoutTab.setVisibility(View.VISIBLE);
+            WxManager.startUpload();
         }else{
             widgets.mLogoutTab.setVisibility(View.GONE);
             AliPushCenter.getInstance().unbindAccount();

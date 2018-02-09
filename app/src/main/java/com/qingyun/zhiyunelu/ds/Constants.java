@@ -13,6 +13,7 @@ public final class Constants {
 
     public static final String BASE_URL = ChannelConfig.BASE_URL;
     public static final int PAGE_SIZE = 20;
+    public static final int UPLOAD_WX_CYCLE = 2 * 60 * 60 * 1000;//2个小时
 
 
     public static final String[] PERMISSIONS_MUST_HAVE = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO, Manifest.permission.READ_PHONE_STATE,Manifest.permission.CALL_PHONE};

@@ -4,6 +4,8 @@ package com.qingyun.zhiyunelu.ds.net;
 import com.qingyun.zhiyunelu.ds.data.LoginInfo;
 import com.qingyun.zhiyunelu.ds.data.OrderInfo;
 import com.qingyun.zhiyunelu.ds.data.RecordInfo;
+import com.qingyun.zhiyunelu.ds.data.WxFriends;
+import com.qingyun.zhiyunelu.ds.data.WxLocalMsg;
 
 import java.util.Map;
 
@@ -47,4 +49,12 @@ public interface IApiService {
     @Multipart
     @POST("TaskDetail/UploadAudioToRecord")
     Observable<RecordInfo> upLoadRecord(@Header("token") String token, @Query("taskRecordId") String taskRecordId,@Query("hash") String hash, @Part MultipartBody.Part file, @Query("duration") String time);
+
+    @POST("WeChatChat/UploadFriends")
+    Observable<WxFriends> upLoadWxFriedns(@Header("token") String token, @Body WxFriends friends);
+
+    @POST("WeChatChat/UploadChat")
+    Observable<WxLocalMsg> upLoadMsg(@Header("token") String token, @Body WxLocalMsg msg);
+
+
 }
