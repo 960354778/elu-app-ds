@@ -18,12 +18,6 @@ public class WxMyInfo implements Parcelable {
         return 0;
     }
 
-    public WxMyInfo(String nickName, String phone, String userName) {
-        this.nickName = nickName;
-        this.phone = phone;
-        this.userName = userName;
-    }
-
     public String getNickName() {
         return nickName;
     }

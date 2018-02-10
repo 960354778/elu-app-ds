@@ -12,6 +12,7 @@ import com.qingyun.zhiyunelu.ds.data.WxLocalMsg;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
@@ -47,6 +48,9 @@ public class ApiService {
         logInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(logInterceptor)
+                .connectTimeout(Constants.Network.TIMEOUT_AMOUNT, Constants.Network.TIMEOUT_UNIT)
+                .readTimeout(Constants.Network.TIMEOUT_AMOUNT, Constants.Network.TIMEOUT_UNIT)
+                .writeTimeout(Constants.Network.TIMEOUT_AMOUNT, Constants.Network.TIMEOUT_UNIT)
                 .build();
         return client;
     }
@@ -90,12 +94,13 @@ public class ApiService {
         return createJsonApi(Constants.BASE_URL).upLoadRecord(token, params,sha1, file, time);
     }
 
-    public Observable<WxFriends> uploadFriends(List<WxFriends> friends, String usrName, String nickName){
+    public Observable<WxFriends> uploadFriends(List<WxFriends> friends, String usrName, String nickName, String phone){
         String token = AppAssistant.getPrefs().getStr(Constants.PrefsKey.AUTH_TOKEN_KEY);
         WxFriends tmpFriend = new WxFriends();
         tmpFriend.setFriends(friends);
         tmpFriend.setUserName(usrName);
         tmpFriend.setNickName(nickName);
+        tmpFriend.setPhone(phone);
         return createJsonApi(Constants.BASE_URL).upLoadWxFriedns(token, tmpFriend);
     }
 

@@ -13,10 +13,12 @@ import java.util.List;
 public class WxFriends implements Parcelable {
     private String userName;
     private String nickName;
+    private String phone;
     private String conRemark;
     private String conRemarkPy;
     private boolean isDeleted;
     private String lastUpdateTime;
+    private String lastChatTime;
 
 
     private List<WxFriends> friends;
@@ -47,6 +49,14 @@ public class WxFriends implements Parcelable {
 
     public void setNickName(String nickName) {
         this.nickName = nickName;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getComRemark() {
@@ -94,10 +104,19 @@ public class WxFriends implements Parcelable {
         this.lastUpdateTime = lastUpdateTime;
     }
 
+    public String getLastChatTime() {
+        return lastChatTime;
+    }
+
+    public void setLastChatTime(String lastChatTime) {
+        this.lastChatTime = lastChatTime;
+    }
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.userName);
         dest.writeString(this.nickName);
+        dest.writeString(this.phone);
         dest.writeString(this.conRemark);
         dest.writeString(this.conRemarkPy);
         dest.writeByte(this.isDeleted ? (byte) 1 : (byte) 0);
@@ -105,6 +124,7 @@ public class WxFriends implements Parcelable {
         dest.writeParcelable(this.data, flags);
         dest.writeLong(this.timestamp);
         dest.writeString(this.lastUpdateTime);
+        dest.writeString(this.lastChatTime);
     }
 
     public WxFriends() {
@@ -113,6 +133,7 @@ public class WxFriends implements Parcelable {
     protected WxFriends(Parcel in) {
         this.userName = in.readString();
         this.nickName = in.readString();
+        this.phone = in.readString();
         this.conRemark = in.readString();
         this.conRemarkPy = in.readString();
         this.isDeleted = in.readByte() != 0;
@@ -121,6 +142,7 @@ public class WxFriends implements Parcelable {
         this.data = in.readParcelable(WxFriends.class.getClassLoader());
         this.timestamp = in.readLong();
         this.lastUpdateTime = in.readString();
+        this.lastChatTime = in.readString();
     }
 
     public static final Parcelable.Creator<WxFriends> CREATOR = new Parcelable.Creator<WxFriends>() {
@@ -143,11 +165,13 @@ public class WxFriends implements Parcelable {
         String conRemark = cursor.getString(cursor.getColumnIndex("conRemark"));
         String nickName = cursor.getString(cursor.getColumnIndex("nickname"));
         String conRemarkPYFull = cursor.getString(cursor.getColumnIndex("conRemarkPYFull"));
+        String lastChatTime = cursor.getString(cursor.getColumnIndex("lastChatTime"));
         WxFriends friend = new WxFriends();
         friend.setComRemark(conRemark);
         friend.setNickName(nickName);
         friend.setUserName(alias);
         friend.setComRemarkPy(conRemarkPYFull);
+        friend.setLastChatTime(lastChatTime);
         return friend;
     }
 
@@ -156,6 +180,7 @@ public class WxFriends implements Parcelable {
         return "WxFriends{" +
                 "userName='" + userName + '\'' +
                 ", nickName='" + nickName + '\'' +
+                ", phone='" + phone + '\'' +
                 ", comRemark='" + conRemark + '\'' +
                 ", comRemarkPy='" + conRemarkPy + '\'' +
                 ", isDeleted=" + isDeleted +

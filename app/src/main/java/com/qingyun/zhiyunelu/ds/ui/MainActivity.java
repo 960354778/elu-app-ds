@@ -126,7 +126,6 @@ public class MainActivity extends BaseTemplatedActivity {
                 AliPushCenter.getInstance().bindAccount(displayName);
             }
             widgets.mLogoutTab.setVisibility(View.VISIBLE);
-            WxManager.startUpload();
         }else{
             widgets.mLogoutTab.setVisibility(View.GONE);
             AliPushCenter.getInstance().unbindAccount();

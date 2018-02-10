@@ -3,6 +3,8 @@ package com.qingyun.zhiyunelu.ds;
 import android.Manifest;
 import android.os.Environment;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * Created by regis on 16/11/11.
  */
@@ -55,4 +57,16 @@ public final class Constants {
 
     }
 
+    public static final class Network {
+        private Network() {
+        }
+        public static final long TIMEOUT_AMOUNT = 10;
+        public static final TimeUnit TIMEOUT_UNIT = TimeUnit.MINUTES;
+    }
+
+    public static final class Logic {
+        private Logic() {
+        }
+        public static final int WECHAT_MSG_UPLOAD_ONCE_LIMIT = 1000;
+    }
 }
