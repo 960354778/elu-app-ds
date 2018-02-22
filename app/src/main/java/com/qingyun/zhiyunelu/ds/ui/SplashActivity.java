@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.qingyun.zhiyunelu.ds.AppAssistant;
 import com.qingyun.zhiyunelu.ds.Constants;
 import com.qingyun.zhiyunelu.ds.R;
+import com.qingyun.zhiyunelu.ds.sms.SmsManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,6 +56,7 @@ public class SplashActivity extends BaseActivity {
                     gotPermission = true;
                     scheduleLeave(false);
                 } else if (!SyntaxUtil.nvl(arg1.f())) {
+                    gotPermission = true;
                     scheduleLeave(true); // for those api < 23
                 }
                 return true;
@@ -69,6 +71,12 @@ public class SplashActivity extends BaseActivity {
         if(!FileUtil.isExistsForFile(Constants.FilePaths.MIUI_SOUND_DIR)){
             ToastUtil.showToastLong(this,"请确认已打开手机自动录音功能");
         }
+
+        if(!SmsManager.isGetMySelfPhoneNum(this)){
+            ToastUtil.showToastLong(this,"请在设置界面输入本机号");
+        }
+
+//        SmsManager.uploadSmsList();
 
     }
 

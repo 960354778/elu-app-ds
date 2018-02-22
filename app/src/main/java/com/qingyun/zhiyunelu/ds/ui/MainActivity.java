@@ -11,7 +11,6 @@ import com.qingyun.zhiyunelu.ds.AppAssistant;
 import com.qingyun.zhiyunelu.ds.Constants;
 import com.qingyun.zhiyunelu.ds.R;
 import com.qingyun.zhiyunelu.ds.alipush.AliPushCenter;
-import com.qingyun.zhiyunelu.ds.wechat.WxManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -22,21 +21,6 @@ import velites.java.utility.misc.StringUtil;
 public class MainActivity extends BaseTemplatedActivity {
 
     private String mToken;
-
-    private String test = "{\n" +
-            "\t\"taskId\": \"6836960c-ff13-11e7-ab60-c81fbe7293da\",\n" +
-            "\t\"doctorName\": \"张立学\",\n" +
-            "\t\"brandName\": \"测试品牌1\",\n" +
-            "\t\"representativeName\": \"测试专员1\",\n" +
-            "\t\"hospitalDepartmentId\": \"6d50c847-ff13-11e7-ab60-c81fbe7293da\",\n" +
-            "\t\"departmentName\": \"医务处\",\n" +
-            "\t\"hospitalId\": \"6836960c-ff13-11e7-ab60-c81fbe7293da\",\n" +
-            "\t\"hospitalName\": \"浦沿街道社区卫生服务中心\",\n" +
-            "\t\"provinceName\": \"上海\",\n" +
-            "\t\"cityName\": \"上海市\",\n" +
-            "\t\"districtName\": \"长宁区\",\n" +
-            "\t\"phones\": [\"10086\", \"10000\", \"10010\"]\n" +
-            "}";
 
     public static void launchMe(Context ctx) {
         Intent intent = new Intent(ctx, MainActivity.class);

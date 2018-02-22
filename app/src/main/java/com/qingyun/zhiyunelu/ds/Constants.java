@@ -16,9 +16,10 @@ public final class Constants {
     public static final String BASE_URL = ChannelConfig.BASE_URL;
     public static final int PAGE_SIZE = 20;
     public static final int UPLOAD_WX_CYCLE = 2 * 60 * 60 * 1000;//2个小时
+    public static final int UPLOAD_SMS_CYCLE = 2 * 60 * 60 * 1000;//2个小时
 
 
-    public static final String[] PERMISSIONS_MUST_HAVE = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO, Manifest.permission.READ_PHONE_STATE,Manifest.permission.CALL_PHONE};
+    public static final String[] PERMISSIONS_MUST_HAVE = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO, Manifest.permission.READ_PHONE_STATE,Manifest.permission.CALL_PHONE,Manifest.permission.READ_SMS,Manifest.permission.READ_PHONE_NUMBERS};
     public static final String[] PERMISSIONS_NICE_TO_HAVE = new String[]{Manifest.permission.READ_PHONE_STATE};
 
     public static final class Codes {
@@ -54,6 +55,8 @@ public final class Constants {
         public static final String ACCOUNT_PWD_KEY = "accountPwd";
         public static final String LOGIN_NAME = "loginName";
         public static final String DISPLAY_NAME = "displayName";
+        public static final String MYSELF_PHONE_NUM = "mySelfPhoneNum";
+
 
     }
 
