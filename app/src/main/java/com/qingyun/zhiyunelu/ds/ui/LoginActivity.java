@@ -12,6 +12,7 @@ import com.qingyun.zhiyunelu.ds.AppAssistant;
 import com.qingyun.zhiyunelu.ds.Constants;
 import com.qingyun.zhiyunelu.ds.R;
 import com.qingyun.zhiyunelu.ds.data.LoginInfo;
+import com.qingyun.zhiyunelu.ds.sms.SmsManager;
 import com.qingyun.zhiyunelu.ds.wechat.WxManager;
 
 import butterknife.BindView;
@@ -70,6 +71,7 @@ public class LoginActivity extends BaseTemplatedActivity {
                                 AppAssistant.getPrefs().setLong(Constants.PrefsKey.AUTH_EXPIRE_KEY, loginInfo.getToken().getExpire());
                                 ToastUtil.showToastShort(AppAssistant.getDefaultContext(), "登录成功");
                                 WxManager.startUpload();
+                                SmsManager.startUpload();
                                 finish();
                             }
                         }

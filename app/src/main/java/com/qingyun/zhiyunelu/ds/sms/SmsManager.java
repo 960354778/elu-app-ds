@@ -67,7 +67,8 @@ public class SmsManager {
         String curPhoneNum = AppAssistant.getPrefs().getStr(Constants.PrefsKey.MYSELF_PHONE_NUM);
         String myPhoneNum = SystemUtil.getMyselfPhone(ctx);
         if(!StringUtil.isNullOrEmpty(myPhoneNum)){
-            AppAssistant.getPrefs().setStr(Constants.PrefsKey.MYSELF_PHONE_NUM, myPhoneNum);
+            if(StringUtil.isNullOrEmpty(curPhoneNum))
+                AppAssistant.getPrefs().setStr(Constants.PrefsKey.MYSELF_PHONE_NUM, myPhoneNum);
             return true;
         }else{
             return !StringUtil.isNullOrEmpty(curPhoneNum);
@@ -177,5 +178,12 @@ public class SmsManager {
                 ExceptionUtil.swallowThrowable(e);
             }
         });
+    }
+
+    public static void startUpload() {
+        if (handlerUtil != null) {
+            LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, SmsManager.class, "start upload sms info"));
+            handlerUtil.sendEmptyMessage(MSG_TAG_UPLOAD_SMS);
+        }
     }
 }
