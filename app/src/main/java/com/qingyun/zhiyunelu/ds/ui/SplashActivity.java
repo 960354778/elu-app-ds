@@ -76,8 +76,6 @@ public class SplashActivity extends BaseActivity {
             ToastUtil.showToastLong(this,"请在设置界面输入本机号");
         }
 
-//        SmsManager.uploadSmsList();
-
     }
 
     @Override

@@ -4,6 +4,7 @@ package com.qingyun.zhiyunelu.ds.net;
 import com.qingyun.zhiyunelu.ds.data.LoginInfo;
 import com.qingyun.zhiyunelu.ds.data.OrderInfo;
 import com.qingyun.zhiyunelu.ds.data.RecordInfo;
+import com.qingyun.zhiyunelu.ds.data.SmsMsgInfo;
 import com.qingyun.zhiyunelu.ds.data.WxFriends;
 import com.qingyun.zhiyunelu.ds.data.WxLocalMsg;
 
@@ -55,6 +56,12 @@ public interface IApiService {
 
     @POST("WeChatChat/UploadChat")
     Observable<WxLocalMsg> upLoadMsg(@Header("token") String token, @Body WxLocalMsg msg);
+
+    @POST("SmsChat/UploadContacts")
+    Observable<SmsMsgInfo> upLoadContacts(@Header("token") String token, @Body SmsMsgInfo contacts);
+
+    @POST("SmsChat/UploadChat")
+    Observable<SmsMsgInfo> upLoadSmsChat(@Header("token") String token, @Body SmsMsgInfo msg);
 
 
 }
