@@ -7,14 +7,16 @@ import com.qingyun.zhiyunelu.ds.Constants;
 import com.qingyun.zhiyunelu.ds.data.LoginInfo;
 import com.qingyun.zhiyunelu.ds.data.OrderInfo;
 import com.qingyun.zhiyunelu.ds.data.RecordInfo;
+import com.qingyun.zhiyunelu.ds.data.SmsMsgInfo;
 import com.qingyun.zhiyunelu.ds.data.WxFriends;
 import com.qingyun.zhiyunelu.ds.data.WxLocalMsg;
 
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -109,4 +111,41 @@ public class ApiService {
         return createJsonApi(Constants.BASE_URL).upLoadMsg(token, msg);
     }
 
+    public Observable<SmsMsgInfo> uploadContact(SmsMsgInfo contacts){
+        String token = AppAssistant.getPrefs().getStr(Constants.PrefsKey.AUTH_TOKEN_KEY);
+        return createJsonApi(Constants.BASE_URL).upLoadContacts(token, contacts);
+    }
+
+    public Observable<SmsMsgInfo> uploadSmsChat(SmsMsgInfo chats){
+        String token = AppAssistant.getPrefs().getStr(Constants.PrefsKey.AUTH_TOKEN_KEY);
+        return createJsonApi(Constants.BASE_URL).upLoadSmsChat(token, chats);
+    }
+
+
+    public abstract static class ApiObserver<T> implements Observer<T> {
+        @Override
+        public final void onSubscribe(Disposable d) {
+        }
+
+        @Override
+        public final void onNext(T t) {
+            onSuccess(t);
+        }
+
+        @Override
+        public final void onError(Throwable e) {
+            onFail(e);
+        }
+
+        @Override
+        public final void onComplete() {
+
+        }
+
+        public abstract void onSuccess(T t);
+
+
+        public abstract void onFail(Throwable e);
+
+    }
 }

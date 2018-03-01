@@ -9,6 +9,7 @@ import com.qingyun.zhiyunelu.ds.net.ApiService;
 import com.qingyun.zhiyunelu.ds.net.NetLife.NetLifeManager;
 import com.qingyun.zhiyunelu.ds.net.NetLife.RequestQueue;
 import com.qingyun.zhiyunelu.ds.op.Prefs;
+import com.qingyun.zhiyunelu.ds.sms.SmsManager;
 import com.qingyun.zhiyunelu.ds.wechat.WxManager;
 
 import velites.android.utility.framework.EnvironmentInfo;
@@ -64,6 +65,7 @@ public final class AppAssistant {
             requestQueue = NetLifeManager.newRequestQueue();
             ExceptionUtil.wrapperGlobalUncaughtExceptionHandlerWithLog();
             WxManager.initWxManager(ctx);
+            SmsManager.initSms();
         }
     };
 
