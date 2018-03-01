@@ -4,7 +4,7 @@ apply from: '../androidUtils/ide/funcs.gradle'
 def FLAVOR_CHANNEL = 'channel'
 def FLAVOR_DEVICE = 'device'
 
-def developChannels = ['dev', 'qa']
+def developChannels = ['dev', 'qa', 'demo']
 def debugOnlyChannels = ['dev']
 def originChannels = developChannels + 'prd'
 
@@ -65,11 +65,12 @@ android {
     productFlavors {
         dev {
             dimension FLAVOR_CHANNEL
-            applicationIdSuffix "."+name
         }
         qa {
             dimension FLAVOR_CHANNEL
-            applicationIdSuffix "."+name
+        }
+        demo {
+            dimension FLAVOR_CHANNEL
         }
         prd {
             dimension FLAVOR_CHANNEL
@@ -87,12 +88,17 @@ android {
                     res.srcDirs += 'src/origin/res'
                 }
             }
-            if (!developChannels.contains(name)) {
+            def appName = '智云'
+            if (developChannels.contains(name)) {
+                appName += "(${name.toUpperCase()})"
+                flavor.applicationIdSuffix = ".${name}"
+            } else {
                 sourceSets."${name}" {
                     java.srcDirs += 'src/prod/java'
                     res.srcDirs += 'src/prod/res'
                 }
             }
+            flavor.resValue('string', 'app_name', appName)
         }
     }
     variantFilter { variant ->
