@@ -9,15 +9,18 @@ import com.qingyun.zhiyunelu.ds.net.NetLife.Request;
 import com.qingyun.zhiyunelu.ds.net.NetLife.Response;
 
 import java.io.File;
+import java.util.Date;
 
 import io.reactivex.functions.Consumer;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import velites.android.support.media.MediaHelper;
 import velites.java.utility.log.LogEntry;
 import velites.java.utility.log.LogHub;
 import velites.java.utility.misc.EncryptUtil;
 import velites.java.utility.misc.FileUtil;
+import velites.java.utility.misc.PathUtil;
 import velites.java.utility.misc.StringUtil;
 import velites.java.utility.thread.ThreadUtil;
 
@@ -36,7 +39,7 @@ public class RecordRequest extends Request {
         setmRequestCompListener(listener);
         setTaskId(taskId);
         setPhone(phone);
-        setStartTime(System.currentTimeMillis());
+        setStartTime(new Date().getTime());
     }
 
     public RecordRequest(String phone, String path, String taskId) {
@@ -81,6 +84,7 @@ public class RecordRequest extends Request {
                 if (StringUtil.isNullOrEmpty(taskRecordId)) {
                     throw new NullPointerException("taskRecordId is null");
                 }
+                long timeRangeEnd = new Date().getTime();
                 int sameTimes = 0;
                 File file = null;
                 long oldSize = 0;
@@ -89,7 +93,7 @@ public class RecordRequest extends Request {
                         Thread.sleep(1000);
                     } catch (InterruptedException ie) {
                     }
-                    String url = FileUtil.getRecentlyMiUiSoundPath(getPhone(), Constants.FilePaths.MIUI_SOUND_DIR);
+                    String url = FileUtil.getRecentlyMiUiSoundPath(getPhone(), Constants.FilePaths.MIUI_SOUND_DIR, getStartTime(), timeRangeEnd);
                     File newFile = url == null ? null : new File(url);
                     long newSize = newFile != null && newFile.exists() ? newFile.length() : 0;
                     if ((newFile == null && file == null || newFile != null && newFile.equals(file)) && oldSize == newSize) {
@@ -103,29 +107,31 @@ public class RecordRequest extends Request {
                 }
                 if (file == null) {
                     LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, this, "phone %s recordCallOut request but path is null", getPhone()));
-                }
-
-                RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-                MultipartBody.Part filePart = MultipartBody.Part.createFormData("mp3", file.getName(), requestFile);
-                long startTime = getStartTime();
-                AppAssistant.getApi().upLoadRecord(taskRecordId, EncryptUtil.getFileSha1(file.getAbsolutePath()), filePart, startTime > 0 ? (System.currentTimeMillis() - startTime) + "" : "0")
-                        .subscribe(new Consumer<RecordInfo>() {
-                            @Override
-                            public void accept(RecordInfo recordInfo) throws Exception {
-                                LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, this, "phone:%s upload request info:%s", getPhone(), recordInfo == null ? "fail" : recordInfo.toString()));
-                                if (recordInfo != null) {
-                                    if (recordInfo.getError() != null && recordInfo.getError().getCode() != null) {
-                                        int num = getmRepeatRequest();
-                                        if (num > 0) {
-                                            setmRepeatRequest(--num);
-                                            performRequest();
-                                            return;
+                } else {
+                    RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+                    MultipartBody.Part filePart = MultipartBody.Part.createFormData("mp3", file.getName(), requestFile);
+                    String duration = MediaHelper.retrieveMediaDuration(file.toString());
+                    final File f = file;
+                    AppAssistant.getApi().upLoadRecord(taskRecordId, EncryptUtil.getFileSha1(f.getAbsolutePath()), filePart, duration)
+                            .subscribe(new Consumer<RecordInfo>() {
+                                @Override
+                                public void accept(RecordInfo recordInfo) throws Exception {
+                                    LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, this, "phone:%s upload request info:%s", getPhone(), recordInfo == null ? "fail" : recordInfo.toString()));
+                                    if (recordInfo != null) {
+                                        if (recordInfo.getError() != null && recordInfo.getError().getCode() != null) {
+                                            int num = getmRepeatRequest();
+                                            if (num > 0) {
+                                                setmRepeatRequest(--num);
+                                                performRequest();
+                                                return;
+                                            }
                                         }
+                                        data[0] = recordInfo;
+                                        FileUtil.moveFile(f, new File(PathUtil.concat(AppAssistant.getUploadedFileDir(), f.getName())));
                                     }
-                                    data[0] = recordInfo;
                                 }
-                            }
-                        });
+                            });
+                }
             } catch (Exception e1) {
                 LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, this, "recordCallOut request error:%s", e1.getMessage()));
             }

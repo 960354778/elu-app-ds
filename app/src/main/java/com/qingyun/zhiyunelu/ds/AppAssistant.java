@@ -43,13 +43,15 @@ public final class AppAssistant {
             debug = (applicationInfoWthMetaData.flags & ApplicationInfo.FLAG_DEBUGGABLE) == ApplicationInfo.FLAG_DEBUGGABLE;
             buildType = debug ? "debug" : "release";
             channel = applicationInfoWthMetaData.metaData.getString("Channel");
+            logDir = String.format(Constants.FilePaths.LOG_DIR_FORMAT, channel);
+            uploadedFileDir = String.format(Constants.FilePaths.UPLOADED_FILE_DIR_FORMAT, channel);
             device = applicationInfoWthMetaData.metaData.getString("Device");
             showLog = ChannelConfig.FORCE_SHOW_LOG || debug;
             EnvironmentInfo.ensureInit(ctx, channel, buildType);
             if (showLog) {
                 LogReport.initialize(new LogReport.Builder()
                         .setEnable(true)
-                        .setReportDir(Constants.FilePaths.CARCH_LOG_DIR)
+                        .setReportDir(logDir)
                         .setLogProcessor(new SingleLooperLogProcessor())
                         .setReportProcessor(new ReportLogLooperProcessor())
                         .builder()
@@ -80,6 +82,16 @@ public final class AppAssistant {
     private static Prefs prefs;
     private static ApiService apiService;
     private static RequestQueue requestQueue;
+    private static String logDir;
+    private static String uploadedFileDir;
+
+    public static String getLogDir() {
+        return logDir;
+    }
+
+    public static String getUploadedFileDir() {
+        return uploadedFileDir;
+    }
 
     public static Context getDefaultContext() {
         initializer.awaitInitializedNoThrows(null);
