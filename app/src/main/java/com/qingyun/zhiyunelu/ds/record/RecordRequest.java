@@ -16,6 +16,7 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import velites.android.support.media.MediaHelper;
+import velites.android.utility.utils.PhoneNumberUtil;
 import velites.java.utility.log.LogEntry;
 import velites.java.utility.log.LogHub;
 import velites.java.utility.misc.EncryptUtil;
@@ -66,7 +67,7 @@ public class RecordRequest extends Request {
                             if (StringUtil.isNullOrEmpty(taskRecordId)) {
                                 throw new NullPointerException("taskRecordId is null");
                             }
-                            AppAssistant.getRequestQueue().addWaitTask(getPhone(), RecordRequest.this);
+                            AppAssistant.getRequestQueue().addWaitTask(PhoneNumberUtil.normalizeTelNumber(getPhone()), RecordRequest.this);
                         } catch (Exception e) {
                             LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, this, "recordCallOut request error:%s", e.getMessage()));
                         }
@@ -93,7 +94,7 @@ public class RecordRequest extends Request {
                         Thread.sleep(1000);
                     } catch (InterruptedException ie) {
                     }
-                    String url = FileUtil.getRecentlyMiUiSoundPath(getPhone(), Constants.FilePaths.MIUI_SOUND_DIR, getStartTime(), timeRangeEnd);
+                    String url = FileUtil.getRecentlyMiUiSoundPath(PhoneNumberUtil.normalizeTelNumber(getPhone()), Constants.FilePaths.MIUI_SOUND_DIR, getStartTime(), timeRangeEnd);
                     File newFile = url == null ? null : new File(url);
                     long newSize = newFile != null && newFile.exists() ? newFile.length() : 0;
                     if ((newFile == null && file == null || newFile != null && newFile.equals(file)) && oldSize == newSize) {
