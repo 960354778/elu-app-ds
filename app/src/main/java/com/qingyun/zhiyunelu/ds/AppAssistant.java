@@ -42,6 +42,9 @@ public final class AppAssistant {
             db = new DbOperator(ctx);
             debug = (applicationInfoWthMetaData.flags & ApplicationInfo.FLAG_DEBUGGABLE) == ApplicationInfo.FLAG_DEBUGGABLE;
             buildType = debug ? "debug" : "release";
+            buildDate = applicationInfoWthMetaData.metaData.getString("BuildDate");
+            buildEpoch = applicationInfoWthMetaData.metaData.getString("BuildEpoch");
+            buildRevision = applicationInfoWthMetaData.metaData.getString("BuildRevision");
             channel = applicationInfoWthMetaData.metaData.getString("Channel");
             logDir = String.format(Constants.FilePaths.LOG_DIR_FORMAT, channel);
             uploadedFileDir = String.format(Constants.FilePaths.UPLOADED_FILE_DIR_FORMAT, channel);
@@ -84,6 +87,9 @@ public final class AppAssistant {
     private static RequestQueue requestQueue;
     private static String logDir;
     private static String uploadedFileDir;
+    private static String buildDate;
+    private static String buildEpoch;
+    private static String buildRevision;
 
     public static String getLogDir() {
         return logDir;
@@ -146,6 +152,18 @@ public final class AppAssistant {
     public static RequestQueue getRequestQueue() {
         initializer.awaitInitializedNoThrows(null);
         return requestQueue;
+    }
+
+    public static String getBuildDate() {
+        return buildDate;
+    }
+
+    public static String getBuildEpoch() {
+        return buildEpoch;
+    }
+
+    public static String getBuildRevision() {
+        return buildRevision;
     }
 
     public static final void ensureInit(Context ctx) {

@@ -14,7 +14,6 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.CAPTURE_AUDIO_OUTPUT" />
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
-    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -40,7 +39,15 @@
         <meta-data
             android:name="Device"
             android:value="${device}" />
-
+        <meta-data
+            android:name="BuildDate"
+            android:value="${buildDate}" />
+        <meta-data
+            android:name="BuildDateEpoch"
+            android:value="${buildDateEpoch}" />
+        <meta-data
+            android:name="BuildRevision"
+            android:value="${buildRevision}" />
         <meta-data
             android:name="com.alibaba.app.appkey"
             android:value="${aliPushAppKey}" />

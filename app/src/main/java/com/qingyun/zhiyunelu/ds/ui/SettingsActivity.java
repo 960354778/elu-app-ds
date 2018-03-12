@@ -35,6 +35,10 @@ public class SettingsActivity extends BaseTemplatedActivity {
         TextView saveBt;
         @BindView(R.id.etPhone)
         EditText phoneEt;
+        @BindView(R.id.buildDate)
+        TextView buildDate;
+        @BindView(R.id.buildRevision)
+        TextView buildRevision;
 
         @OnClick({R.id.saveBt})
         void onClick(){
@@ -59,6 +63,8 @@ public class SettingsActivity extends BaseTemplatedActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(widgets, this);
+        widgets.buildDate.setText(AppAssistant.getBuildDate());
+        widgets.buildRevision.setText(AppAssistant.getBuildRevision());
         checkMyPhone();
     }
 
