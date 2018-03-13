@@ -4,8 +4,8 @@ apply from: '../androidUtils/ide/funcs.gradle'
 def FLAVOR_CHANNEL = 'channel'
 def FLAVOR_DEVICE = 'device'
 
-def developChannels = ['dev', 'qa', 'demo']
-def debugOnlyChannels = ['dev']
+def developChannels = ['local', 'dev', 'qa', 'demo']
+def debugOnlyChannels = ['local']
 def originChannels = developChannels + 'prd'
 
 android {
@@ -70,6 +70,9 @@ android {
     }
     flavorDimensions FLAVOR_CHANNEL, FLAVOR_DEVICE
     productFlavors {
+        local {
+            dimension FLAVOR_CHANNEL
+        }
         dev {
             dimension FLAVOR_CHANNEL
         }
