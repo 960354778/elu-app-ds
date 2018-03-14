@@ -8,5 +8,5 @@ public final class ChannelConfig {
     private ChannelConfig() {}
 
     public static final boolean FORCE_SHOW_LOG = true;
-    public static final String BASE_URL = "http://api.dev.zhiyunyilu.com/";
+    public static final String BASE_URL = "https://api.dev.zhiyunyilu.com/";
 }

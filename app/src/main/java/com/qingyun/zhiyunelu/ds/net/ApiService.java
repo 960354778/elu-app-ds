@@ -23,6 +23,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import velites.android.utility.utils.NetUtil;
 import velites.java.utility.log.LogEntry;
 import velites.java.utility.log.LogHub;
 
@@ -53,6 +54,8 @@ public class ApiService {
                 .connectTimeout(Constants.Network.TIMEOUT_AMOUNT, Constants.Network.TIMEOUT_UNIT)
                 .readTimeout(Constants.Network.TIMEOUT_AMOUNT, Constants.Network.TIMEOUT_UNIT)
                 .writeTimeout(Constants.Network.TIMEOUT_AMOUNT, Constants.Network.TIMEOUT_UNIT)
+                .sslSocketFactory(NetUtil.createTrustAllSSLSocketFactory(), new NetUtil.TrustAllCerts())
+                .hostnameVerifier(new NetUtil.TrustAllHostnameVerifier())
                 .build();
         return client;
     }
