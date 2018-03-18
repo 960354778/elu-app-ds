@@ -156,6 +156,13 @@ public class SmsManager {
                 int type = c.getInt(c.getColumnIndex("type"));
                 SmsMsgInfo chat = new SmsMsgInfo();
                 chat.setMsgId(_id);
+                if (type == 1) {
+                    chat.setSend(false);
+                } else if (type == 2) {
+                    chat.setSend(true);
+                } else {
+                    continue;
+                }
                 chat.setSend(type != 0);
                 chat.setCreateTime(date);
                 chat.setContent(body);
