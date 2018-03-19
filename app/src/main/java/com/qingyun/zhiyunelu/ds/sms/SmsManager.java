@@ -163,7 +163,6 @@ public class SmsManager {
                 } else {
                     continue;
                 }
-                chat.setSend(type != 0);
                 chat.setCreateTime(date);
                 chat.setContent(body);
                 chatsList.add(chat);
