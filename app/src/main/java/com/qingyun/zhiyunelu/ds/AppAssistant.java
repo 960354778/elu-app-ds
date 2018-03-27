@@ -20,6 +20,7 @@ import velites.java.utility.log.LogHub;
 import velites.java.utility.log.LogProcessor;
 import velites.java.utility.log.LogReport;
 import velites.java.utility.misc.ExceptionUtil;
+import velites.java.utility.misc.StringUtil;
 import velites.java.utility.thread.BaseInitializer;
 
 /**
@@ -66,6 +67,7 @@ public final class AppAssistant {
 
             }
             prefs = new Prefs(ctx);
+            apiBaseUrl = ChannelConfig.BASE_URL;
             apiService = new ApiService();
             requestQueue = NetLifeManager.newRequestQueue();
             ExceptionUtil.wrapperGlobalUncaughtExceptionHandlerWithLog();
@@ -75,7 +77,7 @@ public final class AppAssistant {
     };
 
     private static Context defaultContext;
-    public static ApplicationInfo applicationInfoWthMetaData;
+    private static ApplicationInfo applicationInfoWthMetaData;
     private static DbOperator db;
     private static String channel;
     private static String device;
@@ -90,6 +92,7 @@ public final class AppAssistant {
     private static String buildDate;
     private static String buildEpoch;
     private static String buildRevision;
+    private static String apiBaseUrl;
 
     public static String getLogDir() {
         return logDir;
@@ -142,6 +145,20 @@ public final class AppAssistant {
     public static Prefs getPrefs() {
         initializer.awaitInitializedNoThrows(null);
         return prefs;
+    }
+
+    public static String getApiBaseUrl() {
+        if (debug) {
+            String url = prefs.getStr(Constants.PrefsKey.DEBUG_API_BASE_URL);
+            if (!StringUtil.isNullOrSpace(url)) {
+                return url;
+            }
+        }
+        return apiBaseUrl;
+    }
+
+    public static void setApiBaseUrl(String url) {
+        AppAssistant.getPrefs().setStr(Constants.PrefsKey.DEBUG_API_BASE_URL, url);
     }
 
     public static ApiService getApi() {

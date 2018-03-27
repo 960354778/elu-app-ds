@@ -15,7 +15,7 @@ public class OrderInfo implements Parcelable {
     private OrderInfo  data;
     private OrderInfo doctorTasks;
     private List<OrderInfo> list;
-    private List<String> phones;
+    private List<PhoneInfo> phones;
     private PageInfo page;
     private String doctorName;
     private String hospitalName;
@@ -29,6 +29,18 @@ public class OrderInfo implements Parcelable {
     private String taskId;
     private String taskCode;
 
+
+    public static final Parcelable.Creator<OrderInfo> CREATOR = new Parcelable.Creator<OrderInfo>() {
+        @Override
+        public OrderInfo createFromParcel(Parcel source) {
+            return new OrderInfo(source);
+        }
+
+        @Override
+        public OrderInfo[] newArray(int size) {
+            return new OrderInfo[size];
+        }
+    };
 
     @Override
     public int describeContents() {
@@ -65,8 +77,8 @@ public class OrderInfo implements Parcelable {
         this.doctorTasks = in.readParcelable(OrderInfo.class.getClassLoader());
         this.list = new ArrayList<OrderInfo>();
         in.readList(this.list, OrderInfo.class.getClassLoader());
-        this.phones = new ArrayList<>();
-        in.readList(this.phones, String.class.getClassLoader());
+        this.phones = new ArrayList<PhoneInfo>();
+        in.readList(this.phones, OrderInfo.class.getClassLoader());
         this.page = in.readParcelable(PageInfo.class.getClassLoader());
         this.doctorName = in.readString();
         this.hospitalName = in.readString();
@@ -80,18 +92,6 @@ public class OrderInfo implements Parcelable {
         this.taskId = in.readString();
         this.taskCode = in.readString();
     }
-
-    public static final Parcelable.Creator<OrderInfo> CREATOR = new Parcelable.Creator<OrderInfo>() {
-        @Override
-        public OrderInfo createFromParcel(Parcel source) {
-            return new OrderInfo(source);
-        }
-
-        @Override
-        public OrderInfo[] newArray(int size) {
-            return new OrderInfo[size];
-        }
-    };
 
     public long getTimestamp() {
         return timestamp;
@@ -145,7 +145,7 @@ public class OrderInfo implements Parcelable {
         return districtName;
     }
 
-    public List<String> getPhones() {
+    public List<PhoneInfo> getPhones() {
         return phones;
     }
 
@@ -160,6 +160,7 @@ public class OrderInfo implements Parcelable {
     public String getRepresentativeName() {
         return representativeName;
     }
+
 
     @Override
     public String toString() {

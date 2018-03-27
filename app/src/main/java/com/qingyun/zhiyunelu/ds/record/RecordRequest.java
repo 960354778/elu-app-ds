@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import com.qingyun.zhiyunelu.ds.AppAssistant;
 import com.qingyun.zhiyunelu.ds.Constants;
+import com.qingyun.zhiyunelu.ds.data.PhoneInfo;
 import com.qingyun.zhiyunelu.ds.data.RecordInfo;
 import com.qingyun.zhiyunelu.ds.net.NetLife.Request;
 import com.qingyun.zhiyunelu.ds.net.NetLife.Response;
@@ -34,7 +35,7 @@ public class RecordRequest extends Request {
     private final String TAG = RecordRequest.class.getSimpleName();
     private String taskRecordId;
 
-    public RecordRequest(String phone, String path, String taskId, NetworkRequestCompleteListener listener) {
+    public RecordRequest(PhoneInfo phone, String path, String taskId, NetworkRequestCompleteListener listener) {
         setmTag(String.format("%s_%s", phone, System.currentTimeMillis() + ""));
         setmUrl(path);
         setmRequestCompListener(listener);
@@ -43,7 +44,7 @@ public class RecordRequest extends Request {
         setStartTime(new Date().getTime());
     }
 
-    public RecordRequest(String phone, String path, String taskId) {
+    public RecordRequest(PhoneInfo phone, String path, String taskId) {
         this(phone, path, taskId, null);
     }
 
@@ -57,17 +58,17 @@ public class RecordRequest extends Request {
     }
 
     private void recordCallOut() {
-        AppAssistant.getApi().recordCalledOut(new RecordInfo.RecordRequestBody(getTaskId(), getPhone()))
+        AppAssistant.getApi().recordCalledOut(new RecordInfo.RecordRequestBody(getTaskId(), getPhone().getPhoneID()))
                 .subscribe(new Consumer<RecordInfo>() {
                     @Override
                     public void accept(RecordInfo recordInfo) throws Exception {
                         try {
-                            LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, this, "phone %s recordCallOut request info:%s", getPhone(), recordInfo == null ? "fail" : recordInfo.toString()));
+                            LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, this, "phone %s(%s) recordCallOut request info:%s", getPhone().getNumber(), getPhone().getPhoneID(), recordInfo == null ? "fail" : recordInfo.toString()));
                             taskRecordId = recordInfo.getData().getTaskRecordId();
                             if (StringUtil.isNullOrEmpty(taskRecordId)) {
                                 throw new NullPointerException("taskRecordId is null");
                             }
-                            AppAssistant.getRequestQueue().addWaitTask(PhoneNumberUtil.normalizeTelNumber(getPhone()), RecordRequest.this);
+                            AppAssistant.getRequestQueue().addWaitTask(PhoneNumberUtil.normalizeTelNumber(getPhone().getNumber()), RecordRequest.this);
                         } catch (Exception e) {
                             LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, this, "recordCallOut request error:%s", e.getMessage()));
                         }
@@ -94,7 +95,7 @@ public class RecordRequest extends Request {
                         Thread.sleep(1000);
                     } catch (InterruptedException ie) {
                     }
-                    String url = FileUtil.getRecentlyMiUiSoundPath(PhoneNumberUtil.normalizeTelNumber(getPhone()), Constants.FilePaths.MIUI_SOUND_DIR, getStartTime(), timeRangeEnd);
+                    String url = FileUtil.getRecentlyMiUiSoundPath(PhoneNumberUtil.normalizeTelNumber(getPhone().getNumber()), Constants.FilePaths.MIUI_SOUND_DIR, getStartTime(), timeRangeEnd);
                     File newFile = url == null ? null : new File(url);
                     long newSize = newFile != null && newFile.exists() ? newFile.length() : 0;
                     if ((newFile == null && file == null || newFile != null && newFile.equals(file)) && oldSize == newSize) {

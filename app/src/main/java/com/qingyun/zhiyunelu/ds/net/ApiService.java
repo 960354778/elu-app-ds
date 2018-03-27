@@ -65,23 +65,24 @@ public class ApiService {
     }
 
     public Observable<LoginInfo> login(LoginInfo.LoginRequest body) {
-            return createJsonApi(Constants.BASE_URL).login(body);
+            return createJsonApi(AppAssistant.getApiBaseUrl()).login(body);
     }
 
     public Observable<OrderInfo> getOrderList(int request, Map<String, Object> params){
         params.put("pageSize", Constants.PAGE_SIZE);
         String token = AppAssistant.getPrefs().getStr(Constants.PrefsKey.AUTH_TOKEN_KEY);
         try{
-            switch (request){
-                case Constants.Codes.REQUEST_NET_MY_DOCTER_LIST_TAG:
-                    return createJsonApi(Constants.BASE_URL).getMyDoctersList(token, params);
-                case Constants.Codes.REQUEST_NET_MY_HOSPITAL_LIST_TAG:
-                    return createJsonApi(Constants.BASE_URL).getMyHospitalList(token, params);
-                case Constants.Codes.REQUEST_NET_DOCTER_LIST_TAG:
-                    return createJsonApi(Constants.BASE_URL).getDoctersList(token, params);
-                case Constants.Codes.REQUEST_NET_HOSPITAL_LIST_TAG:
-                    return createJsonApi(Constants.BASE_URL).getHospitalList(token, params);
-            }
+            return createJsonApi(AppAssistant.getApiBaseUrl()).getMyDoctersList(token, params);
+//            switch (request){
+//                case Constants.Codes.REQUEST_NET_MY_DOCTER_LIST_TAG:
+//                    return createJsonApi(AppAssistant.getApiBaseUrl()).getMyDoctersList(token, params);
+//                case Constants.Codes.REQUEST_NET_MY_HOSPITAL_LIST_TAG:
+//                    return createJsonApi(AppAssistant.getApiBaseUrl()).getMyHospitalList(token, params);
+//                case Constants.Codes.REQUEST_NET_DOCTER_LIST_TAG:
+//                    return createJsonApi(AppAssistant.getApiBaseUrl()).getDoctersList(token, params);
+//                case Constants.Codes.REQUEST_NET_HOSPITAL_LIST_TAG:
+//                    return createJsonApi(AppAssistant.getApiBaseUrl()).getHospitalList(token, params);
+//            }
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -91,12 +92,12 @@ public class ApiService {
 
     public Observable<RecordInfo> recordCalledOut(RecordInfo.RecordRequestBody body){
         String token = AppAssistant.getPrefs().getStr(Constants.PrefsKey.AUTH_TOKEN_KEY);
-        return createJsonApi(Constants.BASE_URL).recordCalledOut(token,body);
+        return createJsonApi(AppAssistant.getApiBaseUrl()).recordCalledOut(token,body);
     }
 
     public Observable<RecordInfo> upLoadRecord(String params,String sha1, MultipartBody.Part file , String time){
         String token = AppAssistant.getPrefs().getStr(Constants.PrefsKey.AUTH_TOKEN_KEY);
-        return createJsonApi(Constants.BASE_URL).upLoadRecord(token, params,sha1, file, time);
+        return createJsonApi(AppAssistant.getApiBaseUrl()).upLoadRecord(token, params,sha1, file, time);
     }
 
     public Observable<WxFriends> uploadFriends(List<WxFriends> friends, String usrName, String nickName, String phone){
@@ -106,22 +107,22 @@ public class ApiService {
         tmpFriend.setUserName(usrName);
         tmpFriend.setNickName(nickName);
         tmpFriend.setPhone(phone);
-        return createJsonApi(Constants.BASE_URL).upLoadWxFriedns(token, tmpFriend);
+        return createJsonApi(AppAssistant.getApiBaseUrl()).upLoadWxFriedns(token, tmpFriend);
     }
 
     public Observable<WxLocalMsg> uploadWxMsg(WxLocalMsg msg){
         String token = AppAssistant.getPrefs().getStr(Constants.PrefsKey.AUTH_TOKEN_KEY);
-        return createJsonApi(Constants.BASE_URL).upLoadMsg(token, msg);
+        return createJsonApi(AppAssistant.getApiBaseUrl()).upLoadWxMsg(token, msg);
     }
 
     public Observable<SmsMsgInfo> uploadContact(SmsMsgInfo contacts){
         String token = AppAssistant.getPrefs().getStr(Constants.PrefsKey.AUTH_TOKEN_KEY);
-        return createJsonApi(Constants.BASE_URL).upLoadContacts(token, contacts);
+        return createJsonApi(AppAssistant.getApiBaseUrl()).upLoadSmsContacts(token, contacts);
     }
 
     public Observable<SmsMsgInfo> uploadSmsChat(SmsMsgInfo chats){
         String token = AppAssistant.getPrefs().getStr(Constants.PrefsKey.AUTH_TOKEN_KEY);
-        return createJsonApi(Constants.BASE_URL).upLoadSmsChat(token, chats);
+        return createJsonApi(AppAssistant.getApiBaseUrl()).upLoadSmsChat(token, chats);
     }
 
 

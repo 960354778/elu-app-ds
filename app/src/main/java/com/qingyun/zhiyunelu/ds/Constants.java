@@ -13,7 +13,6 @@ public final class Constants {
     private Constants() {
     }
 
-    public static final String BASE_URL = ChannelConfig.BASE_URL;
     public static final int PAGE_SIZE = 20;
     public static final int UPLOAD_WX_CYCLE = 2 * 60 * 60 * 1000;//2个小时
     public static final int UPLOAD_SMS_CYCLE = 2 * 60 * 60 * 1000;//2个小时
@@ -57,6 +56,7 @@ public final class Constants {
         public static final String LOGIN_NAME = "loginName";
         public static final String DISPLAY_NAME = "displayName";
         public static final String MYSELF_PHONE_NUM = "mySelfPhoneNum";
+        public static final String DEBUG_API_BASE_URL = "debugApiBaseUrl";
 
 
     }

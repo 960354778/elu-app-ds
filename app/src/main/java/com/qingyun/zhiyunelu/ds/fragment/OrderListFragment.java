@@ -19,6 +19,7 @@ import com.qingyun.zhiyunelu.ds.Constants;
 import com.qingyun.zhiyunelu.ds.R;
 import com.qingyun.zhiyunelu.ds.adapter.BaseAdatper;
 import com.qingyun.zhiyunelu.ds.data.OrderInfo;
+import com.qingyun.zhiyunelu.ds.data.PhoneInfo;
 import com.qingyun.zhiyunelu.ds.record.RecordRequest;
 import com.qingyun.zhiyunelu.ds.widget.ShowPhoeListDialog;
 
@@ -167,18 +168,14 @@ public class OrderListFragment extends BaseListFragment<OrderInfo> {
                     public void onClick(View v) {
                         int index = (Integer) v.getTag();
                         final OrderInfo itemInfo = datas.get(index);
-                        final ShowPhoeListDialog dialog = new ShowPhoeListDialog(getActivity(), R.style.CustomDialog, datas.get(index).getPhones(), new Action1<String>() {
+                        final ShowPhoeListDialog dialog = new ShowPhoeListDialog(getActivity(), R.style.CustomDialog, datas.get(index).getPhones(), new Action1<PhoneInfo>() {
                             @Override
-                            public void a(String arg1) {
-                                if (!StringUtil.isNullOrEmpty(arg1)) {
-                                    new RecordRequest(arg1, null, itemInfo.getTaskId()).sendRequest();
-                                    Intent intent = new Intent(Intent.ACTION_CALL);
-                                    Uri data = Uri.parse("tel:" + arg1);
-                                    intent.setData(data);
-                                    getActivity().startActivity(intent);
-
-                                }
-
+                            public void a(PhoneInfo arg1) {
+                                new RecordRequest(arg1, null, itemInfo.getTaskId()).sendRequest();
+                                Intent intent = new Intent(Intent.ACTION_CALL);
+                                Uri data = Uri.parse("tel:" + arg1.getNumber());
+                                intent.setData(data);
+                                getActivity().startActivity(intent);
                             }
                         });
                         dialog.show();

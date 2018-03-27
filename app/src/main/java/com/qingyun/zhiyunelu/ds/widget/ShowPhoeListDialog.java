@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -12,6 +13,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.qingyun.zhiyunelu.ds.R;
+import com.qingyun.zhiyunelu.ds.data.OrderInfo;
+import com.qingyun.zhiyunelu.ds.data.PhoneInfo;
 
 import java.util.List;
 
@@ -20,6 +23,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
 import velites.java.utility.generic.Action1;
+import velites.java.utility.misc.StringUtil;
 
 /**
  * Created by luohongzhen on 16/12/2017.
@@ -27,8 +31,8 @@ import velites.java.utility.generic.Action1;
 
 public class ShowPhoeListDialog extends Dialog {
 
-    private List<String> mDatas;
-    private Action1<String> action;
+    private List<PhoneInfo> mDatas;
+    private Action1<PhoneInfo> action;
     class Widgets{
         @BindView(R.id.lvPhoneListId)
         MyListView myListView;
@@ -50,7 +54,7 @@ public class ShowPhoeListDialog extends Dialog {
 
     private final Widgets widgets = new Widgets();
 
-    public ShowPhoeListDialog(@NonNull Context context, int themeResId, List<String> args, Action1<String> action) {
+    public ShowPhoeListDialog(@NonNull Context context, int themeResId, List<PhoneInfo> args, Action1<PhoneInfo> action) {
         super(context, themeResId);
         this.mDatas = args;
         this.action = action;
@@ -98,8 +102,17 @@ public class ShowPhoeListDialog extends Dialog {
             }else{
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-            String phoneNum = mDatas.get(position);
-            viewHolder.tvTitle.setText(phoneNum);
+            PhoneInfo phone = mDatas.get(position);
+            String num = phone.getNumber();
+            if (!StringUtil.isNullOrSpace(phone.getExtension())) {
+                num += " x " + phone.getExtension();
+            }
+            if (TextUtils.equals(phone.getPhoneSource(), "Department")) {
+                num += "（科室）";
+            } else if (TextUtils.equals(phone.getPhoneSource(), "Hospital")) {
+                num += "（医院）";
+            }
+            viewHolder.tvTitle.setText(num);
             return convertView;
         }
     }

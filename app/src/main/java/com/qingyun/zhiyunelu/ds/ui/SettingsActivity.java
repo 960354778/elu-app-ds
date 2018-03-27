@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -31,21 +32,32 @@ public class SettingsActivity extends BaseTemplatedActivity {
     //TODO: change to use pref
 
     class Widgets {
-        @BindView(R.id.saveBt)
-        TextView saveBt;
-        @BindView(R.id.etPhone)
-        EditText phoneEt;
         @BindView(R.id.buildDate)
         TextView buildDate;
         @BindView(R.id.buildRevision)
         TextView buildRevision;
+        @BindView(R.id.etPhone)
+        EditText phoneEt;
+        @BindView(R.id.layoutDebugUrl)
+        View layoutDebugUrl;
+        @BindView(R.id.debugUrl)
+        EditText debugUrl;
 
-        @OnClick({R.id.saveBt})
-        void onClick(){
+        @OnClick({R.id.savePhoneBt})
+        void onPhoneNumberClick(){
             if(widgets.phoneEt.getText() != null){
                 String phone = widgets.phoneEt.getText().toString();
                 if(!StringUtil.isNullOrEmpty(phone)){
                     AppAssistant.getPrefs().setStr(Constants.PrefsKey.MYSELF_PHONE_NUM, phone);
+                }
+            }
+        }
+        @OnClick({R.id.saveDebugUrlBt})
+        void onDebugUrlClick(){
+            if(widgets.debugUrl.getText() != null){
+                String url = widgets.debugUrl.getText().toString();
+                if(!StringUtil.isNullOrEmpty(url)){
+                    AppAssistant.setApiBaseUrl(url);
                 }
             }
         }
@@ -65,6 +77,10 @@ public class SettingsActivity extends BaseTemplatedActivity {
         ButterKnife.bind(widgets, this);
         widgets.buildDate.setText(AppAssistant.getBuildDate());
         widgets.buildRevision.setText(AppAssistant.getBuildRevision());
+        if (AppAssistant.isDebug()) {
+            widgets.layoutDebugUrl.setVisibility(View.VISIBLE);
+            widgets.debugUrl.setText(AppAssistant.getApiBaseUrl());
+        }
         checkMyPhone();
     }
 

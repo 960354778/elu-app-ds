@@ -47,7 +47,7 @@ public class SplashActivity extends BaseActivity {
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(widgets, this);
         Tuple2<String, Integer> v = EnvironmentInfo.obtainAppVersion(this);
-        widgets.version.setText(getString(R.string.content_splash_version, v.v1, v.v2));
+        widgets.version.setText(getString(R.string.content_splash_version, v.v1, v.v2, AppAssistant.isDebug() ? "DEBUG" : ""));
         RequestPermissionAssistant.startRequestPermission(this, Constants.Codes.REQUEST_CODE_REQUIRE_PERMISSION, !AppAssistant.getPrefs().getPermissionRequested(), new Func2<Func0<Boolean>, String[], Boolean>() {
             @Override
             public Boolean f(Func0<Boolean> arg1, String[] arg2) {

@@ -66,13 +66,39 @@
             android:layout_marginRight="@dimen/space_medium"
             android:textSize="@dimen/text_large"
             android:padding="8dp"
-            android:id="@+id/saveBt"
+            android:id="@+id/savePhoneBt"
             />
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="输入本机号码..."
             android:id="@+id/etPhone"
+            android:textSize="@dimen/text_large"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutDebugUrl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="保存"
+            android:layout_marginRight="@dimen/space_medium"
+            android:textSize="@dimen/text_large"
+            android:padding="8dp"
+            android:id="@+id/saveDebugUrlBt"
+            />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="输入调试用API Root..."
+            android:id="@+id/debugUrl"
             android:textSize="@dimen/text_large"
             />
 

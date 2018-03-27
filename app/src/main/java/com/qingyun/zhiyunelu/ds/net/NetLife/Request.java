@@ -2,6 +2,8 @@ package com.qingyun.zhiyunelu.ds.net.NetLife;
 
 import android.support.annotation.NonNull;
 
+import com.qingyun.zhiyunelu.ds.data.PhoneInfo;
+
 /**
  * Created by luohongzhen on 07/01/2018.
  */
@@ -18,7 +20,7 @@ public abstract class Request<T> implements Comparable<Request<T>> {
     private long startTime;
 
     private String mTaskId;
-    private String mPhone;
+    private PhoneInfo mPhone;
 
     private NetworkRequestCompleteListener mRequestCompListener;
 
@@ -47,11 +49,11 @@ public abstract class Request<T> implements Comparable<Request<T>> {
         this.mTag = mTag;
     }
 
-    public String getPhone() {
+    public PhoneInfo getPhone() {
         return mPhone;
     }
 
-    public void setPhone(String mPhone) {
+    public void setPhone(PhoneInfo mPhone) {
         this.mPhone = mPhone;
     }
 

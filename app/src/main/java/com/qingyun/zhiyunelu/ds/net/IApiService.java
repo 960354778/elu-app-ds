@@ -26,41 +26,29 @@ import retrofit2.http.Query;
 
 public interface IApiService {
 
-    @POST("user/login")
+    @POST("MobileUser/Login")
     Observable<LoginInfo> login(@Body LoginInfo.LoginRequest body);
 
-    @GET("MyTask/Load")
-    Observable<OrderInfo> getMyTasks(@Header("token") String token);
-
-    @POST("MyTask/DoctorTasksAllReps")
+    @POST("MobileTask/DoctorTasksAllReps")
     Observable<OrderInfo> getMyDoctersList(@Header("token") String token, @Body Map<String, Object> params );
 
-    @POST("MyTask/HospitalTasks")
-    Observable<OrderInfo> getMyHospitalList(@Header("token") String token,@Body Map<String, Object> params);
-
-    @POST("Task/GetDoctorTaskList")
-    Observable<OrderInfo> getDoctersList(@Header("token") String token, @Body Map<String, Object> params);
-
-    @POST("Task/GetHospitalTaskList")
-    Observable<OrderInfo> getHospitalList(@Header("token") String token, @Body Map<String, Object> params);
-
-    @POST("TaskDetail/RecordCalledOut")
+    @POST("MobileTask/RecordCalledOut")
     Observable<RecordInfo> recordCalledOut(@Header("token") String token, @Body RecordInfo.RecordRequestBody params);
 
     @Multipart
-    @POST("TaskDetail/UploadAudioToRecord")
+    @POST("MobileTask/UploadAudioToRecord")
     Observable<RecordInfo> upLoadRecord(@Header("token") String token, @Query("taskRecordId") String taskRecordId,@Query("hash") String hash, @Part MultipartBody.Part file, @Query("duration") String time);
 
-    @POST("WeChatChat/UploadFriends")
+    @POST("MobileSync/UploadWechatFriends")
     Observable<WxFriends> upLoadWxFriedns(@Header("token") String token, @Body WxFriends friends);
 
-    @POST("WeChatChat/UploadChat")
-    Observable<WxLocalMsg> upLoadMsg(@Header("token") String token, @Body WxLocalMsg msg);
+    @POST("MobileSync/UploadWechatChats")
+    Observable<WxLocalMsg> upLoadWxMsg(@Header("token") String token, @Body WxLocalMsg msg);
 
-    @POST("SmsChat/UploadContacts")
-    Observable<SmsMsgInfo> upLoadContacts(@Header("token") String token, @Body SmsMsgInfo contacts);
+    @POST("MobileSync/UploadSmsContacts")
+    Observable<SmsMsgInfo> upLoadSmsContacts(@Header("token") String token, @Body SmsMsgInfo contacts);
 
-    @POST("SmsChat/UploadChat")
+    @POST("MobileSync/UploadSmsChats")
     Observable<SmsMsgInfo> upLoadSmsChat(@Header("token") String token, @Body SmsMsgInfo msg);
 
 

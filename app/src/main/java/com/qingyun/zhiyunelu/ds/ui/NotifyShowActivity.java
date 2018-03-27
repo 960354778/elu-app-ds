@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.qingyun.zhiyunelu.ds.AppAssistant;
 import com.qingyun.zhiyunelu.ds.R;
 import com.qingyun.zhiyunelu.ds.data.OrderInfo;
+import com.qingyun.zhiyunelu.ds.data.PhoneInfo;
 import com.qingyun.zhiyunelu.ds.record.RecordRequest;
 import com.qingyun.zhiyunelu.ds.widget.ShowPhoeListDialog;
 
@@ -129,18 +130,14 @@ public class NotifyShowActivity extends BaseTemplatedActivity {
         widgets.itemLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    final ShowPhoeListDialog dialog = new ShowPhoeListDialog(NotifyShowActivity.this, R.style.CustomDialog, info.getPhones(), new Action1<String>() {
+                    final ShowPhoeListDialog dialog = new ShowPhoeListDialog(NotifyShowActivity.this, R.style.CustomDialog, info.getPhones(), new Action1<PhoneInfo>() {
                         @Override
-                        public void a(String arg1) {
-                            if (!StringUtil.isNullOrEmpty(arg1)) {
-                                new RecordRequest(arg1, null, info.getTaskId()).sendRequest();
-                                Intent intent = new Intent(Intent.ACTION_CALL);
-                                Uri data = Uri.parse("tel:" + arg1);
-                                intent.setData(data);
-                                NotifyShowActivity.this.startActivity(intent);
-
-                            }
-
+                        public void a(PhoneInfo arg1) {
+                            new RecordRequest(arg1, null, info.getTaskId()).sendRequest();
+                            Intent intent = new Intent(Intent.ACTION_CALL);
+                            Uri data = Uri.parse("tel:" + arg1.getNumber());
+                            intent.setData(data);
+                            NotifyShowActivity.this.startActivity(intent);
                         }
                     });
                     dialog.show();

@@ -142,7 +142,7 @@ public class RecordInfo implements Parcelable {
     public static class RecordRequestBody implements Parcelable {
         private String taskId;
         private String execDate;
-        private String phoneNumber;
+        private String phoneId;
 
 
         public int describeContents() {
@@ -153,24 +153,24 @@ public class RecordInfo implements Parcelable {
         public void writeToParcel(Parcel dest, int flags) {
             dest.writeString(this.taskId);
             dest.writeString(this.execDate);
-            dest.writeString(this.phoneNumber);
+            dest.writeString(this.phoneId);
         }
 
         public RecordRequestBody() {
         }
 
-        public RecordRequestBody(String taskId, String phoneNum) {
+        public RecordRequestBody(String taskId, String phoneId) {
             this.taskId = taskId;
             SimpleDateFormat dateformat1=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             this.execDate = dateformat1.format(new Date());
             this.execDate = execDate.replace(" ", "T");
-            this.phoneNumber = phoneNum;
+            this.phoneId = phoneId;
         }
 
         protected RecordRequestBody(Parcel in) {
             this.taskId = in.readString();
             this.execDate = in.readString();
-            this.phoneNumber = in.readString();
+            this.phoneId = in.readString();
         }
 
         public static final Creator<RecordRequestBody> CREATOR = new Creator<RecordRequestBody>() {
