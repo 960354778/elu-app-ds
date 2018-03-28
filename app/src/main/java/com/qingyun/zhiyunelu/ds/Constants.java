@@ -3,6 +3,9 @@ package com.qingyun.zhiyunelu.ds;
 import android.Manifest;
 import android.os.Environment;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -16,6 +19,9 @@ public final class Constants {
     public static final int PAGE_SIZE = 20;
     public static final int UPLOAD_WX_CYCLE = 2 * 60 * 60 * 1000;//2个小时
     public static final int UPLOAD_SMS_CYCLE = 2 * 60 * 60 * 1000;//2个小时
+    public static final Date UPLOAD_SOUND_RECORD_START = new GregorianCalendar(2018, 2, 1).getTime();
+    public static final int UPLOAD_SOUND_RECORD_CYCLE = 2 * 60 * 60 * 1000;//2个小时
+    public static final int UPLOAD_SOUND_RECORD_OFFSET = 2 * 60 * 60 * 1000;//2个小时
 
 
     public static final String[] PERMISSIONS_MUST_HAVE = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO, Manifest.permission.READ_PHONE_STATE,Manifest.permission.CALL_PHONE,Manifest.permission.READ_SMS};

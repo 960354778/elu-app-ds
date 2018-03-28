@@ -96,7 +96,7 @@ public class WxManager {
                 c1.close();
                 friendsData.setFriends(list);
 
-                AppAssistant.getApi().uploadFriends(list, userInfo.getUserName(), userInfo.getNickName(), userInfo.getPhone()).subscribe(new Observer<WxFriends>() {
+                AppAssistant.getApi().uploadWxFriedns(list, userInfo.getUserName(), userInfo.getNickName(), userInfo.getPhone()).subscribe(new Observer<WxFriends>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                     }

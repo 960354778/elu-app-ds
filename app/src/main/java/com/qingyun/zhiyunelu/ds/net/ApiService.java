@@ -6,6 +6,7 @@ import com.qingyun.zhiyunelu.ds.AppAssistant;
 import com.qingyun.zhiyunelu.ds.Constants;
 import com.qingyun.zhiyunelu.ds.data.LoginInfo;
 import com.qingyun.zhiyunelu.ds.data.OrderInfo;
+import com.qingyun.zhiyunelu.ds.data.PendingSoundRecordInfo;
 import com.qingyun.zhiyunelu.ds.data.RecordInfo;
 import com.qingyun.zhiyunelu.ds.data.SmsMsgInfo;
 import com.qingyun.zhiyunelu.ds.data.WxFriends;
@@ -95,19 +96,24 @@ public class ApiService {
         return createJsonApi(AppAssistant.getApiBaseUrl()).recordCalledOut(token,body);
     }
 
-    public Observable<RecordInfo> upLoadRecord(String params,String sha1, MultipartBody.Part file , String time){
+    public Observable<RecordInfo> uploadRecord(String params, String sha1, MultipartBody.Part file , String time){
         String token = AppAssistant.getPrefs().getStr(Constants.PrefsKey.AUTH_TOKEN_KEY);
-        return createJsonApi(AppAssistant.getApiBaseUrl()).upLoadRecord(token, params,sha1, file, time);
+        return createJsonApi(AppAssistant.getApiBaseUrl()).uploadRecord(token, params,sha1, file, time);
     }
 
-    public Observable<WxFriends> uploadFriends(List<WxFriends> friends, String usrName, String nickName, String phone){
+    public Observable<List<PendingSoundRecordInfo>> checkAudioToRecords(String[] fileNames){
+        String token = AppAssistant.getPrefs().getStr(Constants.PrefsKey.AUTH_TOKEN_KEY);
+        return createJsonApi(AppAssistant.getApiBaseUrl()).checkAudioToRecords(token, fileNames);
+    }
+
+    public Observable<WxFriends> uploadWxFriedns(List<WxFriends> friends, String usrName, String nickName, String phone){
         String token = AppAssistant.getPrefs().getStr(Constants.PrefsKey.AUTH_TOKEN_KEY);
         WxFriends tmpFriend = new WxFriends();
         tmpFriend.setFriends(friends);
         tmpFriend.setUserName(usrName);
         tmpFriend.setNickName(nickName);
         tmpFriend.setPhone(phone);
-        return createJsonApi(AppAssistant.getApiBaseUrl()).upLoadWxFriedns(token, tmpFriend);
+        return createJsonApi(AppAssistant.getApiBaseUrl()).uploadWxFriedns(token, tmpFriend);
     }
 
     public Observable<WxLocalMsg> uploadWxMsg(WxLocalMsg msg){
@@ -115,7 +121,7 @@ public class ApiService {
         return createJsonApi(AppAssistant.getApiBaseUrl()).upLoadWxMsg(token, msg);
     }
 
-    public Observable<SmsMsgInfo> uploadContact(SmsMsgInfo contacts){
+    public Observable<SmsMsgInfo> uploadSmsContacts(SmsMsgInfo contacts){
         String token = AppAssistant.getPrefs().getStr(Constants.PrefsKey.AUTH_TOKEN_KEY);
         return createJsonApi(AppAssistant.getApiBaseUrl()).upLoadSmsContacts(token, contacts);
     }

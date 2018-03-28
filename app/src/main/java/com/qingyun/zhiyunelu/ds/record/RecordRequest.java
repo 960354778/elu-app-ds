@@ -1,7 +1,5 @@
 package com.qingyun.zhiyunelu.ds.record;
 
-import android.text.TextUtils;
-
 import com.qingyun.zhiyunelu.ds.AppAssistant;
 import com.qingyun.zhiyunelu.ds.Constants;
 import com.qingyun.zhiyunelu.ds.data.PhoneInfo;
@@ -18,6 +16,8 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import velites.android.support.media.MediaHelper;
 import velites.android.utility.utils.PhoneNumberUtil;
+import velites.java.utility.generic.Action1;
+import velites.java.utility.generic.Action2;
 import velites.java.utility.log.LogEntry;
 import velites.java.utility.log.LogHub;
 import velites.java.utility.misc.EncryptUtil;
@@ -105,16 +105,30 @@ public class RecordRequest extends Request {
                         oldSize = newSize;
                         sameTimes = 0;
                     }
-                    LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, this, "wait record video file write complete oldsize: %d, nowsize: %d, sameTimes: %d", oldSize, newSize, sameTimes));
+                    LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, this, "wait record audio file write complete oldsize: %d, nowsize: %d, sameTimes: %d", oldSize, newSize, sameTimes));
                 }
                 if (file == null) {
                     LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, this, "phone %s recordCallOut request but path is null", getPhone()));
                 } else {
+                    uploadSoundRecordFile(file, taskRecordId, new Action2<Boolean, RecordInfo>() {
+                        @Override
+                        public void a(Boolean success, RecordInfo r) {
+                            if (!success) {
+                                int num = getmRepeatRequest();
+                                if (num > 0) {
+                                    setmRepeatRequest(--num);
+                                    performRequest();
+                                    return;
+                                }
+                            }
+                            data[0] = r;
+                        }
+                    });
                     RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
                     MultipartBody.Part filePart = MultipartBody.Part.createFormData("mp3", file.getName(), requestFile);
                     String duration = MediaHelper.retrieveMediaDuration(file.toString());
                     final File f = file;
-                    AppAssistant.getApi().upLoadRecord(taskRecordId, EncryptUtil.getFileSha1(f.getAbsolutePath()), filePart, duration)
+                    AppAssistant.getApi().uploadRecord(taskRecordId, EncryptUtil.getFileSha1(f.getAbsolutePath()), filePart, duration)
                             .subscribe(new Consumer<RecordInfo>() {
                                 @Override
                                 public void accept(RecordInfo recordInfo) throws Exception {
@@ -146,5 +160,25 @@ public class RecordRequest extends Request {
         } catch (Exception e) {
             return Response.error(e.getMessage());
         }
+    }
+
+    public static void uploadSoundRecordFile(final File f, String taskRecordId, Action2<Boolean, RecordInfo> extraBehavior) {
+        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), f);
+        MultipartBody.Part filePart = MultipartBody.Part.createFormData("mp3", f.getName(), requestFile);
+        String duration = MediaHelper.retrieveMediaDuration(f.toString());
+        AppAssistant.getApi().uploadRecord(taskRecordId, EncryptUtil.getFileSha1(f.getAbsolutePath()), filePart, duration)
+                .subscribe(new Consumer<RecordInfo>() {
+                    @Override
+                    public void accept(RecordInfo recordInfo) throws Exception {
+                        boolean success = recordInfo != null && (recordInfo.getError() == null || recordInfo.getError().getCode() == null);
+                        LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, this, "upload audio record file: %s, result(%s): %s", f, success ? "success" : "fail", recordInfo));
+                        if (extraBehavior != null) {
+                            extraBehavior.a(success, recordInfo);
+                        }
+                        if (success) {
+                            FileUtil.moveFile(f, new File(PathUtil.concat(AppAssistant.getUploadedFileDir(), f.getName())));
+                        }
+                    }
+                });
     }
 }

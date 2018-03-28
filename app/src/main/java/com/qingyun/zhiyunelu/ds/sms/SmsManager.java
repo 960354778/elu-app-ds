@@ -31,7 +31,7 @@ public class SmsManager {
     private final static String TAG = SmsManager.class.getSimpleName();
 
     private static HandlerUtil handlerUtil;
-    private static final int MSG_TAG_UPLOAD_SMS = 3001;
+    private static final int MSG_TAG_UPLOAD_SMS = 3002;
 
     private static Uri uri = Uri.parse("content://sms/");
     private static String[] projection = new String[]{"_id", "thread_id", "address", "body", "date","type"};
@@ -95,7 +95,7 @@ public class SmsManager {
                 contacts.add(contact);
             }
             c.close();
-            AppAssistant.getApi().uploadContact(info).subscribe(new ApiService.ApiObserver<SmsMsgInfo>() {
+            AppAssistant.getApi().uploadSmsContacts(info).subscribe(new ApiService.ApiObserver<SmsMsgInfo>() {
                 @Override
                 public void onSuccess(SmsMsgInfo smsMsgInfo) {
                     if(smsMsgInfo != null){
