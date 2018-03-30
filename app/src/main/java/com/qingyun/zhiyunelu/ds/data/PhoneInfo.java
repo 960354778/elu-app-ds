@@ -40,7 +40,7 @@ public class PhoneInfo implements Parcelable {
     }
 
     public String getCallableNumber() {
-        return areaCode + number;
+        return StringUtil.emptyIfNull(areaCode) + number;
     }
 
     public String getDisplayNumber() {

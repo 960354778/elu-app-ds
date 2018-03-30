@@ -70,7 +70,7 @@ public class SoundRecordSynchronizer {
                 AppAssistant.getApi().checkAudioToRecords(files.keySet().toArray(new String[0])).subscribe(new ApiService.ApiObserver<ResultWrapper<PendingSoundRecordInfo[]>>() {
                     @Override
                     public void onSuccess(ResultWrapper<PendingSoundRecordInfo[]> pendings) {
-                        if (pendings != null) {
+                        if (pendings != null && pendings.getData() != null) {
                             for (PendingSoundRecordInfo p : pendings.getData()) {
                                 File f = files.get(p.getFileName());
                                 if (f != null) {

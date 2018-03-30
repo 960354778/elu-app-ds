@@ -73,7 +73,7 @@ public class LoginActivity extends BaseTemplatedActivity {
                                 ToastUtil.showToastShort(AppAssistant.getDefaultContext(), "登录成功");
                                 WxManager.startUpload();
                                 SmsManager.startUpload();
-                                SoundRecordSynchronizer.startSync();
+//                                SoundRecordSynchronizer.startSync();
                                 finish();
                             }
                         }
