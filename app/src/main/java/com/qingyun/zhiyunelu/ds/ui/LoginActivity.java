@@ -12,6 +12,7 @@ import com.qingyun.zhiyunelu.ds.AppAssistant;
 import com.qingyun.zhiyunelu.ds.Constants;
 import com.qingyun.zhiyunelu.ds.R;
 import com.qingyun.zhiyunelu.ds.data.LoginInfo;
+import com.qingyun.zhiyunelu.ds.record.SoundRecordSynchronizer;
 import com.qingyun.zhiyunelu.ds.sms.SmsManager;
 import com.qingyun.zhiyunelu.ds.wechat.WxManager;
 
@@ -72,6 +73,7 @@ public class LoginActivity extends BaseTemplatedActivity {
                                 ToastUtil.showToastShort(AppAssistant.getDefaultContext(), "登录成功");
                                 WxManager.startUpload();
                                 SmsManager.startUpload();
+                                SoundRecordSynchronizer.startSync();
                                 finish();
                             }
                         }

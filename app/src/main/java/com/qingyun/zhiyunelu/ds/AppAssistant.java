@@ -72,9 +72,9 @@ public final class AppAssistant {
             apiService = new ApiService();
             requestQueue = NetLifeManager.newRequestQueue();
             ExceptionUtil.wrapperGlobalUncaughtExceptionHandlerWithLog();
-//            WxManager.initWxManager(ctx);
-//            SmsManager.initSms();
-            SoundRecordSynchronizer.init();
+            WxManager.initWxManager(ctx);
+            SmsManager.initSms();
+//            SoundRecordSynchronizer.init();
         }
     };
 

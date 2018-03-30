@@ -8,6 +8,7 @@ import com.qingyun.zhiyunelu.ds.data.LoginInfo;
 import com.qingyun.zhiyunelu.ds.data.OrderInfo;
 import com.qingyun.zhiyunelu.ds.data.PendingSoundRecordInfo;
 import com.qingyun.zhiyunelu.ds.data.RecordInfo;
+import com.qingyun.zhiyunelu.ds.data.ResultWrapper;
 import com.qingyun.zhiyunelu.ds.data.SmsMsgInfo;
 import com.qingyun.zhiyunelu.ds.data.WxFriends;
 import com.qingyun.zhiyunelu.ds.data.WxLocalMsg;
@@ -71,6 +72,7 @@ public class ApiService {
 
     public Observable<OrderInfo> getOrderList(int request, Map<String, Object> params){
         params.put("pageSize", Constants.PAGE_SIZE);
+        params.put("taskChannelCategories", new String[] {"Phone", "PboneFollow"});
         String token = AppAssistant.getPrefs().getStr(Constants.PrefsKey.AUTH_TOKEN_KEY);
         try{
             return createJsonApi(AppAssistant.getApiBaseUrl()).getMyDoctersList(token, params);
@@ -101,7 +103,7 @@ public class ApiService {
         return createJsonApi(AppAssistant.getApiBaseUrl()).uploadRecord(token, params,sha1, file, time);
     }
 
-    public Observable<List<PendingSoundRecordInfo>> checkAudioToRecords(String[] fileNames){
+    public Observable<ResultWrapper<PendingSoundRecordInfo[]>> checkAudioToRecords(String[] fileNames){
         String token = AppAssistant.getPrefs().getStr(Constants.PrefsKey.AUTH_TOKEN_KEY);
         return createJsonApi(AppAssistant.getApiBaseUrl()).checkAudioToRecords(token, fileNames);
     }

@@ -5,6 +5,7 @@ import com.qingyun.zhiyunelu.ds.data.LoginInfo;
 import com.qingyun.zhiyunelu.ds.data.OrderInfo;
 import com.qingyun.zhiyunelu.ds.data.PendingSoundRecordInfo;
 import com.qingyun.zhiyunelu.ds.data.RecordInfo;
+import com.qingyun.zhiyunelu.ds.data.ResultWrapper;
 import com.qingyun.zhiyunelu.ds.data.SmsMsgInfo;
 import com.qingyun.zhiyunelu.ds.data.WxFriends;
 import com.qingyun.zhiyunelu.ds.data.WxLocalMsg;
@@ -42,7 +43,7 @@ public interface IApiService {
     Observable<RecordInfo> uploadRecord(@Header("token") String token, @Query("taskRecordId") String taskRecordId, @Query("hash") String hash, @Part MultipartBody.Part file, @Query("duration") String time);
 
     @POST("MobileTask/CheckAudioToRecords")
-    Observable<List<PendingSoundRecordInfo>> checkAudioToRecords(@Header("token") String token, @Body String[] files);
+    Observable<ResultWrapper<PendingSoundRecordInfo[]>> checkAudioToRecords(@Header("token") String token, @Body String[] files);
 
     @POST("MobileSync/UploadWechatFriends")
     Observable<WxFriends> uploadWxFriedns(@Header("token") String token, @Body WxFriends friends);

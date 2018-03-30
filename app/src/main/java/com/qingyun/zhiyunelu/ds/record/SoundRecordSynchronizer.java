@@ -7,6 +7,7 @@ import android.os.Message;
 import com.qingyun.zhiyunelu.ds.AppAssistant;
 import com.qingyun.zhiyunelu.ds.Constants;
 import com.qingyun.zhiyunelu.ds.data.PendingSoundRecordInfo;
+import com.qingyun.zhiyunelu.ds.data.ResultWrapper;
 import com.qingyun.zhiyunelu.ds.data.SmsMsgInfo;
 import com.qingyun.zhiyunelu.ds.net.ApiService;
 
@@ -66,11 +67,11 @@ public class SoundRecordSynchronizer {
                 }
             }
             if (files.size() > 0) {
-                AppAssistant.getApi().checkAudioToRecords(files.keySet().toArray(new String[0])).subscribe(new ApiService.ApiObserver<List<PendingSoundRecordInfo>>() {
+                AppAssistant.getApi().checkAudioToRecords(files.keySet().toArray(new String[0])).subscribe(new ApiService.ApiObserver<ResultWrapper<PendingSoundRecordInfo[]>>() {
                     @Override
-                    public void onSuccess(List<PendingSoundRecordInfo> pendings) {
+                    public void onSuccess(ResultWrapper<PendingSoundRecordInfo[]> pendings) {
                         if (pendings != null) {
-                            for (PendingSoundRecordInfo p : pendings) {
+                            for (PendingSoundRecordInfo p : pendings.getData()) {
                                 File f = files.get(p.getFileName());
                                 if (f != null) {
                                     RecordRequest.uploadSoundRecordFile(f, p.getTaskRecordId(), null);
@@ -87,6 +88,13 @@ public class SoundRecordSynchronizer {
             }
         } catch (Throwable ex) {
             ExceptionUtil.swallowThrowable(ex);
+        }
+    }
+
+    public static void startSync() {
+        if (handlerUtil != null) {
+            LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, SoundRecordSynchronizer.class, "start sync sound recorder"));
+            handlerUtil.sendEmptyMessage(MSG_TAG_UPLOAD_SOUND_RECORD);
         }
     }
 }
