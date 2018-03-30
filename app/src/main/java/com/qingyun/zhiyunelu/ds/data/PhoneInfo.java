@@ -5,6 +5,8 @@ import android.os.Parcelable;
 
 import java.util.ArrayList;
 
+import velites.java.utility.misc.StringUtil;
+
 /**
  * Created by regis on 2018/3/27.
  */
@@ -13,6 +15,7 @@ public class PhoneInfo implements Parcelable {
 
     private String phoneID;
     private String phoneSource;
+    private String areaCode;
     private String number;
     private String extension;
 
@@ -24,6 +27,10 @@ public class PhoneInfo implements Parcelable {
         return phoneSource;
     }
 
+    public String getAreaCode() {
+        return areaCode;
+    }
+
     public String getNumber() {
         return number;
     }
@@ -32,10 +39,19 @@ public class PhoneInfo implements Parcelable {
         return extension;
     }
 
+    public String getCallableNumber() {
+        return areaCode + number;
+    }
+
+    public String getDisplayNumber() {
+        return (StringUtil.isNullOrSpace(areaCode) ? "" : areaCode + "-") + number + (StringUtil.isNullOrSpace(extension) ? "" : "*" + extension);
+    }
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.phoneID);
         dest.writeString(this.phoneSource);
+        dest.writeString(this.areaCode);
         dest.writeString(this.number);
         dest.writeString(this.extension);
     }
@@ -43,6 +59,7 @@ public class PhoneInfo implements Parcelable {
     protected PhoneInfo(Parcel in) {
         this.phoneID = in.readString();
         this.phoneSource = in.readString();
+        this.areaCode = in.readString();
         this.number = in.readString();
         this.extension = in.readString();
     }

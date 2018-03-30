@@ -173,7 +173,7 @@ public class OrderListFragment extends BaseListFragment<OrderInfo> {
                             public void a(PhoneInfo arg1) {
                                 new RecordRequest(arg1, null, itemInfo.getTaskId()).sendRequest();
                                 Intent intent = new Intent(Intent.ACTION_CALL);
-                                Uri data = Uri.parse("tel:" + arg1.getNumber());
+                                Uri data = Uri.parse("tel:" + arg1.getCallableNumber());
                                 intent.setData(data);
                                 getActivity().startActivity(intent);
                             }

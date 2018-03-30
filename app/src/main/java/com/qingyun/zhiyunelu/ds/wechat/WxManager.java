@@ -14,6 +14,7 @@ import net.sqlcipher.Cursor;
 import net.sqlcipher.database.SQLiteDatabase;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import io.reactivex.Observer;
@@ -143,7 +144,7 @@ public class WxManager {
                     WxLocalMsg user = new WxLocalMsg();
                     user.setUserName(item.getUserName());
                     StringBuffer buffer = new StringBuffer();
-                    buffer.append(String.format("SELECT * FROM message WHERE talker=\'%s\' AND createTime > %s ORDER BY createTime ASC", item.getUserName(), StringUtil.isNullOrEmpty(item.getLastUpdateTime()) ? "0" : item.getLastUpdateTime()));
+                    buffer.append(String.format("SELECT * FROM message WHERE talker=\'%s\' AND createTime >= %s AND createTime < %s ORDER BY createTime ASC", item.getUserName(), StringUtil.isNullOrEmpty(item.getLastUpdateTime()) ? "0" : item.getLastUpdateTime(), String.valueOf(new Date().getTime() - Constants.UPLOAD_WX_OFFSET)));
                     Cursor c = sql.rawQuery(buffer.toString(), null);
                     if (c != null) {
                         List<WxLocalMsg> chats = new ArrayList<>();

@@ -12,6 +12,7 @@ import com.qingyun.zhiyunelu.ds.data.SmsMsgInfo;
 import com.qingyun.zhiyunelu.ds.net.ApiService;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import velites.android.utility.utils.HandlerUtil;
@@ -143,8 +144,8 @@ public class SmsManager {
 
     private static List<SmsMsgInfo> uploadSmsMsg(String addressTmp, String dateTmp){
         ContentResolver contentResolver = AppAssistant.getDefaultContext().getContentResolver();
-        String[] selectionArgs = new String[]{addressTmp, StringUtil.isNullOrEmpty(dateTmp)?"0": dateTmp};
-        Cursor c = contentResolver.query(uri, projection, "address=? AND date >=?", selectionArgs, "date asc");
+        String[] selectionArgs = new String[]{addressTmp, StringUtil.isNullOrEmpty(dateTmp)?"0": dateTmp, String.valueOf(new Date().getTime() - Constants.UPLOAD_SMS_OFFSET)};
+        Cursor c = contentResolver.query(uri, projection, "address=? AND date >=? AND date <= ?", selectionArgs, "date asc");
         List<SmsMsgInfo> chatsList = new ArrayList<>();
         if(c != null){
             while (c.moveToNext()){

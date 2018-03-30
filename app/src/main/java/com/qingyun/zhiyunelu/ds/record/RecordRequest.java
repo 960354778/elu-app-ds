@@ -63,12 +63,12 @@ public class RecordRequest extends Request {
                     @Override
                     public void accept(RecordInfo recordInfo) throws Exception {
                         try {
-                            LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, this, "phone %s(%s) recordCallOut request info:%s", getPhone().getNumber(), getPhone().getPhoneID(), recordInfo == null ? "fail" : recordInfo.toString()));
+                            LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, this, "phone %s(%s) recordCallOut request info:%s", getPhone().getDisplayNumber(), getPhone().getPhoneID(), recordInfo == null ? "fail" : recordInfo.toString()));
                             taskRecordId = recordInfo.getData().getTaskRecordId();
                             if (StringUtil.isNullOrEmpty(taskRecordId)) {
                                 throw new NullPointerException("taskRecordId is null");
                             }
-                            AppAssistant.getRequestQueue().addWaitTask(PhoneNumberUtil.normalizeTelNumber(getPhone().getNumber()), RecordRequest.this);
+                            AppAssistant.getRequestQueue().addWaitTask(PhoneNumberUtil.normalizeTelNumber(getPhone().getCallableNumber()), RecordRequest.this);
                         } catch (Exception e) {
                             LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, this, "recordCallOut request error:%s", e.getMessage()));
                         }
@@ -95,7 +95,7 @@ public class RecordRequest extends Request {
                         Thread.sleep(1000);
                     } catch (InterruptedException ie) {
                     }
-                    String url = FileUtil.getRecentlyMiUiSoundPath(PhoneNumberUtil.normalizeTelNumber(getPhone().getNumber()), Constants.FilePaths.MIUI_SOUND_DIR, getStartTime(), timeRangeEnd);
+                    String url = FileUtil.getRecentlyMiUiSoundPath(PhoneNumberUtil.normalizeTelNumber(getPhone().getCallableNumber()), Constants.FilePaths.MIUI_SOUND_DIR, getStartTime(), timeRangeEnd);
                     File newFile = url == null ? null : new File(url);
                     long newSize = newFile != null && newFile.exists() ? newFile.length() : 0;
                     if ((newFile == null && file == null || newFile != null && newFile.equals(file)) && oldSize == newSize) {

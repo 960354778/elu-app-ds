@@ -103,10 +103,7 @@ public class ShowPhoeListDialog extends Dialog {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
             PhoneInfo phone = mDatas.get(position);
-            String num = phone.getNumber();
-            if (!StringUtil.isNullOrSpace(phone.getExtension())) {
-                num += " x " + phone.getExtension();
-            }
+            String num = phone.getDisplayNumber();
             if (TextUtils.equals(phone.getPhoneSource(), "Department")) {
                 num += "（科室）";
             } else if (TextUtils.equals(phone.getPhoneSource(), "Hospital")) {

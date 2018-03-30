@@ -135,7 +135,7 @@ public class NotifyShowActivity extends BaseTemplatedActivity {
                         public void a(PhoneInfo arg1) {
                             new RecordRequest(arg1, null, info.getTaskId()).sendRequest();
                             Intent intent = new Intent(Intent.ACTION_CALL);
-                            Uri data = Uri.parse("tel:" + arg1.getNumber());
+                            Uri data = Uri.parse("tel:" + arg1.getCallableNumber());
                             intent.setData(data);
                             NotifyShowActivity.this.startActivity(intent);
                         }
