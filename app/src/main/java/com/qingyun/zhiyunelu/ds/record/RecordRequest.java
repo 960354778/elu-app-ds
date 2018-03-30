@@ -124,29 +124,6 @@ public class RecordRequest extends Request {
                             data[0] = r;
                         }
                     });
-                    RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-                    MultipartBody.Part filePart = MultipartBody.Part.createFormData("mp3", file.getName(), requestFile);
-                    String duration = MediaHelper.retrieveMediaDuration(file.toString());
-                    final File f = file;
-                    AppAssistant.getApi().uploadRecord(taskRecordId, EncryptUtil.getFileSha1(f.getAbsolutePath()), filePart, duration)
-                            .subscribe(new Consumer<RecordInfo>() {
-                                @Override
-                                public void accept(RecordInfo recordInfo) throws Exception {
-                                    LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, this, "phone:%s upload request info:%s", getPhone(), recordInfo == null ? "fail" : recordInfo.toString()));
-                                    if (recordInfo != null) {
-                                        if (recordInfo.getError() != null && recordInfo.getError().getCode() != null) {
-                                            int num = getmRepeatRequest();
-                                            if (num > 0) {
-                                                setmRepeatRequest(--num);
-                                                performRequest();
-                                                return;
-                                            }
-                                        }
-                                        data[0] = recordInfo;
-                                        FileUtil.moveFile(f, new File(PathUtil.concat(AppAssistant.getUploadedFileDir(), f.getName())));
-                                    }
-                                }
-                            });
                 }
             } catch (Exception e1) {
                 LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, this, "recordCallOut request error:%s", e1.getMessage()));
