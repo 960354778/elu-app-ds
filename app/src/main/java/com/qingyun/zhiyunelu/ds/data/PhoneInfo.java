@@ -3,8 +3,6 @@ package com.qingyun.zhiyunelu.ds.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.ArrayList;
-
 import velites.java.utility.misc.StringUtil;
 
 /**
@@ -13,14 +11,14 @@ import velites.java.utility.misc.StringUtil;
 
 public class PhoneInfo implements Parcelable {
 
-    private String phoneID;
+    private String phoneId;
     private String phoneSource;
     private String areaCode;
     private String number;
     private String extension;
 
-    public String getPhoneID() {
-        return phoneID;
+    public String getPhoneId() {
+        return phoneId;
     }
 
     public String getPhoneSource() {
@@ -49,7 +47,7 @@ public class PhoneInfo implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.phoneID);
+        dest.writeString(this.phoneId);
         dest.writeString(this.phoneSource);
         dest.writeString(this.areaCode);
         dest.writeString(this.number);
@@ -57,7 +55,7 @@ public class PhoneInfo implements Parcelable {
     }
 
     protected PhoneInfo(Parcel in) {
-        this.phoneID = in.readString();
+        this.phoneId = in.readString();
         this.phoneSource = in.readString();
         this.areaCode = in.readString();
         this.number = in.readString();

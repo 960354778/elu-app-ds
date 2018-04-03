@@ -16,7 +16,6 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import velites.android.support.media.MediaHelper;
 import velites.android.utility.utils.PhoneNumberUtil;
-import velites.java.utility.generic.Action1;
 import velites.java.utility.generic.Action2;
 import velites.java.utility.log.LogEntry;
 import velites.java.utility.log.LogHub;
@@ -58,12 +57,12 @@ public class RecordRequest extends Request {
     }
 
     private void recordCallOut() {
-        AppAssistant.getApi().recordCalledOut(new RecordInfo.RecordRequestBody(getTaskId(), getPhone().getPhoneID()))
+        AppAssistant.getApi().recordCalledOut(new RecordInfo.RecordRequestBody(getTaskId(), getPhone().getPhoneId()))
                 .subscribe(new Consumer<RecordInfo>() {
                     @Override
                     public void accept(RecordInfo recordInfo) throws Exception {
                         try {
-                            LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, this, "phone %s(%s) recordCallOut request info:%s", getPhone().getDisplayNumber(), getPhone().getPhoneID(), recordInfo == null ? "fail" : recordInfo.toString()));
+                            LogHub.log(new LogEntry(LogHub.LOG_LEVEL_INFO, this, "phone %s(%s) recordCallOut request info:%s", getPhone().getDisplayNumber(), getPhone().getPhoneId(), recordInfo == null ? "fail" : recordInfo.toString()));
                             taskRecordId = recordInfo.getData().getTaskRecordId();
                             if (StringUtil.isNullOrEmpty(taskRecordId)) {
                                 throw new NullPointerException("taskRecordId is null");

@@ -74,7 +74,7 @@ public final class AppAssistant {
             ExceptionUtil.wrapperGlobalUncaughtExceptionHandlerWithLog();
             WxManager.initWxManager(ctx);
             SmsManager.initSms();
-//            SoundRecordSynchronizer.init();
+            SoundRecordSynchronizer.init();
         }
     };
 
