@@ -4,7 +4,7 @@ apply from: '../androidUtils/ide/funcs.gradle'
 def FLAVOR_CHANNEL = 'channel'
 def FLAVOR_DEVICE = 'device'
 
-def developChannels = ['local', 'dev', 'qa', 'demo']
+def developChannels = ['local', 'dev', 'qa', 'demo', 'pre']
 def debugOnlyChannels = ['local']
 def originChannels = developChannels + 'prd'
 
