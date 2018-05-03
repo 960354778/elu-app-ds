@@ -9,7 +9,7 @@ ext {
             minSdkVersion: 21,
             targetSdkVersion: 26,
             versionCode: 1032,
-            versionName: '1.03.2',
+            versionName: '1.3.2',
             applicationId: "com.qingyun.zhiyunelu.ds",
             apk_name_prefix: "zhiyunDS",
             java_version: JavaVersion.VERSION_1_8,
