@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.qingyun.zhiyunelu.ds.AppAssistant;
 import com.qingyun.zhiyunelu.ds.Constants;
 import com.qingyun.zhiyunelu.ds.R;
+import com.qingyun.zhiyunelu.ds.wechat.WxManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,6 +43,8 @@ public class SettingsActivity extends BaseTemplatedActivity {
         View layoutDebugUrl;
         @BindView(R.id.debugUrl)
         EditText debugUrl;
+        @BindView(R.id.layoutExportWxDb)
+        View layoutExportWxDb;
 
         @OnClick({R.id.savePhoneBt})
         void onPhoneNumberClick(){
@@ -60,6 +63,10 @@ public class SettingsActivity extends BaseTemplatedActivity {
                     AppAssistant.setApiBaseUrl(url);
                 }
             }
+        }
+        @OnClick({R.id.exportWxDb})
+        void onExportWxDbClick(){
+            WxManager.exportWxDatabase(SettingsActivity.this);
         }
     }
 
@@ -80,6 +87,7 @@ public class SettingsActivity extends BaseTemplatedActivity {
         if (AppAssistant.isDebug()) {
             widgets.layoutDebugUrl.setVisibility(View.VISIBLE);
             widgets.debugUrl.setText(AppAssistant.getApiBaseUrl());
+            widgets.layoutExportWxDb.setVisibility(View.VISIBLE);
         }
         checkMyPhone();
     }

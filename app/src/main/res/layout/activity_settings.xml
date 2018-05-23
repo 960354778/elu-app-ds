@@ -103,4 +103,23 @@
             />
 
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutExportWxDb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="导出微信数据库"
+            android:layout_marginRight="@dimen/space_medium"
+            android:textSize="@dimen/text_large"
+            android:padding="8dp"
+            android:id="@+id/exportWxDb"
+            />
+
+    </LinearLayout>
 </LinearLayout>

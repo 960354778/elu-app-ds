@@ -38,7 +38,10 @@ public class PhoneInfo implements Parcelable {
     }
 
     public String getCallableNumber() {
-        return StringUtil.emptyIfNull(areaCode) + number;
+        if (StringUtil.isNullOrSpace(areaCode)) {
+            return number;
+        }
+        return "0086" + areaCode.replaceFirst("^0+", "") + number;
     }
 
     public String getDisplayNumber() {

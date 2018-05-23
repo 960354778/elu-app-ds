@@ -26,6 +26,7 @@ import velites.java.utility.generic.Action3;
 import velites.java.utility.log.LogEntry;
 import velites.java.utility.log.LogHub;
 import velites.java.utility.misc.ExceptionUtil;
+import velites.java.utility.misc.PathUtil;
 import velites.java.utility.misc.StringUtil;
 
 /**
@@ -48,10 +49,23 @@ public class WxManager {
             @Override
             public void a(Boolean isOk, String msg, SQLiteDatabase sql) {
                 if (isOk && sql != null) {
-//                    WechatHelper.exportDecodedDB(sql, null);
                     userInfo(sql);
                 } else {
                     LogHub.log(new LogEntry(LogHub.LOG_LEVEL_ERROR, WxManager.class, "get wx database error msg %s", msg));
+                }
+            }
+        });
+    }
+
+    public static void exportWxDatabase(Context context) {
+
+        WechatHelper.checkWechatAndRun(context, AppAssistant.getDefaultContext().getCacheDir().getPath() + "/%s/" + Constants.FilePaths.WX_MS_DB_NAME, Constants.FilePaths.WX_SHARE_PREFS_PATH, Constants.FilePaths.WX_MICROMS_PATH, Constants.FilePaths.WX_MS_DB_NAME, new Action3<Boolean, String, net.sqlcipher.database.SQLiteDatabase>() {
+            @Override
+            public void a(Boolean isOk, String msg, SQLiteDatabase sql) {
+                if (isOk && sql != null) {
+                    WechatHelper.exportDecodedDB(sql, PathUtil.concat(AppAssistant.getMiscDir(), "decrypted_database.db"));
+                } else {
+                    LogHub.log(new LogEntry(LogHub.LOG_LEVEL_ERROR, WxManager.class, "export wx database error msg %s", msg));
                 }
             }
         });

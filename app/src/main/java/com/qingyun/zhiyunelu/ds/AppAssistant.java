@@ -49,6 +49,7 @@ public final class AppAssistant {
             buildRevision = applicationInfoWthMetaData.metaData.getString("BuildRevision");
             channel = applicationInfoWthMetaData.metaData.getString("Channel");
             logDir = String.format(Constants.FilePaths.LOG_DIR_FORMAT, channel);
+            miscDir = String.format(Constants.FilePaths.MISC_DIR_FORMAT, channel);
             uploadedFileDir = String.format(Constants.FilePaths.UPLOADED_FILE_DIR_FORMAT, channel);
             device = applicationInfoWthMetaData.metaData.getString("Device");
             showLog = ChannelConfig.FORCE_SHOW_LOG || debug;
@@ -90,6 +91,7 @@ public final class AppAssistant {
     private static ApiService apiService;
     private static RequestQueue requestQueue;
     private static String logDir;
+    private static String miscDir;
     private static String uploadedFileDir;
     private static String buildDate;
     private static String buildEpoch;
@@ -98,6 +100,10 @@ public final class AppAssistant {
 
     public static String getLogDir() {
         return logDir;
+    }
+
+    public static String getMiscDir() {
+        return miscDir;
     }
 
     public static String getUploadedFileDir() {
