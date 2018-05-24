@@ -15,18 +15,14 @@ public class WxLocalMsg implements Parcelable {
     private long createTime;
     private boolean isSend;
     private long msgId;
+    private Long msgSvrId;
+    private long type;
+    private long status;
     private String userName;
     private List<WxLocalMsg> userChats;
     private List<WxLocalMsg> chats;
 
     private String repUserName;
-
-    public WxLocalMsg(String content, long createTime, boolean isSend, long msgId) {
-        this.content = content;
-        this.createTime = createTime;
-        this.isSend = isSend;
-        this.msgId = msgId;
-    }
 
     public WxLocalMsg() {
     }
@@ -97,11 +93,21 @@ public class WxLocalMsg implements Parcelable {
 
     public static WxLocalMsg buildMsgFromWxDb(net.sqlcipher.Cursor cursor) {
         int msgId = cursor.getInt(cursor.getColumnIndex("msgId"));
+        int c_msgSvrId = cursor.getColumnIndex("msgSvrId");
+        Long msgSvrId = cursor.isNull(c_msgSvrId) ? null :cursor.getLong(c_msgSvrId);
+        int status = cursor.getInt(cursor.getColumnIndex("status"));
+        int type = cursor.getInt(cursor.getColumnIndex("type"));
         long createTime = cursor.getLong(cursor.getColumnIndex("createTime"));
         String content = cursor.getString(cursor.getColumnIndex("content"));
         int isSend = cursor.getInt(cursor.getColumnIndex("isSend"));
-//        String username = cursor.getString(cursor.getColumnIndex("talker"));
-        WxLocalMsg message = new WxLocalMsg(content, createTime, isSend == 1, msgId);
+        WxLocalMsg message = new WxLocalMsg();
+        message.setContent(content);
+        message.setCreateTime(createTime);
+        message.setSend(isSend == 1);
+        message.setMsgId(msgId);
+        message.setMsgSvrId(msgSvrId);
+        message.setStatus(status);
+        message.setType(type);
         return message;
     }
 
@@ -131,6 +137,12 @@ public class WxLocalMsg implements Parcelable {
         dest.writeLong(this.createTime);
         dest.writeByte(this.isSend ? (byte) 1 : (byte) 0);
         dest.writeLong(this.msgId);
+        dest.writeByte(this.msgSvrId == null ? (byte)0 : 1);
+        if (this.msgSvrId != null) {
+            dest.writeLong(this.msgSvrId);
+        }
+        dest.writeLong(this.status);
+        dest.writeLong(this.type);
         dest.writeString(this.userName);
         dest.writeList(this.userChats);
         dest.writeList(this.chats);
@@ -142,6 +154,11 @@ public class WxLocalMsg implements Parcelable {
         this.createTime = in.readLong();
         this.isSend = in.readByte() != 0;
         this.msgId = in.readLong();
+        if (in.readByte() > 0) {
+            this.msgSvrId = in.readLong();
+        }
+        this.status = in.readLong();
+        this.type = in.readLong();
         this.userName = in.readString();
         this.userChats = new ArrayList<WxLocalMsg>();
         in.readList(this.userChats, WxLocalMsg.class.getClassLoader());
@@ -161,4 +178,28 @@ public class WxLocalMsg implements Parcelable {
             return new WxLocalMsg[size];
         }
     };
+
+    public Long getMsgSvrId() {
+        return msgSvrId;
+    }
+
+    public void setMsgSvrId(Long msgSvrId) {
+        this.msgSvrId = msgSvrId;
+    }
+
+    public long getType() {
+        return type;
+    }
+
+    public void setType(long type) {
+        this.type = type;
+    }
+
+    public long getStatus() {
+        return status;
+    }
+
+    public void setStatus(long status) {
+        this.status = status;
+    }
 }
