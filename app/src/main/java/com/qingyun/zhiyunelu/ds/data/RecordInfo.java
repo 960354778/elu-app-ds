@@ -161,7 +161,7 @@ public class RecordInfo implements Parcelable {
 
         public RecordRequestBody(String taskId, String phoneId) {
             this.taskId = taskId;
-            SimpleDateFormat dateformat1=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat dateformat1=new SimpleDateFormat("yyyy-MM-dd HH:mm:ssZ");
             this.execDate = dateformat1.format(new Date());
             this.execDate = execDate.replace(" ", "T");
             this.phoneId = phoneId;
