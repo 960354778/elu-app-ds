@@ -8,6 +8,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.concurrent.TimeUnit;
 
+import velites.java.utility.misc.PathUtil;
+
 /**
  * Created by regis on 16/11/11.
  */
@@ -44,15 +46,13 @@ public final class Constants {
     public static final class FilePaths {
         private FilePaths() {
         }
-        public static final String WX_SHARE_PREFS_PATH = "/data/data/com.tencent.mm/shared_prefs/auth_info_key_prefs.xml";
-        public static final String WX_MICROMS_PATH = "/data/data/com.tencent.mm/MicroMsg";
-        public static final String WX_MS_DB_NAME = "EnMicroMsg.db";
-        public static final String WX_PACKAGE = "com.tencent.mm";
 
-        public static final String MIUI_SOUND_DIR = Environment.getExternalStorageDirectory().getAbsolutePath()+"/MIUI/sound_recorder/call_rec/";
-        public static final String LOG_DIR_FORMAT = Environment.getExternalStorageDirectory().getAbsolutePath()+"/zhiyun/%s/log/";
-        public static final String MISC_DIR_FORMAT = Environment.getExternalStorageDirectory().getAbsolutePath()+"/zhiyun/%s/misc/";
-        public static final String UPLOADED_FILE_DIR_FORMAT = Environment.getExternalStorageDirectory().getAbsolutePath()+"/zhiyun/%s/files/";
+        public static final String MIUI_SOUND_DIR = PathUtil.concat(Environment.getExternalStorageDirectory().getAbsolutePath(), "MIUI/sound_recorder/call_rec");
+        public static final String STORAGE_ROOT = PathUtil.concat(Environment.getExternalStorageDirectory().getAbsolutePath(), "zhiyun/%s");
+        public static final String LOG_DIR_FORMAT = PathUtil.concat(STORAGE_ROOT, "log");
+        public static final String MISC_DIR_FORMAT = PathUtil.concat(STORAGE_ROOT, "misc");
+        public static final String UPLOADED_FILE_DIR_FORMAT = PathUtil.concat(STORAGE_ROOT, "files");
+        public static final String TEMP_DIR_WX_SEGMENT = "wx";
     }
 
     public static final class PrefsKey{

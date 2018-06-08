@@ -13,16 +13,20 @@ import com.qingyun.zhiyunelu.ds.data.WxMyInfo;
 import net.sqlcipher.Cursor;
 import net.sqlcipher.database.SQLiteDatabase;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
-import velites.android.support.wx.WechatHelper;
+import velites.android.support.wx.WechatOperator;
+import velites.android.utility.root.RootUtility;
 import velites.android.utility.utils.HandlerUtil;
+import velites.java.utility.generic.Action0;
 import velites.java.utility.generic.Action1;
-import velites.java.utility.generic.Action3;
+import velites.java.utility.generic.Func2;
+import velites.java.utility.generic.ObjectWrapper;
 import velites.java.utility.log.LogEntry;
 import velites.java.utility.log.LogHub;
 import velites.java.utility.misc.ExceptionUtil;
@@ -43,32 +47,32 @@ public class WxManager {
     private static HandlerUtil handlerUtil;
     private static final int MSG_TAG_UPLOAD_WX = 3001;
 
-    private static void checkWxDatabase(Context context) {
-
-        WechatHelper.checkWechatAndRun(context, AppAssistant.getDefaultContext().getCacheDir().getPath() + "/%s/" + Constants.FilePaths.WX_MS_DB_NAME, Constants.FilePaths.WX_SHARE_PREFS_PATH, Constants.FilePaths.WX_MICROMS_PATH, Constants.FilePaths.WX_MS_DB_NAME, new Action3<Boolean, String, net.sqlcipher.database.SQLiteDatabase>() {
+    private static void syncWxDatabase(Context context) {
+        ExceptionUtil.executeWithRetry(new Action0() {
             @Override
-            public void a(Boolean isOk, String msg, SQLiteDatabase sql) {
-                if (isOk && sql != null) {
-                    userInfo(sql);
-                } else {
-                    LogHub.log(new LogEntry(LogHub.LOG_LEVEL_ERROR, WxManager.class, "get wx database error msg %s", msg));
-                }
+            public void a() {
+                new WechatOperator(context).checkWechatAndRun(AppAssistant.getWxTempDir(), new Action1<SQLiteDatabase>() {
+                    @Override
+                    public void a(SQLiteDatabase sql) {
+                        userInfo(sql);
+                    }
+                });
             }
-        });
+        }, 1, null);
     }
 
     public static void exportWxDatabase(Context context) {
-
-        WechatHelper.checkWechatAndRun(context, AppAssistant.getDefaultContext().getCacheDir().getPath() + "/%s/" + Constants.FilePaths.WX_MS_DB_NAME, Constants.FilePaths.WX_SHARE_PREFS_PATH, Constants.FilePaths.WX_MICROMS_PATH, Constants.FilePaths.WX_MS_DB_NAME, new Action3<Boolean, String, net.sqlcipher.database.SQLiteDatabase>() {
+        ExceptionUtil.executeWithRetry(new Action0() {
             @Override
-            public void a(Boolean isOk, String msg, SQLiteDatabase sql) {
-                if (isOk && sql != null) {
-                    WechatHelper.exportDecodedDB(sql, PathUtil.concat(AppAssistant.getMiscDir(), "decrypted_database.db"));
-                } else {
-                    LogHub.log(new LogEntry(LogHub.LOG_LEVEL_ERROR, WxManager.class, "export wx database error msg %s", msg));
-                }
+            public void a() {
+                new WechatOperator(context).checkWechatAndRun(AppAssistant.getWxTempDir(), new Action1<SQLiteDatabase>() {
+                    @Override
+                    public void a(SQLiteDatabase sql) {
+                        WechatOperator.exportDecodedDB(sql, PathUtil.concat(AppAssistant.getMiscDir(), "decrypted_database.db"));
+                    }
+                });
             }
-        });
+        }, 1, null);
     }
 
     private static final void userInfo(SQLiteDatabase sql) {
@@ -218,15 +222,35 @@ public class WxManager {
         }
     }
 
+    private static void fixPermission() {
+        final ObjectWrapper<Boolean> needFix = new ObjectWrapper<>();
+        ExceptionUtil.executeWithRetry(new Action0() {
+            @Override
+            public void a() {
+                File f = new File(WechatOperator.DATA_ROOT_MAIN);
+                needFix.setObj(f.canWrite());
+            }
+        }, 1, new Func2<Throwable, Integer, Boolean>() {
+            @Override
+            public Boolean f(Throwable ex, Integer retried) {
+                needFix.setObj(false);
+                return true;
+            }
+        });
+        if (needFix.getObj() != null && needFix.getObj()) {
+            RootUtility.runAsRoot(null, String.format("chmod -R o-rw %s", WechatOperator.DATA_ROOT_MAIN), String.format("chmod -R g-w %s", WechatOperator.DATA_ROOT_MAIN));
+        }
+    }
+
     public static void initWxManager(final Context ctx) {
+        fixPermission();
         if (handlerUtil != null)
             handlerUtil.releaseData();
-
         handlerUtil = HandlerUtil.create(false, TAG, new Action1<Message>() {
             @Override
             public void a(Message arg1) {
                 if (!StringUtil.isNullOrEmpty(AppAssistant.getPrefs().getStr(Constants.PrefsKey.AUTH_TOKEN_KEY))) {
-                    checkWxDatabase(ctx);
+                    syncWxDatabase(ctx);
                 }
                 handlerUtil.removeMessages(MSG_TAG_UPLOAD_WX);
                 handlerUtil.sendEmptyMessageDelayed(MSG_TAG_UPLOAD_WX, Constants.UPLOAD_WX_CYCLE);

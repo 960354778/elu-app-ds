@@ -21,6 +21,7 @@ import velites.java.utility.log.LogHub;
 import velites.java.utility.log.LogProcessor;
 import velites.java.utility.log.LogReport;
 import velites.java.utility.misc.ExceptionUtil;
+import velites.java.utility.misc.PathUtil;
 import velites.java.utility.misc.StringUtil;
 import velites.java.utility.thread.BaseInitializer;
 
@@ -51,6 +52,7 @@ public final class AppAssistant {
             logDir = String.format(Constants.FilePaths.LOG_DIR_FORMAT, channel);
             miscDir = String.format(Constants.FilePaths.MISC_DIR_FORMAT, channel);
             uploadedFileDir = String.format(Constants.FilePaths.UPLOADED_FILE_DIR_FORMAT, channel);
+            wxTempDir = PathUtil.concat(defaultContext.getCacheDir().getPath(), Constants.FilePaths.TEMP_DIR_WX_SEGMENT);
             device = applicationInfoWthMetaData.metaData.getString("Device");
             showLog = ChannelConfig.FORCE_SHOW_LOG || debug;
             EnvironmentInfo.ensureInit(ctx, channel, buildType);
@@ -93,6 +95,7 @@ public final class AppAssistant {
     private static String logDir;
     private static String miscDir;
     private static String uploadedFileDir;
+    private static String wxTempDir;
     private static String buildDate;
     private static String buildEpoch;
     private static String buildRevision;
@@ -108,6 +111,10 @@ public final class AppAssistant {
 
     public static String getUploadedFileDir() {
         return uploadedFileDir;
+    }
+
+    public static String getWxTempDir() {
+        return wxTempDir;
     }
 
     public static Context getDefaultContext() {
