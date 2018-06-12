@@ -62,8 +62,8 @@ public class SplashActivity extends BaseActivity {
                 return true;
             }
         }, Constants.PERMISSIONS_MUST_HAVE, Constants.PERMISSIONS_NICE_TO_HAVE);
-        if(RootUtility.canRoot()){
-           if(!RootUtility.canRoot()){
+        if(RootUtility.isRooted()){
+           if(!RootUtility.isRooted()){
                ToastUtil.showToastLong(this, "请先root手机");
            }
         }
