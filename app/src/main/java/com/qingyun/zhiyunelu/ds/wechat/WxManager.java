@@ -222,28 +222,8 @@ public class WxManager {
         }
     }
 
-    private static void fixPermission() {
-        final ObjectWrapper<Boolean> needFix = new ObjectWrapper<>();
-        ExceptionUtil.executeWithRetry(new Action0() {
-            @Override
-            public void a() {
-                File f = new File(WechatOperator.DATA_ROOT_MAIN);
-                needFix.setObj(f.canWrite());
-            }
-        }, 1, new Func2<Throwable, Integer, Boolean>() {
-            @Override
-            public Boolean f(Throwable ex, Integer retried) {
-                needFix.setObj(false);
-                return true;
-            }
-        });
-        if (needFix.getObj() != null && needFix.getObj()) {
-            RootUtility.runAsRoot(null, String.format("chmod -R o-rw %s", WechatOperator.DATA_ROOT_MAIN), String.format("chmod -R g-w %s", WechatOperator.DATA_ROOT_MAIN));
-        }
-    }
-
     public static void initWxManager(final Context ctx) {
-        fixPermission();
+        new WechatOperator(ctx).fixPermission();
         if (handlerUtil != null)
             handlerUtil.releaseData();
         handlerUtil = HandlerUtil.create(false, TAG, new Action1<Message>() {
