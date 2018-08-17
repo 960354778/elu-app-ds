@@ -28,6 +28,7 @@ import velites.java.utility.log.LogProcessor;
 import velites.java.utility.merge.ObjectMerger;
 import velites.java.utility.misc.ExceptionUtil;
 import velites.java.utility.misc.FileUtil;
+import velites.java.utility.misc.ObjectAccessor;
 import velites.java.utility.misc.PathUtil;
 import velites.java.utility.misc.StringUtil;
 import velites.java.utility.misc.SyntaxUtil;
@@ -80,14 +81,18 @@ public class App extends BaseApplication {
                 device = applicationInfoWthMetaData.metaData.getString("Device");
                 prefs = new Prefs(defaultContext);
                 EnvironmentInfo.ensureInit(defaultContext, channel, buildType);
-                setting = new ObjectMerger(true).merge(Constants.SETTING_BASIC, ChannelConfig.SETTING_CHANNEL, null);
-                applySetting(setting);
+                applySetting(new ObjectMerger(true).merge(ChannelConfig.SETTING_CHANNEL, Constants.SETTING_BASIC, null));
                 ExceptionUtil.wrapperGlobalUncaughtExceptionHandlerWithLog();
             }
         };
 
         private void applySetting(Setting s) {
-            gson = new GsonBuilder().setDateFormat(setting.format.defaultDateTime).create();
+            setting = s == null ? new Setting() : s;
+            GsonBuilder gb = new GsonBuilder();
+            if (setting.format != null && setting.format.defaultDateTime != null) {
+                gb = gb.setDateFormat(setting.format.defaultDateTime);
+            }
+            gson = gb.create();
             LogProcessor logProcessor = null;
             if (setting.logging != null) {
                 List<LogProcessor> lps = new ArrayList<LogProcessor>();
@@ -101,7 +106,17 @@ public class App extends BaseApplication {
                 logProcessor = new AggregatedLogProcessor(primitive, lps.toArray(new LogProcessor[0]));
             }
             LogHub.setProcessor(logProcessor);
-            api = new ApiService(gson, setting.network);
+            api = new ApiService(gson, setting.network, new ObjectAccessor<String>() {
+                @Override
+                public String get() {
+                    return prefs.getSerializedToken();
+                }
+
+                @Override
+                public void Set(String value) {
+                    prefs.setSerializedToken(value);
+                }
+            });
         }
 
         public File getMiscDir() {
@@ -192,6 +207,7 @@ public class App extends BaseApplication {
 
     @Override
     public void onCreate() {
+        instance = this;
         super.onCreate();
         if(SystemUtil.isAppProcess(this)){
             assistant = new Assistant();

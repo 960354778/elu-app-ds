@@ -19,17 +19,20 @@ import velites.android.utility.utils.NetUtil;
 import velites.java.utility.log.LogEntry;
 import velites.java.utility.log.LogHub;
 import velites.java.utility.misc.ExceptionUtil;
+import velites.java.utility.misc.ObjectAccessor;
 
 public class ApiService {
     private final Gson gson;
     private final Setting.Network setting;
     private final IApiService defaultIApi;
+    private final ObjectAccessor<String> serializedTokenAccessor;
 
-    public ApiService(Gson gson, Setting.Network setting) {
+    public ApiService(Gson gson, Setting.Network setting, ObjectAccessor<String> serializedTokenAccessor) {
         ExceptionUtil.assertArgumentNotNull(gson, "gson");
         ExceptionUtil.assertArgumentNotNull(setting, "setting");
         this.gson = gson;
         this.setting = setting;
+        this.serializedTokenAccessor = serializedTokenAccessor;
         this.defaultIApi = this.createApi(this.setting.apiRootUrl);
     }
 
