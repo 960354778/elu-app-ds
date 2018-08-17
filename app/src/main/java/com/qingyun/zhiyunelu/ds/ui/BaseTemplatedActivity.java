@@ -135,7 +135,7 @@ public abstract class BaseTemplatedActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_settings:
-                SettingsActivity.launchMe(this);
+                //SettingsActivity.launchMe(this);
                 break;
         }
         return true;
