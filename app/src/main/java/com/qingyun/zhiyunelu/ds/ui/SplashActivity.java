@@ -2,12 +2,14 @@ package com.qingyun.zhiyunelu.ds.ui;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.qingyun.zhiyunelu.ds.App;
 import com.qingyun.zhiyunelu.ds.Constants;
 import com.qingyun.zhiyunelu.ds.R;
 
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -17,6 +19,8 @@ import io.reactivex.ObservableEmitter;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.ReplaySubject;
+import io.reactivex.subjects.Subject;
 import velites.android.support.devices.xiaomi.XiaomiConstants;
 import velites.android.support.ui.RequestPermissionAssistant;
 import velites.android.utility.framework.BaseApplication;
@@ -49,7 +53,8 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        Single<Integer> wait = Single.just(0).delay(STAY_FROM_ENTER_IN_MS, TimeUnit.MILLISECONDS);
+        Subject<Integer> wait = ReplaySubject.create();
+        Single.just(0).toObservable().delay(STAY_FROM_ENTER_IN_MS, TimeUnit.MILLISECONDS).subscribe(wait);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(widgets, this);
@@ -61,7 +66,7 @@ public class SplashActivity extends BaseActivity {
                 .subscribe(o -> this.showInfo(o, wait));
     }
 
-    private void showInfo(final int msg, Single<Integer> wait) {
+    private void showInfo(final int msg, Subject<Integer> wait) {
         Tuple2<String, Integer> v = EnvironmentInfo.obtainAppVersion(this);
         widgets.version.setText(getString(R.string.content_splash_version, v.v1, v.v2, App.getInstance().getAssistant().isDebug() ? "DEBUG" : ""));
         RequestPermissionAssistant.startRequestPermission(this, Constants.Codes.REQUEST_CODE_REQUIRE_PERMISSION, !App.getInstance().getAssistant().getPrefs().getPermissionRequested(), new Func2<Func0<Boolean>, String[], Boolean>() {
@@ -80,9 +85,9 @@ public class SplashActivity extends BaseActivity {
         this.warnOrJump(msg, wait);
     }
 
-    private void warnOrJump(int msg, Single<Integer> wait) {
+    private void warnOrJump(int msg, Subject<Integer> wait) {
         if (msg == 0) {
-            wait.zipWith(Single.just(0).delay(STAY_FROM_INIT_IN_MS, TimeUnit.MILLISECONDS), (integer, integer2) -> 0)
+            wait.zipWith(Single.just(0).toObservable().delay(STAY_FROM_INIT_IN_MS, TimeUnit.MILLISECONDS), (integer, integer2) -> 0)
                     .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                     .subscribe(o -> MainActivity.launchMe(SplashActivity.this));
         } else {

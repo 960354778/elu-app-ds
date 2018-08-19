@@ -27,7 +27,7 @@
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:id="@+id/ivCallId"
-                android:src="@drawable/uncall_icon"
+                android:src="@mipmap/ic_call"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="@dimen/space_xxxlarge"
                 android:layout_marginLeft="@dimen/space_medium"
