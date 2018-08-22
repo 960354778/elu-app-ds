@@ -5,7 +5,7 @@ ext {
         build: '28.0.2',
         room: '1.1.1',
         lifecycle: '1.1.1',
-        support: '27.1.1',
+        support: '27.0.2',
         junit: '4.12',
         test: '1.0.1',
         espresso: '3.0.1',
@@ -13,7 +13,9 @@ ext {
         sqlcipher: '3.5.9',
         rxjava: '2.2.0',
         rxandroid: '2.0.2',
+        rxbinding: '2.1.1',
         retrofit: '2.4.0',
+        okhttp: '3.11.0',
         gson: '2.8.5',
         object_diff: '0.95'
     ]
@@ -50,12 +52,15 @@ ext {
         gson: "com.google.code.gson:gson:${versions.gson}",
         rxjava: "io.reactivex.rxjava2:rxjava:${versions.rxjava}",
         rxandroid: "io.reactivex.rxjava2:rxandroid:${versions.rxandroid}",
+        rxbinding: "com.jakewharton.rxbinding2:rxbinding:${versions.rxbinding}",
+        rxbinding_design: "com.jakewharton.rxbinding2:rxbinding-design:${versions.rxbinding}",
+        rxbinding_appcompat_v7: "com.jakewharton.rxbinding2:rxbinding-appcompat-v7:${versions.rxbinding}",
+        rxbinding_recyclerview_v7: "com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:${versions.rxbinding}",
         retrofit: "com.squareup.retrofit2:retrofit:${versions.retrofit}",
         retrofit_rx: "com.squareup.retrofit2:adapter-rxjava2:${versions.retrofit}",
         retrofit_gson: "com.squareup.retrofit2:converter-gson:${versions.retrofit}",
         object_diff: "de.danielbechler:java-object-diff:${versions.object_diff}",
-        ok_log: "com.squareup.okhttp3:logging-interceptor:3.4.1",
-        ultra: "in.srain.cube:ultra-ptr:1.0.11"
+        ok_log: "com.squareup.okhttp3:logging-interceptor:${versions.okhttp}"
     ]
     def dt = new Date()
     config = [

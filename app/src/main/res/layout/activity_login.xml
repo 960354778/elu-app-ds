@@ -1,71 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
+    style="@style/MMStyle"
+    android:orientation="vertical"
+    >
     <LinearLayout
-        style="@style/LLHorMWStyle"
-        android:layout_height="50dp"
+        style="@style/MWHorStyle"
+        android:layout_height="@dimen/size_standard"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="@dimen/space_xxlarge"
-        android:layout_marginLeft="@dimen/size_xsmall"
-        android:layout_marginRight="@dimen/size_xsmall"
-        android:layout_marginTop="@dimen/space_xxlarge"
-        android:background="@drawable/edit_pwd_bg_shape"
-        android:paddingLeft="@dimen/space_medium"
-        android:paddingRight="@dimen/space_medium">
-
+        android:layout_marginLeft="@dimen/space_standard"
+        android:layout_marginRight="@dimen/space_standard"
+        android:layout_marginTop="@dimen/space_standard_double"
+        android:layout_marginBottom="@dimen/space_standard_double"
+        android:background="@drawable/edit_bg_shape"
+        android:paddingLeft="@dimen/space_standard"
+        android:paddingRight="@dimen/space_standard"
+        >
         <TextView
-            style="@style/TTextBoldStyle"
+            style="@style/EluStyle.TextBold"
             android:layout_gravity="center_vertical"
-            android:text="账号：" />
-
+            android:text="@string/label_account"
+            />
         <EditText
-            android:id="@+id/TVloginAccount"
-            style="@style/ETextStyle"
+            android:id="@+id/login_account"
+            style="@style/EluStyle.EditText"
             android:layout_gravity="center_vertical"
-            android:hint="请输入账号..." />
+            android:hint="@string/hint_enter_account"
+            />
     </LinearLayout>
-
     <LinearLayout
-        style="@style/LLHorMWStyle"
-        android:layout_height="50dp"
+        style="@style/MWHorStyle"
+        android:layout_height="@dimen/size_standard"
         android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="@dimen/size_xsmall"
-        android:layout_marginRight="@dimen/size_xsmall"
-        android:background="@drawable/edit_pwd_bg_shape"
-        android:paddingLeft="@dimen/space_medium"
-        android:paddingRight="@dimen/space_medium">
-
+        android:layout_marginLeft="@dimen/space_standard"
+        android:layout_marginRight="@dimen/space_standard"
+        android:layout_marginTop="@dimen/space_standard_double"
+        android:layout_marginBottom="@dimen/space_standard_double"
+        android:background="@drawable/edit_bg_shape"
+        >
         <TextView
-            style="@style/TTextBoldStyle"
+            style="@style/EluStyle.TextBold"
             android:layout_gravity="center_vertical"
-            android:text="密码：" />
-
+            android:text="@string/label_password"
+            />
         <EditText
-            android:id="@+id/TVloginPwd"
-            style="@style/ETextStyle"
+            android:id="@+id/login_password"
+            style="@style/EluStyle.EditText"
             android:layout_gravity="center_vertical"
-            android:hint="请输入密码..."
-            android:inputType="textPassword" />
+            android:hint="@string/hint_enter_password"
+            android:inputType="textPassword"
+            />
     </LinearLayout>
-
-
     <Button
-        android:id="@+id/BTLogin"
-        style="@style/HWWMStyle"
-        android:layout_height="50dp"
-        android:layout_marginLeft="80dp"
-        android:layout_marginRight="80dp"
-        android:layout_marginTop="50dp"
-        android:background="@color/bg_primary"
+        android:id="@+id/login_login"
+        style="@style/EluStyle.TextBold"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_standard"
+        android:layout_marginLeft="@dimen/size_standard"
+        android:layout_marginRight="@dimen/size_standard"
+        android:layout_marginTop="@dimen/size_standard"
         android:gravity="center"
-        android:padding="@dimen/space_medium"
-        android:text="登录"
+        android:padding="@dimen/space_standard"
+        android:text="@string/label_login"
         android:textColor="@android:color/white"
-        android:textSize="20sp"
-        android:textStyle="bold"
-
+        android:textSize="@dimen/font_standard_bigger"
         />
 </LinearLayout>

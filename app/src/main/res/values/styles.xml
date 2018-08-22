@@ -1,92 +1,46 @@
 <resources>
-
-    <style name="BaseAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/bg_primary</item>
-        <item name="colorPrimaryDark">@color/bg_primaryDark</item>
-        <item name="colorAccent">@color/bg_accent</item>
-
-        <item name="bgListItemPrimary">@drawable/bg_list_item_major</item>
-        <item name="bgBlack">@android:color/black</item>
-        <item name="bgGray">@color/bg_gray</item>
-        <item name="bgWhite">@android:color/white</item>
-        <item name="bgNone">@android:color/transparent</item>
-        <item name="bgMask">@color/bg_mask</item>
-        <item name="bgWhiteGray">@color/bg_white_grey</item>
+    <style name="BaseEluTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primaryDark</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="android:textSize">@dimen/font_standard_normal</item>
     </style>
-
-    <style name="AppTheme" parent="BaseAppTheme">
+    <style name="EluTheme" parent="BaseEluTheme">
         <item name="android:windowContentTransitions">true</item>
     </style>
-    <style name="AppTheme.AppBarOverlay" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <!--custom style for xml-->
-    <style name="HWWWStyle">
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_width">wrap_content</item>
+    <style name="EluTheme.AppBarOverlay" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="EluStyle">
     </style>
-    <style name="HWWMStyle">
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_width">match_parent</item>
-    </style>
-
-    <style name="HMWWStyle">
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_width">wrap_content</item>
-    </style>
-
-    <style name="HMWMStyle">
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_width">match_parent</item>
-    </style>
-
-    <style name="LLVerMWStyle" parent="HWWMStyle">
-        <item name="android:orientation">vertical</item>
-    </style>
-    <style name="LLHorMWStyle" parent="HWWMStyle">
-        <item name="android:orientation">horizontal</item>
-    </style>
-
-    <style name="TTextBoldStyle" parent="HWWWStyle">
-        <item name="android:textSize">@dimen/text_large</item>
+    <style name="EluStyle.TextBold" parent="WWStyle">
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/bg_primary</item>
+        <item name="android:textColor">@color/primary</item>
     </style>
-
-    <style name="ETextStyle" parent="HWWMStyle">
-        <item name="android:textSize">@dimen/text_medium</item>
-        <item name="android:textColor">@color/c_000000</item>
-        <item name="android:paddingTop">@dimen/space_medium</item>
-        <item name="android:paddingBottom">@dimen/space_medium</item>
-        <item name="android:paddingLeft">@dimen/space_medium</item>
-        <item name="android:paddingRight">@dimen/space_medium</item>
-        <item name="android:textColorHint">@color/c_353c46</item>
+    <style name="EluStyle.EditText" parent="MWStyle">
+        <item name="android:textColor">@color/fg_black</item>
+        <item name="android:padding">@dimen/space_standard</item>
+        <item name="android:textColorHint">@color/fg_dark</item>
         <item name="android:background">@null</item>
         <item name="android:layout_gravity">center_vertical</item>
     </style>
-
-    <style name="TTextTitleStyle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+    <style name="EluStyle.TextTitle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:layout_gravity">center</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColor">@color/fg_white</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_centerInParent">true</item>
     </style>
-
-    <style name="CustomDialog">
+    <style name="EluStyle.Area">
+        <item name="android:layout_width">@dimen/size_area_width</item>
+        <item name="android:layout_height">@dimen/size_area_height</item>
+    </style>
+    <style name="EluStyle.CustomDialog">
         <item name="android:windowFrame">@null</item>
         <item name="android:windowIsFloating">false</item>
         <item name="android:windowIsTranslucent">false</item>
         <item name="android:windowNoTitle">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowBackground">@color/bg_none</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:theme">@android:style/Theme.Dialog</item>
     </style>
-
-    <style name="land_view_line_style">
-        <item name="android:background">@color/c_e6e6e6</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">0.5dp</item>
-    </style>
-
 </resources>

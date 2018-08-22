@@ -14,7 +14,7 @@ public final class ChannelConfig {
     private static Setting buildChannelSetting() {
         Setting ret = new Setting();
         ret.network = new Setting.Network();
-        ret.network.apiRootUrl = "http://192.168.87.192:5008/";
+        ret.network.apiRootUrl = "http://192.168.88.54:5008/";
         ret.logging = new Setting.Logging();
         ret.logging.logLevel = 0;
         ret.logging.suppressPrimitiveLog = false;

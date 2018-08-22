@@ -2,14 +2,12 @@ package com.qingyun.zhiyunelu.ds.ui;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.widget.TextView;
 
 import com.qingyun.zhiyunelu.ds.App;
 import com.qingyun.zhiyunelu.ds.Constants;
 import com.qingyun.zhiyunelu.ds.R;
 
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -21,19 +19,14 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.ReplaySubject;
 import io.reactivex.subjects.Subject;
-import velites.android.support.devices.xiaomi.XiaomiConstants;
 import velites.android.support.ui.RequestPermissionAssistant;
-import velites.android.utility.framework.BaseApplication;
 import velites.android.utility.framework.EnvironmentInfo;
-import velites.android.utility.root.RootUtility;
-import velites.android.utility.utils.ToastUtil;
+import velites.android.utility.helpers.RxHelper;
+import velites.android.utility.helpers.ToastUtil;
 import velites.java.utility.generic.Func0;
 import velites.java.utility.generic.Func2;
 import velites.java.utility.generic.Tuple2;
-import velites.java.utility.misc.FileUtil;
-import velites.java.utility.misc.StringUtil;
 import velites.java.utility.misc.SyntaxUtil;
-import velites.java.utility.thread.RunnableKeepingScope;
 
 /**
  * Created by regis on 17/4/23.
@@ -62,7 +55,7 @@ public class SplashActivity extends BaseActivity {
             App.getInstance().getAssistant().awaitInit();
             awaitInit();
             emitter.onNext(SyntaxUtil.nvl(App.getInstance().getAssistant().checkEnv()));
-        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        }).subscribeOn(RxHelper.createKeepingScopeIOSchedule()).observeOn(RxHelper.createKeepingScopeMainThreadSchedule())
                 .subscribe(o -> this.showInfo(o, wait));
     }
 
@@ -87,9 +80,15 @@ public class SplashActivity extends BaseActivity {
 
     private void warnOrJump(int msg, Subject<Integer> wait) {
         if (msg == 0) {
-            wait.zipWith(Single.just(0).toObservable().delay(STAY_FROM_INIT_IN_MS, TimeUnit.MILLISECONDS), (integer, integer2) -> 0)
-                    .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(o -> MainActivity.launchMe(SplashActivity.this));
+            wait.zipWith(Single.just(1).toObservable().delay(STAY_FROM_INIT_IN_MS, TimeUnit.MILLISECONDS), (integer, integer2) -> {
+                int a = integer + integer2;
+                return a;
+            })
+                    .subscribeOn(RxHelper.createKeepingScopeIOSchedule()).observeOn(RxHelper.createKeepingScopeMainThreadSchedule())
+                    .subscribe(o -> {
+                        MainActivity.launchMe(SplashActivity.this);
+                        SplashActivity.this.finish();
+                    });
         } else {
             ToastUtil.showToastLong(this, msg);
             Single.just(0).delay(INTERVAL_CHECK_MS, TimeUnit.MILLISECONDS)

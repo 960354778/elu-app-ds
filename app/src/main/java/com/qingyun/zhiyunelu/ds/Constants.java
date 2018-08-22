@@ -20,6 +20,7 @@ public final class Constants {
     public static final Setting SETTING_BASIC;
     public static final String[] PERMISSIONS_MUST_HAVE = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO, Manifest.permission.READ_PHONE_STATE,Manifest.permission.CALL_PHONE,Manifest.permission.READ_SMS};
     public static final String[] PERMISSIONS_NICE_TO_HAVE = new String[]{};
+    public static final String MISC_HANDLER_THREAD_NAME = "misc";
 
     public static final class Codes {
         private Codes() {

@@ -4,14 +4,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.MenuItem;
 
+import com.qingyun.zhiyunelu.ds.App;
+import com.qingyun.zhiyunelu.ds.R;
+
+import velites.android.support.ui.BaseTemplatedActivity;
 import velites.java.utility.generic.Tuple2;
 import velites.java.utility.thread.BaseInitializer;
 
-/**
- * Created by regis on 16/11/14.
- */
-public class BaseActivity extends velites.android.support.ui.BaseActivity {
+public abstract class BaseActivity extends BaseTemplatedActivity {
     private static BaseInitializer<Tuple2<Context, Intent>> initializer = new BaseInitializer<Tuple2<Context, Intent>>(false, null) {
         @Override
         protected void doInit(Tuple2<Context, Intent> values) {
@@ -26,13 +28,37 @@ public class BaseActivity extends velites.android.support.ui.BaseActivity {
         return baseIntent;
     }
 
-    public static final void awaitInit() {
+    public static void awaitInit() {
         initializer.awaitInitializedNoThrows(null);
+    }
+
+    protected static App.Assistant  getAppAssistant() {
+        return App.getInstance().getAssistant();
+    }
+
+    @Override
+    protected int getTemplateResId() {
+        return R.layout.activity_base;
+    }
+
+    @Override
+    protected Integer getMenuResId() {
+        return R.menu.toolbar;
     }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         initializer.ensureInit(new Tuple2<Context, Intent>(getApplicationContext(), getIntent()));
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_settings:
+//                SettingsActivity.launchMe(this);
+                break;
+        }
+        return true;
     }
 }

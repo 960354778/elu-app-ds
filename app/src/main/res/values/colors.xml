@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="bg_primary">#ff3f51b5</color>
-    <color name="bg_primaryDark">#ff303f9f</color>
-    <color name="bg_accent">#ffff4081</color>
+    <color name="primary">#ff3f51b5</color>
+    <color name="primaryDark">#ff303f9f</color>
+    <color name="accent">#ffff4081</color>
+    <color name="bg_black">#ff000000</color>
     <color name="bg_gray">#ffe8e8e8</color>
     <color name="bg_white_grey">#fff8f8ff</color>
-    <color name="bg_none">@android:color/transparent</color>
+    <color name="bg_white">#ffffffff</color>
     <color name="bg_mask">#33000000</color>
-
-    <color name="c_000000">#000000</color>
-    <color name="c_353c46">#353c46</color>
-    <color name="c_bf000000">#bf000000</color>
-    <color name="c_333333">#333333</color>
-    <color name="c_e6e6e6">#e6e6e6</color>
-    <color name="c_ebebeb">#ebebeb</color>
+    <color name="bg_none">@android:color/transparent</color>
+    <color name="fg_black">#ff000000</color>
+    <color name="fg_dark">#ff353c46</color>
+    <color name="fg_white">#ffffffff</color>
 </resources>

@@ -130,20 +130,16 @@ dependencies {
     implementation project(':JavaUtility')
     implementation project(':AndroidUtility')
     implementation project(':AndroidSupport')
-    testImplementation rootProject.ext.dependencies['junit']
     androidTestImplementation(rootProject.ext.dependencies['test_runner'])
-    androidTestImplementation(rootProject.ext.dependencies['espresso'])
-    implementation rootProject.ext.dependencies['appcompatV7']
     implementation rootProject.ext.dependencies['butterknife']
-    implementation rootProject.ext.dependencies['recyclerview']
+    annotationProcessor rootProject.ext.dependencies['butterknife_annotation']
     implementation rootProject.ext.dependencies['cardview']
-    implementation rootProject.ext.dependencies['gson']
-    implementation rootProject.ext.dependencies['rxjava']
-    implementation rootProject.ext.dependencies['rxandroid']
+    implementation rootProject.ext.dependencies['rxbinding']
+    implementation rootProject.ext.dependencies['rxbinding_design']
+    implementation rootProject.ext.dependencies['rxbinding_appcompat_v7']
+    implementation rootProject.ext.dependencies['rxbinding_recyclerview_v7']
     implementation rootProject.ext.dependencies['retrofit']
     implementation rootProject.ext.dependencies['retrofit_rx']
     implementation rootProject.ext.dependencies['retrofit_gson']
     implementation rootProject.ext.dependencies['ok_log']
-    implementation rootProject.ext.dependencies['ultra']
-    annotationProcessor rootProject.ext.dependencies['butterknife_annotation']
 }

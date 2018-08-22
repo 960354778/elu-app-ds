@@ -3,6 +3,7 @@ package com.qingyun.zhiyunelu.ds;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.os.HandlerThread;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -12,6 +13,7 @@ import com.qingyun.zhiyunelu.ds.op.Prefs;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import velites.android.support.devices.xiaomi.XiaomiConstants;
@@ -21,11 +23,12 @@ import velites.android.utility.logger.LocalFileLogProcessor;
 import velites.android.utility.logger.PrimitiveLogProcessor;
 import velites.android.utility.logger.SingleLooperLogProcessor;
 import velites.android.utility.root.RootUtility;
-import velites.android.utility.utils.SystemUtil;
+import velites.android.utility.helpers.SystemHelper;
 import velites.java.utility.log.AggregatedLogProcessor;
-import velites.java.utility.log.LogHub;
+import velites.java.utility.log.LogStub;
 import velites.java.utility.log.LogProcessor;
 import velites.java.utility.merge.ObjectMerger;
+import velites.java.utility.misc.DateTimeUtil;
 import velites.java.utility.misc.ExceptionUtil;
 import velites.java.utility.misc.FileUtil;
 import velites.java.utility.misc.ObjectAccessor;
@@ -56,6 +59,7 @@ public class App extends BaseApplication {
         private String buildEpoch;
         private String buildRevision;
         private Prefs prefs;
+        private HandlerThread miscThread;
         private Setting setting;
         private Gson gson;
         private ApiService api;
@@ -81,6 +85,7 @@ public class App extends BaseApplication {
                 device = applicationInfoWthMetaData.metaData.getString("Device");
                 prefs = new Prefs(defaultContext);
                 EnvironmentInfo.ensureInit(defaultContext, channel, buildType);
+                miscThread = new HandlerThread(Constants.MISC_HANDLER_THREAD_NAME);
                 applySetting(new ObjectMerger(true).merge(ChannelConfig.SETTING_CHANNEL, Constants.SETTING_BASIC, null));
                 ExceptionUtil.wrapperGlobalUncaughtExceptionHandlerWithLog();
             }
@@ -92,6 +97,7 @@ public class App extends BaseApplication {
             if (setting.format != null && setting.format.defaultDateTime != null) {
                 gb = gb.setDateFormat(setting.format.defaultDateTime);
             }
+            gb.registerTypeAdapter(Calendar.class, new DateTimeUtil.CalendarTimestampAdapter());
             gson = gb.create();
             LogProcessor logProcessor = null;
             if (setting.logging != null) {
@@ -105,13 +111,12 @@ public class App extends BaseApplication {
                 }
                 logProcessor = new AggregatedLogProcessor(primitive, lps.toArray(new LogProcessor[0]));
             }
-            LogHub.setProcessor(logProcessor);
-            api = new ApiService(gson, setting.network, new ObjectAccessor<String>() {
+            LogStub.setProcessor(logProcessor);
+            api = new ApiService(gson, setting.network, miscThread, new ObjectAccessor<String>() {
                 @Override
                 public String get() {
                     return prefs.getSerializedToken();
                 }
-
                 @Override
                 public void Set(String value) {
                     prefs.setSerializedToken(value);
@@ -209,7 +214,7 @@ public class App extends BaseApplication {
     public void onCreate() {
         instance = this;
         super.onCreate();
-        if(SystemUtil.isAppProcess(this)){
+        if(SystemHelper.isAppProcess(this)){
             assistant = new Assistant();
             assistant.ensureInit(this);
         }

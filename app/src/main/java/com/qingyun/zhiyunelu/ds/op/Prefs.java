@@ -12,6 +12,8 @@ public class Prefs extends BasePrefManager {
 
     private static final String PERMISSIONS_REQUESTED = "permissions_requested";
     private static final String SERIALIZED_TOKEN = "serialized_token";
+    private static final String LAST_USERNAME = "last_username";
+    private static final String LAST_PASSWORD = "last_password";
 
     public Prefs(Context ctx) {
         super(ctx);
@@ -31,5 +33,21 @@ public class Prefs extends BasePrefManager {
 
     public void setSerializedToken(String value) {
         this.setStr(SERIALIZED_TOKEN, value);
+    }
+
+    public String getLastUsername() {
+        return this.getStr(LAST_USERNAME);
+    }
+
+    public void setLastUsername(String value) {
+        this.setStr(LAST_USERNAME, value);
+    }
+
+    public String getLastPassword() {
+        return this.getStr(LAST_PASSWORD);
+    }
+
+    public void setLastPassword(String value) {
+        this.setStr(LAST_PASSWORD, value);
     }
 }
