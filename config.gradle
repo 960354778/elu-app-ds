@@ -12,7 +12,7 @@ ext {
         butterknife: '8.8.1',
         sqlcipher: '3.5.9',
         rxjava: '2.2.0',
-        rxandroid: '2.0.2',
+        rxandroid: '2.0.0',
         rxbinding: '2.1.1',
         retrofit: '2.4.0',
         okhttp: '3.11.0',

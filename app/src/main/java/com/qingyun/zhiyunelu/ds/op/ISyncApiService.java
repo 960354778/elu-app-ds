@@ -3,19 +3,28 @@ package com.qingyun.zhiyunelu.ds.op;
 
 import com.qingyun.zhiyunelu.ds.data.ApiResult;
 import com.qingyun.zhiyunelu.ds.data.LoginDto;
+import com.qingyun.zhiyunelu.ds.data.SyncWechatFriendsDto;
+import com.qingyun.zhiyunelu.ds.data.SyncWechatFriendsResult;
+import com.qingyun.zhiyunelu.ds.data.SyncWechatMessagesDto;
 
 import io.reactivex.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 
-public interface IApiService {
+public interface ISyncApiService {
 
     @POST("MobileUser/Login")
-    Observable<ApiResult> login(@Body LoginDto body);
+    ApiResult login(@Body LoginDto body);
 
     @GET("MobileUser/Logout")
-    Observable<ApiResult> logout();
+    ApiResult logout();
+
+    @POST("MobileSync/UploadWechatFriends")
+    ApiResult<SyncWechatFriendsResult> syncWechatFriends(@Body SyncWechatFriendsDto friends);
+
+    @POST("MobileSync/UploadWechatChats")
+    ApiResult syncWechatMessages(@Body SyncWechatMessagesDto messages);
 
 //    @POST("MobileTask/DoctorTasksAllReps")
 //    Observable<OrderInfo> getMyDoctersList(@Header("token") String token, @Body Map<String, Object> params );
@@ -29,12 +38,6 @@ public interface IApiService {
 //
 //    @POST("MobileTask/CheckAudioToRecords")
 //    Observable<ResultWrapper<PendingSoundRecordInfo[]>> checkAudioToRecords(@Header("token") String token, @Body String[] files);
-//
-//    @POST("MobileSync/UploadWechatFriends")
-//    Observable<WxFriends> uploadWxFriedns(@Header("token") String token, @Body WxFriends friends);
-//
-//    @POST("MobileSync/UploadWechatChats")
-//    Observable<WxLocalMsg> upLoadWxMsg(@Header("token") String token, @Body WxLocalMsg msg);
 //
 //    @POST("MobileSync/UploadSmsContacts")
 //    Observable<SmsMsgInfo> upLoadSmsContacts(@Header("token") String token, @Body SmsMsgInfo contacts);

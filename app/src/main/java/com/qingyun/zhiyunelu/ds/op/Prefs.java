@@ -12,8 +12,10 @@ public class Prefs extends BasePrefManager {
 
     private static final String PERMISSIONS_REQUESTED = "permissions_requested";
     private static final String SERIALIZED_TOKEN = "serialized_token";
-    private static final String LAST_USERNAME = "last_username";
-    private static final String LAST_PASSWORD = "last_password";
+    private static final String LAST_USERNAME = "accountName";
+    private static final String LAST_PASSWORD = "accountPwd";
+    private static final String SELF_PHONE = "mySelfPhoneNum";
+    private static final String DEBUG_API_BASE_URL = "debugApiBaseUrl";
 
     public Prefs(Context ctx) {
         super(ctx);
@@ -49,5 +51,21 @@ public class Prefs extends BasePrefManager {
 
     public void setLastPassword(String value) {
         this.setStr(LAST_PASSWORD, value);
+    }
+
+    public String getSelfPhone() {
+        return this.getStr(SELF_PHONE);
+    }
+
+    public void setSelfPhone(String value) {
+        this.setStr(SELF_PHONE, value);
+    }
+
+    public String getDebugApiBase() {
+        return this.getStr(DEBUG_API_BASE_URL);
+    }
+
+    public void setDebugApiBase(String value) {
+        this.setStr(DEBUG_API_BASE_URL, value);
     }
 }

@@ -142,4 +142,5 @@ dependencies {
     implementation rootProject.ext.dependencies['retrofit_rx']
     implementation rootProject.ext.dependencies['retrofit_gson']
     implementation rootProject.ext.dependencies['ok_log']
+    implementation rootProject.ext.dependencies['sqlcipher']
 }

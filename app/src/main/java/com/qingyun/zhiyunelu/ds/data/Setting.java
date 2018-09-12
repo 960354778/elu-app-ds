@@ -18,8 +18,18 @@ public class Setting {
     public static class Format {
         public String defaultDateTime;
     }
+    public static class Logic {
+        public long wxChatSyncReserveMs;
+        public long wxChatSyncCountThreshold;
+        public long pollingIntervalMs;
+    }
+    public static class Path {
+        public String decryptedWxDbFileName;
+    }
 
     public Network network;
     public Logging logging;
     public Format format;
+    public Logic logic;
+    public Path path;
 }

@@ -14,19 +14,17 @@
         >
         <TextView
             android:id="@+id/main_login_display"
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
+            style="@style/WWStyle"
+            android:layout_gravity="center_horizontal"
             android:gravity="center"
             android:textColor="@color/fg_white"
             android:layout_margin="@dimen/space_standard"
-            android:layout_height="wrap_content"
             />
         <TextView
             android:id="@+id/main_logout"
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/label_settings"
+            style="@style/WWStyle"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/label_logout"
             android:textColor="@color/fg_white"
             android:padding="@dimen/space_standard"
             />

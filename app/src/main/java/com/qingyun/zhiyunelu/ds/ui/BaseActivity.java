@@ -56,9 +56,14 @@ public abstract class BaseActivity extends BaseTemplatedActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_settings:
-//                SettingsActivity.launchMe(this);
+                SettingActivity.launchMe(this);
                 break;
         }
+        return true;
+    }
+
+    @Override
+    protected boolean isDisplayShowTitleForAppName() {
         return true;
     }
 }

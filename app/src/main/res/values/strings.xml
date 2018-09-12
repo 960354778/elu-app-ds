@@ -1,16 +1,29 @@
 <resources>
     <string name="label_home">首页</string>
-    <string name="label_settings">设置</string>
-    <string name="content_splash_version" formatted="false">%s (%d) %s</string>
+    <string name="label_setting">设置</string>
     <string name="label_login">登录</string>
     <string name="label_logout">注销</string>
+    <string name="label_save">保存</string>
     <string name="label_manually_fetch">手工获取推送信息</string>
     <string name="label_account">账号</string>
     <string name="label_password">密码</string>
+    <string name="label_build_date">编译日期</string>
+    <string name="label_build_revision">编译版本</string>
+    <string name="label_self_phone">本机号码</string>
+    <string name="label_debug_url">接口地址</string>
+    <string name="label_export_wx">导出微信数据库</string>
+    <string name="content_splash_version" formatted="false">%s (%d) %s</string>
+    <string name="info_saved">保存成功</string>
     <string name="hint_enter_account">请输入账号&#8230;</string>
     <string name="hint_enter_password">请输入密码&#8230;</string>
+    <string name="hint_self_phone">请输入本机手机号码&#8230;</string>
+    <string name="hint_debug_url">请输入数据接口地址头&#8230;</string>
     <string name="warn_requires_root">请先root手机并授予本应用root权限</string>
     <string name="warn_requires_phone_record">请确认已打开手机自动录音功能</string>
     <string name="warn_requires_permission">请在权限管理中授予本应用所有所需权限</string>
     <string name="warn_missing_account_password">请输入账号或密码</string>
+    <string name="error_network">发生网络错误</string>
+    <string name="error_api">访问数据发生错误</string>
+    <string name="error_coded">发生错误：%s</string>
+    <string name="error_business">%s</string>
 </resources>

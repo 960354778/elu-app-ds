@@ -20,7 +20,6 @@ public final class Constants {
     public static final Setting SETTING_BASIC;
     public static final String[] PERMISSIONS_MUST_HAVE = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO, Manifest.permission.READ_PHONE_STATE,Manifest.permission.CALL_PHONE,Manifest.permission.READ_SMS};
     public static final String[] PERMISSIONS_NICE_TO_HAVE = new String[]{};
-    public static final String MISC_HANDLER_THREAD_NAME = "misc";
 
     public static final class Codes {
         private Codes() {
@@ -41,7 +40,7 @@ public final class Constants {
         public static final String LOG_DIR_FORMAT = PathUtil.concat(STORAGE_ROOT_FORMAT, "log");
         public static final String MISC_DIR_FORMAT = PathUtil.concat(STORAGE_ROOT_FORMAT, "misc");
         public static final String UPLOADED_FILE_DIR_FORMAT = PathUtil.concat(STORAGE_ROOT_FORMAT, "files");
-        public static final String TEMP_DIR_WX_SEGMENT = "wx";
+        public static final String TEMP_DIR_WX_SEGMENT = "wx/%s";
     }
 
     private static Setting buildBasicSetting() {
@@ -57,6 +56,13 @@ public final class Constants {
         ret.logging.suppressLogReport = false;
         ret.format = new Setting.Format();
         ret.format.defaultDateTime = "yyyy-MM-dd HH:mm:ss.SSSZ";
+        ret.logic = new Setting.Logic();
+        ret.logic.wxChatSyncReserveMs = 2 * 1000;
+        ret.logic.wxChatSyncCountThreshold = 1000;
+        ret.logic.pollingIntervalMs = 1 * 60 * 1000;
+//        ret.logic.pollingIntervalMs = 2 * 60 * 60 * 1000;
+        ret.path = new Setting.Path();
+        ret.path.decryptedWxDbFileName = "wx.db";
         return ret;
     }
 

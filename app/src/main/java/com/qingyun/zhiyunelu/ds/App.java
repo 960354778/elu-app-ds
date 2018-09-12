@@ -3,18 +3,20 @@ package com.qingyun.zhiyunelu.ds;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.os.HandlerThread;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.qingyun.zhiyunelu.ds.data.Setting;
 import com.qingyun.zhiyunelu.ds.op.ApiService;
+import com.qingyun.zhiyunelu.ds.op.PollingManager;
 import com.qingyun.zhiyunelu.ds.op.Prefs;
+import com.qingyun.zhiyunelu.ds.op.WechatManager;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.UUID;
 
 import velites.android.support.devices.xiaomi.XiaomiConstants;
 import velites.android.utility.framework.BaseApplication;
@@ -23,7 +25,7 @@ import velites.android.utility.logger.LocalFileLogProcessor;
 import velites.android.utility.logger.PrimitiveLogProcessor;
 import velites.android.utility.logger.SingleLooperLogProcessor;
 import velites.android.utility.root.RootUtility;
-import velites.android.utility.helpers.SystemHelper;
+import velites.android.utility.misc.SystemHelper;
 import velites.java.utility.log.AggregatedLogProcessor;
 import velites.java.utility.log.LogStub;
 import velites.java.utility.log.LogProcessor;
@@ -31,7 +33,6 @@ import velites.java.utility.merge.ObjectMerger;
 import velites.java.utility.misc.DateTimeUtil;
 import velites.java.utility.misc.ExceptionUtil;
 import velites.java.utility.misc.FileUtil;
-import velites.java.utility.misc.ObjectAccessor;
 import velites.java.utility.misc.PathUtil;
 import velites.java.utility.misc.StringUtil;
 import velites.java.utility.misc.SyntaxUtil;
@@ -54,15 +55,16 @@ public class App extends BaseApplication {
         private String buildType;
         private File miscDir;
         private File uploadedFileDir;
-        private File wxTempDir;
+        private String wxTempDirPathFormat;
         private String buildDate;
         private String buildEpoch;
         private String buildRevision;
         private Prefs prefs;
-        private HandlerThread miscThread;
         private Setting setting;
         private Gson gson;
         private ApiService api;
+        private WechatManager wechat;
+        private PollingManager polling;
 
         private BaseInitializer<Context> initializer = new BaseInitializer<Context>(false, null) {
             @Override
@@ -81,23 +83,28 @@ public class App extends BaseApplication {
                 channel = applicationInfoWthMetaData.metaData.getString("Channel");
                 miscDir = new File(StringUtil.formatInvariant(Constants.FilePaths.MISC_DIR_FORMAT, channel));
                 uploadedFileDir = new File(StringUtil.formatInvariant(Constants.FilePaths.UPLOADED_FILE_DIR_FORMAT, channel));
-                wxTempDir = new File(PathUtil.concat(defaultContext.getCacheDir().getPath(), Constants.FilePaths.TEMP_DIR_WX_SEGMENT));
+                wxTempDirPathFormat = PathUtil.concat(defaultContext.getCacheDir().getPath(), Constants.FilePaths.TEMP_DIR_WX_SEGMENT);
                 device = applicationInfoWthMetaData.metaData.getString("Device");
                 prefs = new Prefs(defaultContext);
                 EnvironmentInfo.ensureInit(defaultContext, channel, buildType);
-                miscThread = new HandlerThread(Constants.MISC_HANDLER_THREAD_NAME);
                 applySetting(new ObjectMerger(true).merge(ChannelConfig.SETTING_CHANNEL, Constants.SETTING_BASIC, null));
                 ExceptionUtil.wrapperGlobalUncaughtExceptionHandlerWithLog();
             }
         };
 
         private void applySetting(Setting s) {
-            setting = s == null ? new Setting() : s;
+            setting = s;
+            if (debug) {
+                String url = prefs.getDebugApiBase();
+                if (!StringUtil.isNullOrSpace(url)) {
+                    s.network.apiRootUrl = url;
+                }
+            }
             GsonBuilder gb = new GsonBuilder();
             if (setting.format != null && setting.format.defaultDateTime != null) {
                 gb = gb.setDateFormat(setting.format.defaultDateTime);
             }
-            gb.registerTypeAdapter(Calendar.class, new DateTimeUtil.CalendarTimestampAdapter());
+            gb.registerTypeHierarchyAdapter(Calendar.class, new DateTimeUtil.CalendarTimestampAdapter());
             gson = gb.create();
             LogProcessor logProcessor = null;
             if (setting.logging != null) {
@@ -112,16 +119,9 @@ public class App extends BaseApplication {
                 logProcessor = new AggregatedLogProcessor(primitive, lps.toArray(new LogProcessor[0]));
             }
             LogStub.setProcessor(logProcessor);
-            api = new ApiService(gson, setting.network, miscThread, new ObjectAccessor<String>() {
-                @Override
-                public String get() {
-                    return prefs.getSerializedToken();
-                }
-                @Override
-                public void Set(String value) {
-                    prefs.setSerializedToken(value);
-                }
-            });
+            api = new ApiService(this);
+            wechat = new WechatManager(this);
+            polling = new PollingManager(this);
         }
 
         public File getMiscDir() {
@@ -132,8 +132,8 @@ public class App extends BaseApplication {
             return uploadedFileDir;
         }
 
-        public File getWxTempDir() {
-            return wxTempDir;
+        public String createWxTempDirPath() {
+            return StringUtil.formatInvariant(wxTempDirPathFormat, UUID.randomUUID());
         }
 
         public Context getDefaultContext() {
@@ -188,6 +188,14 @@ public class App extends BaseApplication {
             return api;
         }
 
+        public WechatManager getWechat() {
+            return wechat;
+        }
+
+        public PollingManager getPolling() {
+            return polling;
+        }
+
         public final void ensureInit(Context ctx) {
             initializer.ensureInit(ctx);
         }
@@ -204,6 +212,13 @@ public class App extends BaseApplication {
                 return R.string.warn_requires_phone_record;
             }
             return null;
+        }
+
+        public void updateDebugApiBase(String url) {
+            prefs.setDebugApiBase(url);
+            if (debug) {
+                setting.network.apiRootUrl = url;
+            }
         }
     }
 
@@ -228,6 +243,4 @@ public class App extends BaseApplication {
         assistant.awaitInit();
         return assistant;
     }
-
-    // TODO: rxandroid scheduler with RunnableKeepingScope
 }

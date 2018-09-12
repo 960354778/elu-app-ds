@@ -13,19 +13,13 @@ import com.qingyun.zhiyunelu.ds.data.ApiResult;
 import com.qingyun.zhiyunelu.ds.data.LoginDto;
 import com.qingyun.zhiyunelu.ds.op.ApiService;
 
-import org.w3c.dom.NameList;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.Observer;
-import velites.android.support.ui.BaseTemplatedActivity;
-import velites.android.utility.helpers.RxHelper;
-import velites.android.utility.helpers.ToastUtil;
+import velites.android.utility.misc.RxHelper;
+import velites.android.utility.misc.ToastHelper;
 import velites.java.utility.log.LogEntry;
 import velites.java.utility.log.LogStub;
-import velites.java.utility.misc.DateTimeUtil;
-import velites.java.utility.misc.ExceptionUtil;
 import velites.java.utility.misc.StringUtil;
 
 /**
@@ -33,6 +27,11 @@ import velites.java.utility.misc.StringUtil;
  */
 
 public class LoginActivity extends BaseActivity {
+
+    public static void launchMe(Context ctx) {
+        Intent intent = new Intent(ctx, LoginActivity.class);
+        ctx.startActivity(intent);
+    }
 
     class Widgets {
         @BindView(R.id.login_account)
@@ -42,12 +41,17 @@ public class LoginActivity extends BaseActivity {
         @BindView(R.id.login_login)
         Button btLogin;
 
+        private void render(){
+            etAccount.setText(getAppAssistant().getPrefs().getLastUsername());
+            etPassword.setText(getAppAssistant().getPrefs().getLastPassword());
+        }
+
         @OnClick(R.id.login_login)
         void onLoginClick(View view) {
             String name = etAccount.getText().toString();
             String pwd = etPassword.getText().toString();
             if (StringUtil.isNullOrEmpty(name) || StringUtil.isNullOrEmpty(pwd)) {
-                ToastUtil.showToastShort(LoginActivity.this, R.string.warn_missing_account_password);
+                ToastHelper.showToastShort(LoginActivity.this, R.string.warn_missing_account_password);
                 return;
             }
             getAppAssistant().getPrefs().setLastUsername(name);
@@ -55,17 +59,14 @@ public class LoginActivity extends BaseActivity {
             LoginDto login = new LoginDto();
             login.loginName = name;
             login.password = pwd;
-            getAppAssistant().getApi().getDefaultApi().login(login)
+            getAppAssistant().getApi().createAsyncApi().login(login)
                     .subscribeOn(RxHelper.createKeepingScopeIOSchedule()).observeOn(RxHelper.createKeepingScopeMainThreadSchedule())
-                    .subscribe(new ApiService.ApiObserver<ApiResult>() {
+                    .subscribe(new ApiService.ApiObserver(LoginActivity.this) {
                         @Override
-                        public void onSuccess(ApiResult apiResult) {
-                            LogStub.log(new LogEntry(LogStub.LOG_LEVEL_INFO, "LoginActivity","thread name:%s loginInfo: %s", Thread.currentThread().getName(), apiResult.toString()));
-                        }
-
-                        @Override
-                        public void onFail(Throwable e) {
-                            ExceptionUtil.swallowThrowable(e);
+                        public boolean processResult(Object o, ApiResult res) {
+                            LogStub.log(new LogEntry(LogStub.LOG_LEVEL_INFO, LoginActivity.this,"Logged in as user: %s", res.token.account.loginName));
+                            LoginActivity.this.finish();
+                            return true;
                         }
                     });
         }
@@ -73,22 +74,12 @@ public class LoginActivity extends BaseActivity {
 
     private final Widgets widgets = new Widgets();
 
-    public static void launchMe(Context ctx) {
-        Intent intent = new Intent(ctx, LoginActivity.class);
-        ctx.startActivity(intent);
-    }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         decorateToolbar();
         ButterKnife.bind(widgets, this);
-        initNamePwd();
-    }
-
-    private void initNamePwd(){
-//        widgets.etAccount.setText(AppAssistant.getPrefs().getStr(Constants.PrefsKey.ACCOUNT_NAME_KEY));
-//        widgets.etPassword.setText(AppAssistant.getPrefs().getStr(Constants.PrefsKey.ACCOUNT_PWD_KEY));
+        widgets.render();
     }
 
     @Override

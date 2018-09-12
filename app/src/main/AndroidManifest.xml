@@ -71,8 +71,8 @@
             android:screenOrientation="${commonOrientation}"
             />
         <activity
-            android:name=".ui.SettingsActivity"
-            android:label="@string/label_settings"
+            android:name=".ui.SettingActivity"
+            android:label="@string/label_setting"
             android:screenOrientation="${commonOrientation}" />
         <activity
             android:name=".ui.ViewPagerActivity"
