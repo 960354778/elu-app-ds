@@ -6,6 +6,7 @@ import com.qingyun.zhiyunelu.ds.data.LoginDto;
 import com.qingyun.zhiyunelu.ds.data.SyncWechatFriendsDto;
 import com.qingyun.zhiyunelu.ds.data.SyncWechatFriendsResult;
 import com.qingyun.zhiyunelu.ds.data.SyncWechatMessagesDto;
+import com.qingyun.zhiyunelu.ds.data.TaskMessage;
 
 import io.reactivex.Observable;
 import retrofit2.http.Body;
@@ -25,6 +26,9 @@ public interface ISyncApiService {
 
     @POST("MobileSync/UploadWechatChats")
     ApiResult syncWechatMessages(@Body SyncWechatMessagesDto messages);
+
+    @GET("MobileSync/ObtainLatestMessage")
+    ApiResult<TaskMessage> obtainLatestMessage(@Body SyncWechatMessagesDto messages);
 
 //    @POST("MobileTask/DoctorTasksAllReps")
 //    Observable<OrderInfo> getMyDoctersList(@Header("token") String token, @Body Map<String, Object> params );

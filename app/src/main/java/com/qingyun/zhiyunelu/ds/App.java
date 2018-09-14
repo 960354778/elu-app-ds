@@ -34,6 +34,7 @@ import velites.java.utility.misc.DateTimeUtil;
 import velites.java.utility.misc.ExceptionUtil;
 import velites.java.utility.misc.FileUtil;
 import velites.java.utility.misc.PathUtil;
+import velites.java.utility.misc.SerializationUtil;
 import velites.java.utility.misc.StringUtil;
 import velites.java.utility.misc.SyntaxUtil;
 import velites.java.utility.thread.BaseInitializer;
@@ -61,7 +62,6 @@ public class App extends BaseApplication {
         private String buildRevision;
         private Prefs prefs;
         private Setting setting;
-        private Gson gson;
         private ApiService api;
         private WechatManager wechat;
         private PollingManager polling;
@@ -105,7 +105,7 @@ public class App extends BaseApplication {
                 gb = gb.setDateFormat(setting.format.defaultDateTime);
             }
             gb.registerTypeHierarchyAdapter(Calendar.class, new DateTimeUtil.CalendarTimestampAdapter());
-            gson = gb.create();
+            SerializationUtil.setDefaultGson(gb.create());
             LogProcessor logProcessor = null;
             if (setting.logging != null) {
                 List<LogProcessor> lps = new ArrayList<LogProcessor>();
@@ -181,7 +181,7 @@ public class App extends BaseApplication {
         }
 
         public Gson getGson() {
-            return gson;
+            return SerializationUtil.getDefaultGson();
         }
 
         public ApiService getApi() {
