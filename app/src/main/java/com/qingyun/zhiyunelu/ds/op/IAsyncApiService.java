@@ -27,8 +27,8 @@ public interface IAsyncApiService {
     @POST("MobileSync/UploadWechatChats")
     Observable<ApiResult> syncWechatMessages(@Body SyncWechatMessagesDto messages);
 
-    @GET("MobileSync/ObtainLatestMessage")
-    Observable<ApiResult<TaskMessage>> obtainLatestMessage(@Body SyncWechatMessagesDto messages);
+    @GET("MobileSync/ObtainDialingInformation")
+    Observable<ApiResult<TaskMessage>> obtainDialingInformation();
 
 //    @POST("MobileTask/DoctorTasksAllReps")
 //    Observable<OrderInfo> getMyDoctersList(@Header("token") String token, @Body Map<String, Object> params );

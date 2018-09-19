@@ -14,8 +14,8 @@ import com.qingyun.zhiyunelu.ds.data.LoginDto;
 import com.qingyun.zhiyunelu.ds.op.ApiService;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
+import velites.android.support.ui.BaseLayoutWidget;
 import velites.android.utility.misc.RxHelper;
 import velites.android.utility.misc.ToastHelper;
 import velites.java.utility.log.LogEntry;
@@ -33,7 +33,7 @@ public class LoginActivity extends BaseActivity {
         ctx.startActivity(intent);
     }
 
-    class Widgets {
+    class Widgets extends BaseLayoutWidget {
         @BindView(R.id.login_account)
         EditText etAccount;
         @BindView(R.id.login_password)
@@ -78,7 +78,7 @@ public class LoginActivity extends BaseActivity {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         decorateToolbar();
-        ButterKnife.bind(widgets, this);
+        widgets.bind(this);
         widgets.render();
     }
 

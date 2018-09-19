@@ -35,6 +35,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.CallAdapter;
 import retrofit2.Converter;
+import retrofit2.HttpException;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -223,55 +224,37 @@ public class ApiService {
         }
     }
 
-    public static abstract class ApiObserver<TData> extends ObserverWithProgress<ApiResult<TData>> {
-        private final Observer callback;
+    public static class ApiErrorObserver<T> extends ObserverWithProgress<T> {
 
-        public ApiObserver(Context context, Observer callback) {
+        public ApiErrorObserver(Context context) {
             super(context);
-            this.callback = callback;
         }
 
-        public ApiObserver(Context context) {
-            this(context, null);
-        }
-
-        public ApiObserver() {
-            this(null, null);
+        public ApiErrorObserver() {
+            this(null);
         }
 
         @Override
-        public void onSubscribe(Disposable d) {
-            super.onSubscribe(d);
-            if (this.callback != null) {
-                this.callback.onSubscribe(d);
-            }
+        public void onError(Throwable ex) {
+            super.onError(ex);
+            ExceptionUtil.runAndRethrowAsRuntime(() -> new ApiErrorConsumer(this.getContext()).accept(ex), null);
+        }
+    }
+
+    public static abstract class ApiObserver<TData> extends ApiErrorObserver<ApiResult<TData>> {
+
+        public ApiObserver(Context context) {
+            super(context);
+        }
+
+        public ApiObserver() {
+            this(null);
         }
 
         @Override
         public void onNext(ApiResult<TData> res) {
             super.onNext(res);
-            if (!this.processResult(res.data, res)) {
-                if (this.callback != null) {
-                    this.callback.onNext(res);
-                }
-            }
-        }
-        @Override
-        public void onError(Throwable ex) {
-            super.onError(ex);
-            if (this.callback != null) {
-                this.callback.onError(ex);
-            } else {
-                ExceptionUtil.runAndRethrowAsRuntime(() -> new ApiErrorConsumer(this.getContext()).accept(ex), null);
-            }
-        }
-
-        @Override
-        public void onComplete() {
-            super.onComplete();
-            if (this.callback != null) {
-                this.callback.onComplete();
-            }
+            this.processResult(res.data, res);
         }
 
         /**
@@ -294,7 +277,13 @@ public class ApiService {
 
                 @Override
                 public Object adapt(Call<Object> call) {
-                    return ExceptionUtil.runAndRethrowAsRuntime(() -> call.execute().body(), null);
+                    return ExceptionUtil.runAndRethrowAsRuntime(() -> {
+                        retrofit2.Response res = call.execute();
+                        if (res.isSuccessful()) {
+                            return res.body();
+                        }
+                        throw new HttpException(res);
+                    }, null);
                 }
             };
         }

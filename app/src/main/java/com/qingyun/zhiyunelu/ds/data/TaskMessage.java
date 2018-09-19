@@ -7,8 +7,8 @@ public class TaskMessage {
     public String taskCode;
     public String projectName;
     public String representativeName;
-    public String targetName;
-    public String targetNo;
+    public String doctorName;
+    public String doctorNo;
     public String departmentName;
     public String hospitalName;
     public String provinceName;

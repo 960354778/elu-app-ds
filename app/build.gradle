@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply from: '../androidUtils/ide/funcs.gradle'
 
 def FLAVOR_CHANNEL = 'channel'
 def FLAVOR_DEVICE = 'device'
@@ -39,12 +38,12 @@ android {
 
     signingConfigs {
         release {
-            File sf = resolvePath(rootProject.projectDir.toString(), normalizePath(rootProject.ext.config.releaseKeyConfigPath)).toFile()
+            File sf = rootProject.ext.utils.resolvePath(rootProject.projectDir.toString(), rootProject.ext.utils.normalizePath(rootProject.ext.config.releaseKeyConfigPath)).toFile()
             print("loading signing info from: \"${sf}\"(existing: ${sf.exists()})...\n")
             if (sf.exists()) {
                 Properties props = new Properties()
                 props.load(new FileInputStream(sf))
-                storeFile resolvePath(sf.parent, normalizePath(props.getProperty('signing.release.keyStore'))).toFile()
+                storeFile rootProject.ext.utils.resolvePath(sf.parent, rootProject.ext.utils.normalizePath(props.getProperty('signing.release.keyStore'))).toFile()
                 keyAlias props.getProperty('signing.release.keyAlias')
                 def pStore = props.getProperty('signing.release.storePassword')
                 if (pStore) {
@@ -122,7 +121,7 @@ android {
             variant.setIgnore(buildTypeName == buildTypes.release.name && debugOnlyChannels.contains(channel))
         }
     }
-    processApkOutputs(rootProject.ext.android.apk_name_prefix, normalizePath(rootProject.ext.config.outputDir))
+    rootProject.ext.utils.processApkOutputs(android, rootProject.ext.android.apk_name_prefix, rootProject.ext.utils.normalizePath(rootProject.ext.config.outputDir))
 }
 
 dependencies {
@@ -138,6 +137,7 @@ dependencies {
     implementation rootProject.ext.dependencies['rxbinding_design']
     implementation rootProject.ext.dependencies['rxbinding_appcompat_v7']
     implementation rootProject.ext.dependencies['rxbinding_recyclerview_v7']
+    implementation rootProject.ext.dependencies['rxlifecycle_components']
     implementation rootProject.ext.dependencies['retrofit']
     implementation rootProject.ext.dependencies['retrofit_rx']
     implementation rootProject.ext.dependencies['retrofit_gson']

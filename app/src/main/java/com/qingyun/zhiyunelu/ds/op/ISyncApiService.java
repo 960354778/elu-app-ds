@@ -27,8 +27,8 @@ public interface ISyncApiService {
     @POST("MobileSync/UploadWechatChats")
     ApiResult syncWechatMessages(@Body SyncWechatMessagesDto messages);
 
-    @GET("MobileSync/ObtainLatestMessage")
-    ApiResult<TaskMessage> obtainLatestMessage(@Body SyncWechatMessagesDto messages);
+    @GET("MobileSync/ObtainDialingInformation")
+    ApiResult<TaskMessage> obtainDialingInformation();
 
 //    @POST("MobileTask/DoctorTasksAllReps")
 //    Observable<OrderInfo> getMyDoctersList(@Header("token") String token, @Body Map<String, Object> params );

@@ -75,7 +75,7 @@
             android:label="@string/label_setting"
             android:screenOrientation="${commonOrientation}" />
         <activity
-            android:name=".ui.ViewPagerActivity"
+            android:name=".ui.TasksActivity"
             android:screenOrientation="${commonOrientation}" />
         <activity
             android:name=".ui.NotifyShowActivity"

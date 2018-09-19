@@ -20,15 +20,16 @@
         <item name="android:padding">@dimen/space_standard</item>
         <item name="android:textColorHint">@color/fg_dark</item>
         <item name="android:background">@null</item>
-        <item name="android:layout_gravity">center_vertical</item>
     </style>
-    <style name="EluStyle.TextTitle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+    <style name="EluStyle.Text" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:layout_gravity">center</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:textColor">@color/fg_white</item>
+        <item name="android:textColor">@color/fg_black</item>
         <item name="android:gravity">center</item>
-        <item name="android:layout_centerInParent">true</item>
+    </style>
+    <style name="EluStyle.TextTitle" parent="EluStyle.Text">
+        <item name="android:textStyle">bold</item>
     </style>
     <style name="EluStyle.Area">
         <item name="android:layout_width">@dimen/size_area_width</item>
@@ -42,5 +43,8 @@
         <item name="android:windowBackground">@color/bg_none</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:theme">@android:style/Theme.Dialog</item>
+    </style>
+    <style name="EluStyle.InfoLine" parent="MWHorStyle">
+        <item name="android:layout_margin">@dimen/space_standard</item>
     </style>
 </resources>

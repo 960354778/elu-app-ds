@@ -11,14 +11,16 @@ import com.qingyun.zhiyunelu.ds.R;
 import com.qingyun.zhiyunelu.ds.data.ApiResult;
 import com.qingyun.zhiyunelu.ds.data.TokenInfo;
 import com.qingyun.zhiyunelu.ds.op.ApiService;
+import com.qingyun.zhiyunelu.ds.op.ObserverWithProgress;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
+import velites.android.support.ui.BaseLayoutWidget;
 import velites.android.utility.misc.RxHelper;
 import velites.java.utility.log.LogEntry;
 import velites.java.utility.log.LogStub;
 import velites.java.utility.misc.RxUtil;
+import velites.java.utility.misc.SyntaxUtil;
 
 public class MainActivity extends BaseActivity {
 
@@ -29,7 +31,7 @@ public class MainActivity extends BaseActivity {
 
     private String mToken;
 
-    class Widgets {
+    class Widgets extends BaseLayoutWidget {
         boolean loggedIn;
         @BindView(R.id.main_login_area)
         LinearLayout llLoginArea;
@@ -46,20 +48,23 @@ public class MainActivity extends BaseActivity {
             if (loggedIn) {
                 tvLogin.setText(token.account.displayName);
                 tvLogout.setVisibility(View.VISIBLE);
+                tvManuallyFetch.setVisibility(View.VISIBLE);
             } else {
                 tvLogin.setText(R.string.label_login);
                 tvLogout.setVisibility(View.GONE);
+                tvManuallyFetch.setVisibility(View.INVISIBLE);
             }
         }
 
         @OnClick(R.id.main_login_area)
-        void doLogin(View view){
+        void doLogin(View view) {
             if (!loggedIn) {
                 LoginActivity.launchMe(MainActivity.this);
             }
         }
+
         @OnClick(R.id.main_logout)
-        void doLogout(View view){
+        void doLogout(View view) {
             TokenInfo token = getAppAssistant().getApi().getToken();
             String user = token == null ? null : token.account.loginName;
             getAppAssistant().getApi().clearToken();
@@ -68,8 +73,23 @@ public class MainActivity extends BaseActivity {
                     .subscribe(new ApiService.ApiObserver(MainActivity.this) {
                         @Override
                         public boolean processResult(Object o, ApiResult res) {
-                            LogStub.log(new LogEntry(LogStub.LOG_LEVEL_INFO, MainActivity.this,"Logged out from user: %s", user));
+                            LogStub.log(new LogEntry(LogStub.LOG_LEVEL_INFO, MainActivity.this, "Logged out from user: %s", user));
                             return true;
+                        }
+                    });
+        }
+
+        @OnClick(R.id.main_manually_fetch)
+        void doManuallyFetch(View view) {
+            getAppAssistant().getMessaging().syncTaskMessages()
+                    .subscribeOn(RxHelper.createKeepingScopeIOSchedule()).observeOn(RxHelper.createKeepingScopeMainThreadSchedule())
+                    .subscribe(new ApiService.ApiErrorObserver<Boolean>() {
+                        @Override
+                        public void onNext(Boolean res) {
+                            super.onNext(res);
+                            if (SyntaxUtil.nvl(res, false)) {
+                                TasksActivity.launchMe(MainActivity.this);
+                            }
                         }
                     });
         }
@@ -90,9 +110,10 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         decorateToolbar();
-        ButterKnife.bind(widgets, this);
+        widgets.bind(this);
         getAppAssistant().getApi().getTokenChanged()
                 .observeOn(RxHelper.createKeepingScopeMainThreadSchedule())
+                .compose(this.bindToLifecycle())
                 .subscribe(loggedIn -> this.widgets.render(), RxUtil.simpleErrorConsumer);
     }
 

@@ -13,10 +13,10 @@ import com.qingyun.zhiyunelu.ds.R;
 import com.qingyun.zhiyunelu.ds.op.ObserverWithProgress;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
+import velites.android.support.ui.BaseLayoutWidget;
 import velites.android.utility.misc.RxHelper;
 import velites.java.utility.misc.RxUtil;
 
@@ -39,7 +39,7 @@ public class SettingActivity extends BaseActivity {
             }
         };
     }
-    class Widgets {
+    class Widgets extends BaseLayoutWidget {
         @BindView(R.id.setting_build_date)
         TextView tvBuildDate;
         @BindView(R.id.setting_build_revision)
@@ -98,7 +98,7 @@ public class SettingActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ButterKnife.bind(widgets, this);
+        widgets.bind(this);
         widgets.render();
     }
 }

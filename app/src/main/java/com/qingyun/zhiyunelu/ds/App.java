@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.qingyun.zhiyunelu.ds.data.Setting;
 import com.qingyun.zhiyunelu.ds.op.ApiService;
+import com.qingyun.zhiyunelu.ds.op.MessagingManager;
 import com.qingyun.zhiyunelu.ds.op.PollingManager;
 import com.qingyun.zhiyunelu.ds.op.Prefs;
 import com.qingyun.zhiyunelu.ds.op.WechatManager;
@@ -65,6 +66,7 @@ public class App extends BaseApplication {
         private ApiService api;
         private WechatManager wechat;
         private PollingManager polling;
+        private MessagingManager messaging;
 
         private BaseInitializer<Context> initializer = new BaseInitializer<Context>(false, null) {
             @Override
@@ -122,6 +124,7 @@ public class App extends BaseApplication {
             api = new ApiService(this);
             wechat = new WechatManager(this);
             polling = new PollingManager(this);
+            messaging = new MessagingManager(this);
         }
 
         public File getMiscDir() {
@@ -194,6 +197,10 @@ public class App extends BaseApplication {
 
         public PollingManager getPolling() {
             return polling;
+        }
+
+        public MessagingManager getMessaging() {
+            return messaging;
         }
 
         public final void ensureInit(Context ctx) {

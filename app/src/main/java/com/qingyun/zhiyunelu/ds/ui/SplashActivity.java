@@ -7,16 +7,15 @@ import android.widget.TextView;
 import com.qingyun.zhiyunelu.ds.App;
 import com.qingyun.zhiyunelu.ds.Constants;
 import com.qingyun.zhiyunelu.ds.R;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.ReplaySubject;
 import io.reactivex.subjects.Subject;
+import velites.android.support.ui.BaseLayoutWidget;
 import velites.android.support.ui.RequestPermissionAssistant;
 import velites.android.utility.framework.EnvironmentInfo;
 import velites.android.utility.misc.RxHelper;
@@ -33,7 +32,7 @@ public class SplashActivity extends BaseActivity {
     private static final long STAY_FROM_INIT_IN_MS = 2000;
     private static final long INTERVAL_CHECK_MS = 3000;
 
-    class Widgets {
+    class Widgets extends BaseLayoutWidget {
         @BindView(R.id.splash_version)
         TextView version;
     }
@@ -45,12 +44,13 @@ public class SplashActivity extends BaseActivity {
         Observable.just(0).delay(STAY_FROM_ENTER_IN_MS, TimeUnit.MILLISECONDS).subscribe(wait);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        ButterKnife.bind(widgets, this);
+        widgets.bind(this);
         Observable.create(RxUtil.buildSimpleFuncObservable(() -> {
             App.getInstance().getAssistant().awaitInit();
             awaitInit();
             return SyntaxUtil.nvl(App.getInstance().getAssistant().checkEnv());
         })).subscribeOn(RxHelper.createKeepingScopeIOSchedule()).observeOn(RxHelper.createKeepingScopeMainThreadSchedule())
+                .compose(this.bindToLifecycle())
                 .subscribe(o -> this.showInfo(o, wait), RxUtil.simpleErrorConsumer);
     }
 
@@ -76,6 +76,7 @@ public class SplashActivity extends BaseActivity {
         if (msg == 0) {
             wait.zipWith(Observable.just(0).delay(STAY_FROM_INIT_IN_MS, TimeUnit.MILLISECONDS), (integer, integer2) -> 0)
                     .subscribeOn(RxHelper.createKeepingScopeIOSchedule()).observeOn(RxHelper.createKeepingScopeMainThreadSchedule())
+                    .compose(this.bindUntilEvent(ActivityEvent.DESTROY))
                     .subscribe(o -> {
                         MainActivity.launchMe(SplashActivity.this);
                         SplashActivity.this.finish();
@@ -86,6 +87,7 @@ public class SplashActivity extends BaseActivity {
                     .subscribeOn(RxHelper.createKeepingScopeIOSchedule())
                     .map(integer -> SyntaxUtil.nvl(App.getInstance().getAssistant().checkEnv()))
                     .observeOn(RxHelper.createKeepingScopeMainThreadSchedule())
+                    .compose(this.bindUntilEvent(ActivityEvent.DESTROY))
                     .subscribe(s -> this.warnOrJump(s, wait), RxUtil.simpleErrorConsumer);
         }
     }

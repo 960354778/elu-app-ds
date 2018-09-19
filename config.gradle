@@ -1,6 +1,9 @@
 
-ext {
+apply from: './androidUtils/ide/funcs.gradle'
+
+rootProject.ext {
     versions = [
+        gradle: '3.1.4',
         java: '1.8',
         build: '28.0.2',
         room: '1.1.1',
@@ -9,19 +12,33 @@ ext {
         junit: '4.12',
         test: '1.0.1',
         espresso: '3.0.1',
-        butterknife: '8.8.1',
+        butterknife: '9.0.0-SNAPSHOT', // 8.8.1
         sqlcipher: '3.5.9',
         rxjava: '2.2.0',
-        rxandroid: '2.0.0',
+        rxandroid: '2.0.1',
         rxbinding: '2.1.1',
+        rxlifecycle: '2.2.0',
         retrofit: '2.4.0',
         okhttp: '3.11.0',
         gson: '2.8.5',
-        object_diff: '0.95'
+        object_diff: '0.95',
     ]
     java = [
         version: versions.java,
     ]
+    pathes = [
+        mavens: [
+            "https://maven.aliyun.com/repository/releases",
+            "https://oss.sonatype.org/content/repositories/snapshots",
+        ],
+    ]
+    config_repos = {
+        for (def u : pathes.mavens) {
+            maven { url u }
+        }
+        google()
+        jcenter()
+    }
     android = [
         compileSdkVersion: 28,
         buildToolsVersion: versions.build,
@@ -33,35 +50,42 @@ ext {
         apk_name_prefix: "zhiyunDS",
         java_version: JavaVersion.VERSION_1_8,
     ]
-    dependencies = [
-        appcompatV7: "com.android.support:appcompat-v7:${versions.support}",
-        design: "com.android.support:design:${versions.support}",
-        junit: "junit:junit:${versions.junit}",
-        test_runner: "com.android.support.test:runner:${versions.test}",
-        espresso: "com.android.support.test.espresso:espresso-core:${versions.espresso}",
-        recyclerview: "com.android.support:recyclerview-v7:${versions.support}",
-        cardview: "com.android.support:cardview-v7:${versions.support}",
-        room: "android.arch.persistence.room:runtime:${versions.room}",
-        room_annotation: "android.arch.persistence.room:compiler:${versions.room}",
-        room_test: "android.arch.persistence.room:testing:${versions.room}",
-        lifecycle: "android.arch.lifecycle:extensions:${versions.lifecycle}",
-        lifecycle_annotation: "android.arch.lifecycle:common-java8:${versions.lifecycle}",
-        butterknife: "com.jakewharton:butterknife:${versions.butterknife}",
-        butterknife_annotation: "com.jakewharton:butterknife-compiler:${versions.butterknife}",
-        sqlcipher: "net.zetetic:android-database-sqlcipher:${versions.sqlcipher}@aar",
-        gson: "com.google.code.gson:gson:${versions.gson}",
-        rxjava: "io.reactivex.rxjava2:rxjava:${versions.rxjava}",
-        rxandroid: "io.reactivex.rxjava2:rxandroid:${versions.rxandroid}",
-        rxbinding: "com.jakewharton.rxbinding2:rxbinding:${versions.rxbinding}",
-        rxbinding_design: "com.jakewharton.rxbinding2:rxbinding-design:${versions.rxbinding}",
-        rxbinding_appcompat_v7: "com.jakewharton.rxbinding2:rxbinding-appcompat-v7:${versions.rxbinding}",
-        rxbinding_recyclerview_v7: "com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:${versions.rxbinding}",
-        retrofit: "com.squareup.retrofit2:retrofit:${versions.retrofit}",
-        retrofit_rx: "com.squareup.retrofit2:adapter-rxjava2:${versions.retrofit}",
-        retrofit_gson: "com.squareup.retrofit2:converter-gson:${versions.retrofit}",
-        object_diff: "de.danielbechler:java-object-diff:${versions.object_diff}",
-        ok_log: "com.squareup.okhttp3:logging-interceptor:${versions.okhttp}"
+    dep_items = [
+        gradle: [group: "com.android.tools.build", name: "gradle", version: versions.gradle],
+        appcompatV7: [group: "com.android.support", name: "appcompat-v7", version: versions.support],
+        design: [group: "com.android.support", name: "design", version: versions.support],
+        junit: [group: "junit", name: "junit", version: versions.junit],
+        test_runner: [group: "com.android.support.test", name:"runner", version: versions.test],
+        espresso: [group: "com.android.support.test.espresso", name:"espresso-core", version: versions.espresso],
+        recyclerview: [group: "com.android.support", name:"recyclerview-v7", version: versions.support],
+        cardview: [group: "com.android.support", name:"cardview-v7", version: versions.support],
+        room: [group: "android.arch.persistence.room", name:"runtime", version: versions.room],
+        room_annotation: [group: "android.arch.persistence.room", name:"compiler", version: versions.room],
+        room_test: [group: "android.arch.persistence.room", name:"testing", version: versions.room],
+        lifecycle: [group: "android.arch.lifecycle", name:"extensions", version: versions.lifecycle],
+        lifecycle_annotation: [group: "android.arch.lifecycle", name:"common-java8", version: versions.lifecycle],
+        butterknife: [group: "com.jakewharton", name:"butterknife", version: versions.butterknife],
+        butterknife_annotation: [group: "com.jakewharton", name:"butterknife-compiler", version: versions.butterknife],
+        butterknife_gradle: [group: "com.jakewharton", name:"butterknife-gradle-plugin", version: versions.butterknife],
+        sqlcipher: [group: "net.zetetic", name:"android-database-sqlcipher", version: versions.sqlcipher],
+        gson: [group: "com.google.code.gson", name:"gson", version: versions.gson],
+        rxjava: [group: "io.reactivex.rxjava2", name:"rxjava", version: versions.rxjava],
+        rxandroid: [group: "io.reactivex.rxjava2", name:"rxandroid", version: versions.rxandroid],
+        rxbinding: [group: "com.jakewharton.rxbinding2", name:"rxbinding", version: versions.rxbinding],
+        rxbinding_design: [group: "com.jakewharton.rxbinding2", name:"rxbinding-design", version: versions.rxbinding],
+        rxbinding_appcompat_v7: [group: "com.jakewharton.rxbinding2", name:"rxbinding-appcompat-v7", version: versions.rxbinding],
+        rxbinding_recyclerview_v7: [group: "com.jakewharton.rxbinding2", name:"rxbinding-recyclerview-v7", version: versions.rxbinding],
+        rxlifecycle_components: [group: "com.trello.rxlifecycle2", name:"rxlifecycle-components", version: versions.rxlifecycle],
+        retrofit: [group: "com.squareup.retrofit2", name:"retrofit", version: versions.retrofit],
+        retrofit_rx: [group: "com.squareup.retrofit2", name:"adapter-rxjava2", version: versions.retrofit],
+        retrofit_gson: [group: "com.squareup.retrofit2", name:"converter-gson", version: versions.retrofit],
+        object_diff: [group: "de.danielbechler", name:"java-object-diff", version: versions.object_diff],
+        ok_log: [group: "com.squareup.okhttp3", name:"logging-interceptor", version: versions.okhttp],
     ]
+    dependencies = [:]
+    for (def item : dep_items.entrySet()) {
+        dependencies[item.key] = "${item.value.group}:${item.value.name}:${item.value.version}"
+    }
     def dt = new Date()
     config = [
         releaseKeyConfigPath: 'key/elu-ds.signing.properties',
@@ -70,6 +94,6 @@ ext {
         outputDir: '',
         buildDate: "${dt}",
         buildDateEpoch: dt.getTime(),
-        buildRevision: ""
+        buildRevision: "",
     ]
 }

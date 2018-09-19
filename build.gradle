@@ -1,26 +1,30 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
-apply from: 'config.gradle'
-if (hasProperty('extraConfig')) {
-    print("loading extra config from: \"${extraConfig}\"...\n")
-    apply from: extraConfig
-}
 
 buildscript {
-    repositories {
-//        maven { url 'http://maven.oschina.net/content/groups/public/'}
-        google()
-        jcenter()
+    apply from: 'config.gradle'
+    if (hasProperty('extraConfig')) {
+        print("loading extra config from: \"${extraConfig}\"...\n")
+        apply from: extraConfig
     }
+    repositories(rootProject.ext.config_repos)
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.4'
+        classpath rootProject.ext.dependencies['gradle']
+        classpath rootProject.ext.dependencies['butterknife_gradle']
     }
 }
 
 allprojects {
-    repositories {
-//        maven { url 'http://maven.oschina.net/content/groups/public/'}
-        google()
-        jcenter()
+    repositories(rootProject.ext.config_repos)
+}
+
+subprojects {
+    project.configurations.all {
+        resolutionStrategy.eachDependency { details ->
+            def dep = rootProject.ext.dep_items.find {d -> d.value.group == details.requested.group && d.value.name == details.requested.name}
+            if (dep) {
+                details.useVersion dep.value.version
+            }
+        }
     }
 }
 
