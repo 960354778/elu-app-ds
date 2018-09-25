@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    style="@style/MMStyle"
     android:fitsSystemWindows="true">
     <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/MWStyle"
         android:theme="@style/EluTheme.AppBarOverlay">
         <android.support.v7.widget.Toolbar
             android:id="@+id/header_toolbar"
@@ -17,15 +15,13 @@
             app:layout_scrollFlags="enterAlways|scroll"
             />
         <FrameLayout
+            style="@style/MWStyle"
             android:id="@+id/header_more"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             />
     </android.support.design.widget.AppBarLayout>
     <FrameLayout
+        style="@style/MMStyle"
         android:id="@+id/body"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         />
 </android.support.design.widget.CoordinatorLayout>

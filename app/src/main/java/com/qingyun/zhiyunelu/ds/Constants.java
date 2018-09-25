@@ -57,10 +57,9 @@ public final class Constants {
         ret.format = new Setting.Format();
         ret.format.defaultDateTime = "yyyy-MM-dd HH:mm:ss.SSSZ";
         ret.logic = new Setting.Logic();
-        ret.logic.wxChatSyncReserveMs = 2 * 1000;
-        ret.logic.wxChatSyncCountThreshold = 1000;
-        ret.logic.pollingIntervalMs = 1 * 60 * 1000;
-//        ret.logic.pollingIntervalMs = 2 * 60 * 60 * 1000;
+        ret.logic.wxChatSyncReserveMs = 2 * 1000L;
+        ret.logic.wxChatSyncCountThreshold = 1000L;
+        ret.logic.pollingIntervalMs = 2 * 60 * 60 * 1000L;
         ret.path = new Setting.Path();
         ret.path.decryptedWxDbFileName = "wx.db";
         return ret;

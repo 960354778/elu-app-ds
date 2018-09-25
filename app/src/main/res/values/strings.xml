@@ -2,6 +2,7 @@
     <string name="label_home">首页</string>
     <string name="label_setting">设置</string>
     <string name="label_login">登录</string>
+    <string name="label_task">工单</string>
     <string name="label_logout">注销</string>
     <string name="label_save">保存</string>
     <string name="label_manually_fetch">手工获取推送信息</string>

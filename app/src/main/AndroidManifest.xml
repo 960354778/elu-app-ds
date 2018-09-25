@@ -76,6 +76,7 @@
             android:screenOrientation="${commonOrientation}" />
         <activity
             android:name=".ui.TasksActivity"
+            android:label="@string/label_task"
             android:screenOrientation="${commonOrientation}" />
         <activity
             android:name=".ui.NotifyShowActivity"

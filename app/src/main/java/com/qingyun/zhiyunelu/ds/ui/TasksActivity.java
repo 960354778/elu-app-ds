@@ -31,7 +31,7 @@ public class TasksActivity extends BaseActivity {
     private BaseLayoutWidget.List list;
 
     @Override
-    protected int getBodyResId() {
+    protected Integer getContentResId() {
         return R.layout.layout_list;
     }
 
@@ -39,6 +39,8 @@ public class TasksActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         list = new BaseLayoutWidget.List(this);
+        list.getList().setAdapter(new Adapter(getAppAssistant().getMessaging().getTasks()));
+        list.getList().getAdapter().notifyDataSetChanged();
     }
 
     class ViewHolder extends BaseBindableViewHolder<TaskMessage> {

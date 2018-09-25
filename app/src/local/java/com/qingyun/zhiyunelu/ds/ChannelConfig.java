@@ -15,11 +15,8 @@ public final class ChannelConfig {
         Setting ret = new Setting();
         ret.network = new Setting.Network();
         ret.network.apiRootUrl = "http://192.168.88.54:5008/";
-        ret.logging = new Setting.Logging();
-        ret.logging.logLevel = 0;
-        ret.logging.suppressPrimitiveLog = false;
-        ret.logging.suppressFileLog = false;
-        ret.logging.suppressLogReport = false;
+        ret.logic = new Setting.Logic();
+        ret.logic.pollingIntervalMs = 2 * 60 * 1000L;
         return ret;
     }
 

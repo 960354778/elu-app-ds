@@ -19,9 +19,9 @@ public class Setting {
         public String defaultDateTime;
     }
     public static class Logic {
-        public long wxChatSyncReserveMs;
-        public long wxChatSyncCountThreshold;
-        public long pollingIntervalMs;
+        public Long wxChatSyncReserveMs;
+        public Long wxChatSyncCountThreshold;
+        public Long pollingIntervalMs;
     }
     public static class Path {
         public String decryptedWxDbFileName;
