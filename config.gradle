@@ -3,7 +3,7 @@ apply from: './androidUtils/ide/funcs.gradle'
 
 rootProject.ext {
     versions = [
-        gradle: '3.1.4',
+        gradle: '3.2.0',
         java: '1.8',
         build: '28.0.2',
         room: '1.1.1',
