@@ -12,6 +12,7 @@ import com.qingyun.zhiyunelu.ds.data.ApiResult;
 import com.qingyun.zhiyunelu.ds.data.TokenInfo;
 import com.qingyun.zhiyunelu.ds.op.ApiService;
 import com.qingyun.zhiyunelu.ds.op.ObserverWithProgress;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -70,6 +71,7 @@ public class MainActivity extends BaseActivity {
             getAppAssistant().getApi().clearToken();
             getAppAssistant().getApi().createAsyncApi().logout()
                     .subscribeOn(RxHelper.createKeepingScopeIOSchedule()).observeOn(RxHelper.createKeepingScopeMainThreadSchedule())
+                    .compose(bindUntilEvent(ActivityEvent.DESTROY))
                     .subscribe(new ApiService.ApiObserver(MainActivity.this) {
                         @Override
                         public boolean processResult(Object o, ApiResult res) {
@@ -83,6 +85,7 @@ public class MainActivity extends BaseActivity {
         void doManuallyFetch(View view) {
             getAppAssistant().getMessaging().syncTaskMessages()
                     .subscribeOn(RxHelper.createKeepingScopeIOSchedule()).observeOn(RxHelper.createKeepingScopeMainThreadSchedule())
+                    .compose(bindUntilEvent(ActivityEvent.DESTROY))
                     .subscribe(new ApiService.ApiErrorObserver<Boolean>() {
                         @Override
                         public void onNext(Boolean res) {

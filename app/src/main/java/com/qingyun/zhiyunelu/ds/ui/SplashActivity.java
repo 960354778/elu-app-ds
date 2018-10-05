@@ -57,7 +57,7 @@ public class SplashActivity extends BaseActivity {
     private void showInfo(final int msg, Subject<Integer> wait) {
         Tuple2<String, Integer> v = EnvironmentInfo.obtainAppVersion(this);
         widgets.version.setText(getString(R.string.content_splash_version, v.v1, v.v2, App.getInstance().getAssistant().isDebug() ? "DEBUG" : ""));
-        RequestPermissionAssistant.startRequestPermission(this, Constants.Codes.REQUEST_CODE_REQUIRE_PERMISSION, !App.getInstance().getAssistant().getPrefs().getPermissionRequested(), new Func2<Func0<Boolean>, String[], Boolean>() {
+        RequestPermissionAssistant.startRequestPermission(this, Constants.Misc.REQUEST_CODE_REQUIRE_PERMISSION, !App.getInstance().getAssistant().getPrefs().getPermissionRequested(), new Func2<Func0<Boolean>, String[], Boolean>() {
             @Override
             public Boolean f(Func0<Boolean> arg1, String[] arg2) {
                 if (arg1 == null) {
@@ -69,7 +69,7 @@ public class SplashActivity extends BaseActivity {
                 }
                 return true;
             }
-        }, Constants.PERMISSIONS_MUST_HAVE, Constants.PERMISSIONS_NICE_TO_HAVE);
+        }, Constants.Misc.PERMISSIONS_MUST_HAVE, Constants.Misc.PERMISSIONS_NICE_TO_HAVE);
     }
 
     private void warnOrJump(int msg, Subject<Integer> wait) {

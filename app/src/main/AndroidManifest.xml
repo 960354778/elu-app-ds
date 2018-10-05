@@ -22,6 +22,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.REORDER_TASKS" />
+    <uses-permission android:name="android.permission.READ_PRECISE_PHONE_STATE" />
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -73,19 +74,12 @@
         <activity
             android:name=".ui.SettingActivity"
             android:label="@string/label_setting"
-            android:screenOrientation="${commonOrientation}" />
+            android:screenOrientation="${commonOrientation}"
+            />
         <activity
             android:name=".ui.TasksActivity"
             android:label="@string/label_task"
-            android:screenOrientation="${commonOrientation}" />
-        <activity
-            android:name=".ui.NotifyShowActivity"
-            android:screenOrientation="${commonOrientation}" />
-        <receiver android:name=".bcst.CallPhoneBCSTR">
-            <intent-filter>
-                <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
-            </intent-filter>
-        </receiver>
-        <service android:name=".record.RecordService" />
+            android:screenOrientation="${commonOrientation}"
+            />
     </application>
 </manifest>

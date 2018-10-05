@@ -28,6 +28,11 @@ android {
         ndk {
             abiFilter 'armeabi'
         }
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
     }
 
     sourceSets {
@@ -58,7 +63,7 @@ android {
     }
     buildTypes {
         debug {
-            applicationIdSuffix = "debug"
+            applicationIdSuffix = ".debug"
         }
         release {
             minifyEnabled false
@@ -135,6 +140,9 @@ dependencies {
     androidTestImplementation(rootProject.ext.dependencies['test_runner'])
     implementation rootProject.ext.dependencies['butterknife']
     annotationProcessor rootProject.ext.dependencies['butterknife_annotation']
+    implementation rootProject.ext.dependencies['room']
+    annotationProcessor rootProject.ext.dependencies['room_annotation']
+    implementation rootProject.ext.dependencies['room_rx']
     implementation rootProject.ext.dependencies['cardview']
     implementation rootProject.ext.dependencies['rxbinding']
     implementation rootProject.ext.dependencies['rxbinding_design']

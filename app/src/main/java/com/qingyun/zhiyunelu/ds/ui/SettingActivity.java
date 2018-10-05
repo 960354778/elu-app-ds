@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.qingyun.zhiyunelu.ds.R;
 import com.qingyun.zhiyunelu.ds.op.ObserverWithProgress;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -71,18 +72,21 @@ public class SettingActivity extends BaseActivity {
         void saveSelfPhone() {
             Observable.create(RxUtil.buildSimpleActionObservable(() -> getAppAssistant().getPrefs().setSelfPhone(etSelfPhone.getText().toString())))
                     .subscribeOn(RxHelper.createKeepingScopeIOSchedule()).observeOn(RxHelper.createKeepingScopeMainThreadSchedule())
+                    .compose(bindUntilEvent(ActivityEvent.DESTROY))
                     .subscribe(buildSaveObserver());
         }
         @OnClick({R.id.setting_save_debug_url})
         void saveDebugUrl(){
             Observable.create(RxUtil.buildSimpleActionObservable(() -> getAppAssistant().updateDebugApiBase(etDebugUrl.getText().toString())))
                     .subscribeOn(RxHelper.createKeepingScopeIOSchedule()).observeOn(RxHelper.createKeepingScopeMainThreadSchedule())
+                    .compose(bindUntilEvent(ActivityEvent.DESTROY))
                     .subscribe(buildSaveObserver());
         }
         @OnClick({R.id.setting_export_wx})
         void exportWx() {
             Observable.create(RxUtil.buildSimpleActionObservable(() -> getAppAssistant().getWechat().exportWxDatabase()))
                     .subscribeOn(RxHelper.createKeepingScopeComputationSchedule()).observeOn(RxHelper.createKeepingScopeMainThreadSchedule())
+                    .compose(bindUntilEvent(ActivityEvent.DESTROY))
                     .subscribe(new ObserverWithProgress<Integer>(SettingActivity.this) {
                     });
         }

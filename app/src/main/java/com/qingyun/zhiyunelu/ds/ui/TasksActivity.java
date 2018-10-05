@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,13 +13,22 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.qingyun.zhiyunelu.ds.R;
+import com.qingyun.zhiyunelu.ds.data.ApiResult;
+import com.qingyun.zhiyunelu.ds.data.PhoneInfo;
+import com.qingyun.zhiyunelu.ds.data.RecordCalledOutDto;
+import com.qingyun.zhiyunelu.ds.data.RecordInfo;
 import com.qingyun.zhiyunelu.ds.data.TaskMessage;
+import com.qingyun.zhiyunelu.ds.op.ApiService;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import velites.android.support.ui.BaseBindableViewHolder;
 import velites.android.support.ui.BaseLayoutWidget;
-import velites.android.utility.misc.ToastHelper;
+import velites.android.utility.misc.PhoneNumberHelper;
+import velites.android.utility.misc.RxHelper;
+import velites.java.utility.misc.DateTimeUtil;
+import velites.java.utility.misc.SerializationUtil;
 import velites.java.utility.misc.StringUtil;
 
 public class TasksActivity extends BaseActivity {
@@ -40,7 +50,10 @@ public class TasksActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         list = new BaseLayoutWidget.List(this);
         list.getList().setAdapter(new Adapter(getAppAssistant().getMessaging().getTasks()));
-        list.getList().getAdapter().notifyDataSetChanged();
+    }
+
+    private void dial(RecordInfo rec, PhoneInfo p) {
+        getAppAssistant().getPhoneCall().dial(this, rec, p);
     }
 
     class ViewHolder extends BaseBindableViewHolder<TaskMessage> {
@@ -65,10 +78,31 @@ public class TasksActivity extends BaseActivity {
 
             @OnClick
             void doDial(View view) {
-                ToastHelper.showToastLong(TasksActivity.this, "dialmmm");
+                new AlertDialog.Builder(TasksActivity.this, R.style.EluTheme_Dialog)
+                        .setItems(SerializationUtil.convert(task.phones, p -> StringUtil.formatInvariant("%s(%s%s)", PhoneNumberHelper.getDisplayNumber(p.number, p.areaCode, p.extension), getAppAssistant().getApi().translateByPocket("phoneSources", p.phoneSource), p.remark == null ? StringUtil.STRING_EMPTY : "-" + p.remark)).toArray(new CharSequence[0]), (dialog, which) -> {
+                            final PhoneInfo p = task.phones[which];
+                            RecordCalledOutDto req = new RecordCalledOutDto();
+                            req.taskId = task.taskId;
+                            req.phoneId = p.phoneId;
+                            req.execDate = DateTimeUtil.now();
+                            getAppAssistant().getApi().createAsyncApi().recordCalledOut(req)
+                                    .subscribeOn(RxHelper.createKeepingScopeIOSchedule()).observeOn(RxHelper.createKeepingScopeComputationSchedule())
+                                    .map(res -> {
+                                        dial(res.data, p);
+                                        return res;
+                                    })
+                                    .compose(bindUntilEvent(ActivityEvent.DESTROY))
+                                    .subscribe(new ApiService.ApiObserver<RecordInfo>(TasksActivity.this) {
+                                        @Override
+                                        public boolean processResult(RecordInfo rec, ApiResult<RecordInfo> res) {
+                                            return true;
+                                        }
+                                    });
+                        }).show();
             }
         }
         private final Widget widget;
+        private TaskMessage task;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -77,6 +111,7 @@ public class TasksActivity extends BaseActivity {
 
         @Override
         public void bindItem(TaskMessage task) {
+            this.task = task;
             if (StringUtil.isNullOrEmpty(task.taskCode)) {
                 widget.llTaskCode.setVisibility(View.GONE);
             } else {

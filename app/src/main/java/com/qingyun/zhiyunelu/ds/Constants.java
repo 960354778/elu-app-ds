@@ -5,8 +5,6 @@ import android.os.Environment;
 
 import com.qingyun.zhiyunelu.ds.data.Setting;
 
-import java.util.concurrent.TimeUnit;
-
 import velites.java.utility.misc.PathUtil;
 
 /**
@@ -17,19 +15,13 @@ public final class Constants {
     private Constants() {
     }
 
-    public static final Setting SETTING_BASIC;
-    public static final String[] PERMISSIONS_MUST_HAVE = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO, Manifest.permission.READ_PHONE_STATE,Manifest.permission.CALL_PHONE,Manifest.permission.READ_SMS};
-    public static final String[] PERMISSIONS_NICE_TO_HAVE = new String[]{};
-
-    public static final class Codes {
-        private Codes() {
+    public static final class Misc {
+        private Misc() {
         }
 
         public static final int REQUEST_CODE_REQUIRE_PERMISSION = 17801;
-        public static final int REQUEST_NET_MY_DOCTER_LIST_TAG = 21001;
-        public static final int REQUEST_NET_MY_HOSPITAL_LIST_TAG = 21002;
-        public static final int REQUEST_NET_DOCTER_LIST_TAG = 21003;
-        public static final int REQUEST_NET_HOSPITAL_LIST_TAG = 21004;
+        public static final String[] PERMISSIONS_MUST_HAVE = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO, Manifest.permission.READ_PHONE_STATE,Manifest.permission.CALL_PHONE,Manifest.permission.READ_SMS};
+        public static final String[] PERMISSIONS_NICE_TO_HAVE = new String[]{};
     }
 
     public static final class FilePaths {
@@ -43,6 +35,7 @@ public final class Constants {
         public static final String TEMP_DIR_WX_SEGMENT = "wx/%s";
     }
 
+    public static final Setting SETTING_BASIC;
     private static Setting buildBasicSetting() {
         Setting ret = new Setting();
         ret.network = new Setting.Network();
@@ -58,8 +51,12 @@ public final class Constants {
         ret.format.defaultDateTime = "yyyy-MM-dd HH:mm:ss.SSSZ";
         ret.logic = new Setting.Logic();
         ret.logic.wxChatSyncReserveMs = 2 * 1000L;
-        ret.logic.wxChatSyncCountThreshold = 1000L;
+        ret.logic.wxChatSyncCountThreshold = 200L;
         ret.logic.pollingIntervalMs = 2 * 60 * 60 * 1000L;
+        ret.logic.callElapseThresholdMs = 2 * 60 * 60 * 1000L;
+        ret.logic.callRecordMatchDelayMs = 5 * 1000L;
+        ret.logic.callRecordMatchIntervalMs = 2 * 1000L;
+        ret.logic.callRecordMatchSameTimesThreshold = 16;
         ret.path = new Setting.Path();
         ret.path.decryptedWxDbFileName = "wx.db";
         return ret;

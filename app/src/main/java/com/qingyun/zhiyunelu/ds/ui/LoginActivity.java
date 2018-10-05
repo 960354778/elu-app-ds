@@ -12,6 +12,7 @@ import com.qingyun.zhiyunelu.ds.R;
 import com.qingyun.zhiyunelu.ds.data.ApiResult;
 import com.qingyun.zhiyunelu.ds.data.LoginDto;
 import com.qingyun.zhiyunelu.ds.op.ApiService;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -61,6 +62,7 @@ public class LoginActivity extends BaseActivity {
             login.password = pwd;
             getAppAssistant().getApi().createAsyncApi().login(login)
                     .subscribeOn(RxHelper.createKeepingScopeIOSchedule()).observeOn(RxHelper.createKeepingScopeMainThreadSchedule())
+                    .compose(bindUntilEvent(ActivityEvent.DESTROY))
                     .subscribe(new ApiService.ApiObserver(LoginActivity.this) {
                         @Override
                         public boolean processResult(Object o, ApiResult res) {

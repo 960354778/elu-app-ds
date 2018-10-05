@@ -47,4 +47,16 @@
     <style name="EluStyle.InfoLine" parent="MWHorStyle">
         <item name="android:layout_margin">@dimen/space_standard</item>
     </style>
+
+    <style name="EluTheme.Dialog" parent="Theme.AppCompat.Light.Dialog">
+    </style>
+    <style name="EluTheme.Dialog.Bottom">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <!--<item name="android:theme">@android:style/Theme.Dialog</item>-->
+    </style>
 </resources>

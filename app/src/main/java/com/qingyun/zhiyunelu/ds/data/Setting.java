@@ -22,6 +22,10 @@ public class Setting {
         public Long wxChatSyncReserveMs;
         public Long wxChatSyncCountThreshold;
         public Long pollingIntervalMs;
+        public Long callElapseThresholdMs;
+        public Long callRecordMatchDelayMs;
+        public Long callRecordMatchIntervalMs;
+        public Integer callRecordMatchSameTimesThreshold;
     }
     public static class Path {
         public String decryptedWxDbFileName;

@@ -61,6 +61,7 @@ rootProject.ext {
         cardview: [group: "com.android.support", name:"cardview-v7", version: versions.support],
         room: [group: "android.arch.persistence.room", name:"runtime", version: versions.room],
         room_annotation: [group: "android.arch.persistence.room", name:"compiler", version: versions.room],
+        room_rx: [group: "android.arch.persistence.room", name:"rxjava2", version: versions.room],
         room_test: [group: "android.arch.persistence.room", name:"testing", version: versions.room],
         lifecycle: [group: "android.arch.lifecycle", name:"extensions", version: versions.lifecycle],
         lifecycle_annotation: [group: "android.arch.lifecycle", name:"common-java8", version: versions.lifecycle],

@@ -2,12 +2,14 @@ package com.qingyun.zhiyunelu.ds.op;
 
 import android.accounts.NetworkErrorException;
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.qingyun.zhiyunelu.ds.App;
 import com.qingyun.zhiyunelu.ds.R;
 import com.qingyun.zhiyunelu.ds.data.ApiResult;
 import com.qingyun.zhiyunelu.ds.data.ErrorInfo;
 import com.qingyun.zhiyunelu.ds.data.Setting;
+import com.qingyun.zhiyunelu.ds.data.SimpleItem;
 import com.qingyun.zhiyunelu.ds.data.TokenInfo;
 import com.qingyun.zhiyunelu.ds.ui.Popups;
 
@@ -16,6 +18,10 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -58,6 +64,7 @@ public class ApiService {
 
     private final App.Assistant assitant;
 
+    private Map<String, List<SimpleItem>> pocket = new ConcurrentHashMap<>();
     private TokenInfo token;
     public TokenInfo getToken() {
         return token;
@@ -74,7 +81,7 @@ public class ApiService {
     }
     private void updateServerTime(Calendar serverTime) {
         if (serverTime != null) {
-            serverTimeAdvanced = (int) (serverTime.getTime().getTime() - new Date().getTime());
+            serverTimeAdvanced = (int) (serverTime.getTimeInMillis() - new Date().getTime());
         }
     }
 
@@ -117,7 +124,7 @@ public class ApiService {
         }
         if (this.token != null && this.token.expire != null) {
             Observable.just(0)
-                    .delay(this.token.expire.getTime().getTime() - inferServerTime().getTime().getTime(), TimeUnit.MILLISECONDS)
+                    .delay(this.token.expire.getTimeInMillis() - inferServerTime().getTime().getTime(), TimeUnit.MILLISECONDS)
                     .observeOn(RxHelper.createKeepingScopeSingleSchedule())
                     .subscribe(integer -> this.clearToken(), RxUtil.simpleErrorConsumer);
         }
@@ -125,6 +132,36 @@ public class ApiService {
 
     public void clearToken() {
         this.updateToken(null);
+    }
+
+    private void mergePocket(Map<String, List<SimpleItem>> p) {
+        if (p != null) {
+            for (Map.Entry<String, List<SimpleItem>> ety : p.entrySet()) {
+                String k = ety.getKey();
+                List<SimpleItem> v = ety.getValue();
+                if (v == null) {
+                    pocket.remove(k);
+                } else {
+                    pocket.put(k, v);
+                }
+            }
+        }
+    }
+
+    public SimpleItem[] obtainPocketItems(String key) {
+        List<SimpleItem> ret = key == null ? null : pocket.get(key);
+        SimpleItem[] t = new SimpleItem[0];
+        return ret == null ? t : ret.toArray(t);
+    }
+
+    public String translateByPocket(String key, String value) {
+        SimpleItem[] p = obtainPocketItems(key);
+        for (SimpleItem s : p) {
+            if (TextUtils.equals(value, s.value)) {
+                return s.label;
+            }
+        }
+        return null;
     }
 
     public OkHttpClient createClient() {
@@ -252,7 +289,7 @@ public class ApiService {
         }
 
         @Override
-        public void onNext(ApiResult<TData> res) {
+        public final void onNext(ApiResult<TData> res) {
             super.onNext(res);
             this.processResult(res.data, res);
         }
@@ -337,6 +374,7 @@ public class ApiService {
             ApiResult<TData> res = this.innerConverter.convert(responseBody);
             updateServerTime(res.timestamp);
             this.checkUpdateToken(res.token);
+            mergePocket(res.pocket);
             ErrorInfo err = res.error;
             if (err != null) {
                 if (err.isLogic) {
