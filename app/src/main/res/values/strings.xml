@@ -23,7 +23,8 @@
     <string name="label_location">所在地</string>
     <string name="content_splash_version" formatted="false">%s (%d) %s</string>
     <string name="info_saved">保存成功</string>
-    <string name="info_sound_record_uploaded" formatted="false">和号码%s通话录音文件%s已经成功上传</string>
+    <string name="info_no_phone_number">没有可拨打的电话号码</string>
+    <string name="info_sound_record_uploaded" formatted="false">和号码%s通话的录音文件%s已经成功上传</string>
     <string name="info_sound_record_upload_failed" formatted="false">上传通话录音文件失败！ 号码：%s， 文件：%s</string>
     <string name="hint_enter_account">请输入账号&#8230;</string>
     <string name="hint_enter_password">请输入密码&#8230;</string>
@@ -31,6 +32,7 @@
     <string name="hint_debug_url">请输入数据接口地址头&#8230;</string>
     <string name="warn_requires_root">请先root手机并授予本应用root权限</string>
     <string name="warn_requires_phone_record">请确认已打开手机自动录音功能</string>
+    <string name="warn_need_self_phone_number">请在设置界面输入本机号码</string>
     <string name="warn_requires_permission">请在权限管理中授予本应用所有所需权限</string>
     <string name="warn_missing_account_password">请输入账号或密码</string>
     <string name="error_network">发生网络错误</string>

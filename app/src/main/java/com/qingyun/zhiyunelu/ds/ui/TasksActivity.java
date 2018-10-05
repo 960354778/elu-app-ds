@@ -27,6 +27,7 @@ import velites.android.support.ui.BaseBindableViewHolder;
 import velites.android.support.ui.BaseLayoutWidget;
 import velites.android.utility.misc.PhoneNumberHelper;
 import velites.android.utility.misc.RxHelper;
+import velites.java.utility.misc.CollectionUtil;
 import velites.java.utility.misc.DateTimeUtil;
 import velites.java.utility.misc.SerializationUtil;
 import velites.java.utility.misc.StringUtil;
@@ -53,7 +54,8 @@ public class TasksActivity extends BaseActivity {
     }
 
     private void dial(RecordInfo rec, PhoneInfo p) {
-        getAppAssistant().getPhoneCall().dial(this, rec, p);
+        getAppAssistant().getPhone().dial(this, rec, p);
+        finish();
     }
 
     class ViewHolder extends BaseBindableViewHolder<TaskMessage> {
@@ -78,27 +80,31 @@ public class TasksActivity extends BaseActivity {
 
             @OnClick
             void doDial(View view) {
-                new AlertDialog.Builder(TasksActivity.this, R.style.EluTheme_Dialog)
-                        .setItems(SerializationUtil.convert(task.phones, p -> StringUtil.formatInvariant("%s(%s%s)", PhoneNumberHelper.getDisplayNumber(p.number, p.areaCode, p.extension), getAppAssistant().getApi().translateByPocket("phoneSources", p.phoneSource), p.remark == null ? StringUtil.STRING_EMPTY : "-" + p.remark)).toArray(new CharSequence[0]), (dialog, which) -> {
-                            final PhoneInfo p = task.phones[which];
-                            RecordCalledOutDto req = new RecordCalledOutDto();
-                            req.taskId = task.taskId;
-                            req.phoneId = p.phoneId;
-                            req.execDate = DateTimeUtil.now();
-                            getAppAssistant().getApi().createAsyncApi().recordCalledOut(req)
-                                    .subscribeOn(RxHelper.createKeepingScopeIOSchedule()).observeOn(RxHelper.createKeepingScopeComputationSchedule())
-                                    .map(res -> {
-                                        dial(res.data, p);
-                                        return res;
-                                    })
-                                    .compose(bindUntilEvent(ActivityEvent.DESTROY))
-                                    .subscribe(new ApiService.ApiObserver<RecordInfo>(TasksActivity.this) {
-                                        @Override
-                                        public boolean processResult(RecordInfo rec, ApiResult<RecordInfo> res) {
-                                            return true;
-                                        }
-                                    });
-                        }).show();
+                if (CollectionUtil.isNullOrEmpty(task.phones)) {
+                    Popups.buildAlert(TasksActivity.this, getString(R.string.info_no_phone_number), true);
+                } else {
+                    new AlertDialog.Builder(TasksActivity.this, R.style.EluTheme_Dialog)
+                            .setItems(SerializationUtil.convert(task.phones, p -> StringUtil.formatInvariant("%s(%s%s)", PhoneNumberHelper.getDisplayNumber(p.number, p.areaCode, p.extension), getAppAssistant().getApi().translateByPocket("phoneSources", p.phoneSource), p.remark == null ? StringUtil.STRING_EMPTY : "-" + p.remark)).toArray(new CharSequence[0]), (dialog, which) -> {
+                                final PhoneInfo p = task.phones[which];
+                                RecordCalledOutDto req = new RecordCalledOutDto();
+                                req.taskId = task.taskId;
+                                req.phoneId = p.phoneId;
+                                req.execDate = DateTimeUtil.now();
+                                getAppAssistant().getApi().createAsyncApi().recordCalledOut(req)
+                                        .subscribeOn(RxHelper.createKeepingScopeIOSchedule()).observeOn(RxHelper.createKeepingScopeComputationSchedule())
+                                        .map(res -> {
+                                            dial(res.data, p);
+                                            return res;
+                                        })
+                                        .compose(bindUntilEvent(ActivityEvent.DESTROY))
+                                        .subscribe(new ApiService.ApiObserver<RecordInfo>(TasksActivity.this) {
+                                            @Override
+                                            public boolean processResult(RecordInfo rec, ApiResult<RecordInfo> res) {
+                                                return true;
+                                            }
+                                        });
+                            }).show();
+                }
             }
         }
         private final Widget widget;

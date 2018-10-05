@@ -18,6 +18,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import velites.android.support.ui.BaseLayoutWidget;
 import velites.android.utility.misc.RxHelper;
+import velites.android.utility.misc.ToastHelper;
 import velites.java.utility.log.LogEntry;
 import velites.java.utility.log.LogStub;
 import velites.java.utility.misc.RxUtil;
@@ -118,6 +119,9 @@ public class MainActivity extends BaseActivity {
                 .observeOn(RxHelper.createKeepingScopeMainThreadSchedule())
                 .compose(this.bindToLifecycle())
                 .subscribe(loggedIn -> this.widgets.render(), RxUtil.simpleErrorConsumer);
+        if(!getAppAssistant().getSms().checkMySelfPhoneSet()){
+            ToastHelper.showToastLong(this, R.string.warn_need_self_phone_number);
+        }
     }
 
     private void decorateToolbar() {

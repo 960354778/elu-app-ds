@@ -8,12 +8,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.qingyun.zhiyunelu.ds.data.Setting;
 import com.qingyun.zhiyunelu.ds.op.ApiService;
-import com.qingyun.zhiyunelu.ds.op.DataManager;
-import com.qingyun.zhiyunelu.ds.op.MessagingManager;
-import com.qingyun.zhiyunelu.ds.op.PhoneCallManager;
-import com.qingyun.zhiyunelu.ds.op.PollingManager;
+import com.qingyun.zhiyunelu.ds.op.DataCenter;
+import com.qingyun.zhiyunelu.ds.op.MessagingCenter;
+import com.qingyun.zhiyunelu.ds.op.PhoneCenter;
+import com.qingyun.zhiyunelu.ds.op.PollingCenter;
 import com.qingyun.zhiyunelu.ds.op.Prefs;
-import com.qingyun.zhiyunelu.ds.op.WechatManager;
+import com.qingyun.zhiyunelu.ds.op.SmsCenter;
+import com.qingyun.zhiyunelu.ds.op.WechatCenter;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -65,12 +66,13 @@ public class App extends BaseApplication {
         private String buildRevision;
         private Prefs prefs;
         private Setting setting;
-        private DataManager data;
+        private DataCenter data;
         private ApiService api;
-        private WechatManager wechat;
-        private PollingManager polling;
-        private MessagingManager messaging;
-        private PhoneCallManager phoneCall;
+        private MessagingCenter messaging;
+        private PhoneCenter phone;
+        private WechatCenter wechat;
+        private SmsCenter sms;
+        private PollingCenter polling;
 
         private BaseInitializer<Context> initializer = new BaseInitializer<Context>(false, null) {
             @Override
@@ -125,12 +127,13 @@ public class App extends BaseApplication {
                 logProcessor = new AggregatedLogProcessor(primitive, lps.toArray(new LogProcessor[0]));
             }
             LogStub.setProcessor(logProcessor);
-            data = new DataManager(this);
+            data = new DataCenter(this);
             api = new ApiService(this);
-            wechat = new WechatManager(this);
-            polling = new PollingManager(this);
-            messaging = new MessagingManager(this);
-            phoneCall = new PhoneCallManager(this);
+            messaging = new MessagingCenter(this);
+            phone = new PhoneCenter(this);
+            wechat = new WechatCenter(this);
+            sms = new SmsCenter(this);
+            polling = new PollingCenter(this);
         }
 
         public File getMiscDir() {
@@ -193,7 +196,7 @@ public class App extends BaseApplication {
             return SerializationUtil.getDefaultGson();
         }
 
-        public DataManager getData() {
+        public DataCenter getData() {
             return data;
         }
 
@@ -201,20 +204,24 @@ public class App extends BaseApplication {
             return api;
         }
 
-        public WechatManager getWechat() {
-            return wechat;
-        }
-
-        public PollingManager getPolling() {
-            return polling;
-        }
-
-        public MessagingManager getMessaging() {
+        public MessagingCenter getMessaging() {
             return messaging;
         }
 
-        public PhoneCallManager getPhoneCall() {
-            return phoneCall;
+        public PhoneCenter getPhone() {
+            return phone;
+        }
+
+        public WechatCenter getWechat() {
+            return wechat;
+        }
+
+        public SmsCenter getSms() {
+            return sms;
+        }
+
+        public PollingCenter getPolling() {
+            return polling;
         }
 
         public final void ensureInit(Context ctx) {

@@ -15,15 +15,16 @@ import velites.android.support.wx.WechatMeInfo;
 import velites.android.support.wx.WechatOperator;
 import velites.java.utility.log.LogEntry;
 import velites.java.utility.log.LogStub;
+import velites.java.utility.misc.DateTimeUtil;
 import velites.java.utility.misc.ExceptionUtil;
 import velites.java.utility.misc.PathUtil;
 import velites.java.utility.misc.SerializationUtil;
 
-public class WechatManager {
+public class WechatCenter {
     private final App.Assistant assistant;
     private final WechatOperator op;
 
-    public WechatManager(App.Assistant assistant) {
+    public WechatCenter(App.Assistant assistant) {
         this.assistant = assistant;
         this.op = new WechatOperator(this.assistant.getDefaultContext());
         this.op.fixPermission();
@@ -47,7 +48,7 @@ public class WechatManager {
                 for (int i = 0; i < friends.length; i++) {
                     WechatFriendResult friend = friends[i];
                     WechatMessagesInfo messages = new WechatMessagesInfo();
-                    messages.chats = op.fetchMessages(sql, friend.userName, friend.lastUpdateTime, new Date().getTime() - assistant.getSetting().logic.wxChatSyncReserveMs);
+                    messages.chats = op.fetchMessages(sql, friend.userName, friend.lastUpdateTime, DateTimeUtil.nowTimestamp() - assistant.getSetting().logic.wxChatSyncReserveMs);
                     if (messages.chats.length > 0) {
                         messages.userName = friend.userName;
                         friendMessages.add(messages);

@@ -11,11 +11,11 @@ import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
 import velites.android.utility.misc.RxHelper;
 
-public class MessagingManager {
+public class MessagingCenter {
     private final App.Assistant assistant;
     private TaskMessage latestTask;
 
-    public MessagingManager(App.Assistant assistant) {
+    public MessagingCenter(App.Assistant assistant) {
         this.assistant = assistant;
     }
 

@@ -3,14 +3,17 @@ package com.qingyun.zhiyunelu.ds.op;
 
 import com.qingyun.zhiyunelu.ds.data.ApiResult;
 import com.qingyun.zhiyunelu.ds.data.LoginDto;
+import com.qingyun.zhiyunelu.ds.data.PendingSoundRecordInfo;
 import com.qingyun.zhiyunelu.ds.data.RecordCalledOutDto;
 import com.qingyun.zhiyunelu.ds.data.RecordInfo;
+import com.qingyun.zhiyunelu.ds.data.SyncSmsContactsDto;
+import com.qingyun.zhiyunelu.ds.data.SyncSmsContactsResult;
+import com.qingyun.zhiyunelu.ds.data.SyncSmsMessagesDto;
 import com.qingyun.zhiyunelu.ds.data.SyncWechatFriendsDto;
 import com.qingyun.zhiyunelu.ds.data.SyncWechatFriendsResult;
 import com.qingyun.zhiyunelu.ds.data.SyncWechatMessagesDto;
 import com.qingyun.zhiyunelu.ds.data.TaskMessage;
 
-import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -41,14 +44,14 @@ public interface ISyncApiService {
 
     @Multipart
     @POST("MobileTask/UploadAudioToRecord")
-    ApiResult<RecordInfo> uploadRecord(@Query("taskRecordId") String taskRecordId, @Query("hash") String hash, @Query("duration") String duration, @Part MultipartBody.Part file);
+    ApiResult<RecordInfo> uploadSoundRecord(@Query("taskRecordId") String taskRecordId, @Query("hash") String hash, @Query("duration") String duration, @Part MultipartBody.Part file);
 
-//    @POST("MobileTask/CheckAudioToRecords")
-//    Observable<ResultWrapper<PendingSoundRecordInfo[]>> checkAudioToRecords(@Header("token") String token, @Body String[] files);
-//
-//    @POST("MobileSync/UploadSmsContacts")
-//    Observable<SmsMsgInfo> upLoadSmsContacts(@Header("token") String token, @Body SmsMsgInfo contacts);
-//
-//    @POST("MobileSync/UploadSmsChats")
-//    Observable<SmsMsgInfo> upLoadSmsChat(@Header("token") String token, @Body SmsMsgInfo msg);
+    @POST("MobileTask/CheckAudioToRecords")
+    ApiResult<PendingSoundRecordInfo[]> checkAudioToRecords(@Body String[] files);
+
+    @POST("MobileSync/UploadSmsContacts")
+    ApiResult<SyncSmsContactsResult> syncSmsContacts(@Body SyncSmsContactsDto contacts);
+
+    @POST("MobileSync/UploadSmsChats")
+    ApiResult syncSmsMessages(@Body SyncSmsMessagesDto messages);
 }

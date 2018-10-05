@@ -5,7 +5,8 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverter;
 import android.arch.persistence.room.TypeConverters;
-import android.arch.persistence.room.util.TableInfo;
+
+import com.google.gson.annotations.Expose;
 
 import java.util.Calendar;
 
@@ -33,8 +34,6 @@ public class RecordEntity {
     public long id;
     @ColumnInfo(name = "task_record_id", index = true)
     public String taskRecordId;
-    @ColumnInfo(name = "task_id")
-    public String taskId;
     @ColumnInfo(name = "execution_time", index = true)
     public Calendar executionTime;
     @ColumnInfo(name = "phone_id")
@@ -48,5 +47,6 @@ public class RecordEntity {
     @ColumnInfo(name = "file_name", index = true)
     public String fileName;
     @ColumnInfo(name = "error", typeAffinity = ColumnInfo.TEXT)
+    @Expose(serialize = false)
     public String error;
 }

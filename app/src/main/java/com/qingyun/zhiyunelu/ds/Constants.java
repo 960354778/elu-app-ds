@@ -5,6 +5,8 @@ import android.os.Environment;
 
 import com.qingyun.zhiyunelu.ds.data.Setting;
 
+import java.util.GregorianCalendar;
+
 import velites.java.utility.misc.PathUtil;
 
 /**
@@ -50,13 +52,17 @@ public final class Constants {
         ret.format = new Setting.Format();
         ret.format.defaultDateTime = "yyyy-MM-dd HH:mm:ss.SSSZ";
         ret.logic = new Setting.Logic();
-        ret.logic.wxChatSyncReserveMs = 2 * 1000L;
-        ret.logic.wxChatSyncCountThreshold = 200L;
-        ret.logic.pollingIntervalMs = 2 * 60 * 60 * 1000L;
         ret.logic.callElapseThresholdMs = 2 * 60 * 60 * 1000L;
         ret.logic.callRecordMatchDelayMs = 5 * 1000L;
         ret.logic.callRecordMatchIntervalMs = 2 * 1000L;
         ret.logic.callRecordMatchSameTimesThreshold = 16;
+        ret.logic.callRecordUnmatchedOffsetMs = 40 * 60 * 1000L;
+        ret.logic.callRecordUnmatchedStartEpochMs = new GregorianCalendar(2018, 2, 1).getTimeInMillis();
+        ret.logic.wxChatSyncReserveMs = 2 * 1000L;
+        ret.logic.wxChatSyncCountThreshold = 200L;
+        ret.logic.smsChatSyncReserveMs = 2 * 1000L;
+        ret.logic.smsChatSyncCountThreshold = 200L;
+        ret.logic.pollingIntervalMs = 2 * 60 * 60 * 1000L;
         ret.path = new Setting.Path();
         ret.path.decryptedWxDbFileName = "wx.db";
         return ret;

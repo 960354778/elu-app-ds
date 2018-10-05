@@ -19,13 +19,17 @@ public class Setting {
         public String defaultDateTime;
     }
     public static class Logic {
-        public Long wxChatSyncReserveMs;
-        public Long wxChatSyncCountThreshold;
-        public Long pollingIntervalMs;
         public Long callElapseThresholdMs;
         public Long callRecordMatchDelayMs;
         public Long callRecordMatchIntervalMs;
         public Integer callRecordMatchSameTimesThreshold;
+        public Long callRecordUnmatchedOffsetMs;
+        public Long callRecordUnmatchedStartEpochMs;
+        public Long wxChatSyncReserveMs;
+        public Long wxChatSyncCountThreshold;
+        public Long smsChatSyncReserveMs;
+        public Long smsChatSyncCountThreshold;
+        public Long pollingIntervalMs;
     }
     public static class Path {
         public String decryptedWxDbFileName;
