@@ -30,6 +30,7 @@ public class Setting {
         public Long smsChatSyncReserveMs;
         public Long smsChatSyncCountThreshold;
         public Long pollingIntervalMs;
+        public Long messageHubAutoReconnectIntervalMs;
     }
     public static class Path {
         public String decryptedWxDbFileName;

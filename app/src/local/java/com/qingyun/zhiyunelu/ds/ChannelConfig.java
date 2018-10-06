@@ -16,7 +16,7 @@ public final class ChannelConfig {
         ret.network = new Setting.Network();
         ret.network.apiRootUrl = "http://192.168.88.54:5008/";
         ret.logic = new Setting.Logic();
-        ret.logic.pollingIntervalMs = 2 * 60 * 1000L;
+//        ret.logic.pollingIntervalMs = 2 * 60 * 1000L;
         ret.logic.callRecordMatchSameTimesThreshold = 5;
         return ret;
     }

@@ -89,9 +89,9 @@ public class App extends BaseApplication {
                 buildEpoch = applicationInfoWthMetaData.metaData.getString("BuildEpoch");
                 buildRevision = applicationInfoWthMetaData.metaData.getString("BuildRevision");
                 channel = applicationInfoWthMetaData.metaData.getString("Channel");
-                miscDir = new File(StringUtil.formatInvariant(Constants.FilePaths.MISC_DIR_FORMAT, channel));
-                uploadedFileDir = new File(StringUtil.formatInvariant(Constants.FilePaths.UPLOADED_FILE_DIR_FORMAT, channel));
-                wxTempDirPathFormat = PathUtil.concat(defaultContext.getCacheDir().getPath(), Constants.FilePaths.TEMP_DIR_WX_SEGMENT);
+                miscDir = new File(StringUtil.formatInvariant(Constants.Paths.MISC_DIR_FORMAT, channel));
+                uploadedFileDir = new File(StringUtil.formatInvariant(Constants.Paths.UPLOADED_FILE_DIR_FORMAT, channel));
+                wxTempDirPathFormat = PathUtil.concat(defaultContext.getCacheDir().getPath(), Constants.Paths.TEMP_DIR_WX_SEGMENT);
                 device = applicationInfoWthMetaData.metaData.getString("Device");
                 prefs = new Prefs(defaultContext);
                 EnvironmentInfo.ensureInit(defaultContext, channel, buildType);
@@ -122,7 +122,7 @@ public class App extends BaseApplication {
                     lps.add(primitive);
                 }
                 if (!SyntaxUtil.nvl(setting.logging.suppressFileLog, false)) {
-                    lps.add(new SingleLooperLogProcessor("log_file", new LocalFileLogProcessor(new File(StringUtil.formatInvariant(Constants.FilePaths.LOG_DIR_FORMAT, channel)))));
+                    lps.add(new SingleLooperLogProcessor("log_file", new LocalFileLogProcessor(new File(StringUtil.formatInvariant(Constants.Paths.LOG_DIR_FORMAT, channel)))));
                 }
                 logProcessor = new AggregatedLogProcessor(primitive, lps.toArray(new LogProcessor[0]));
             }

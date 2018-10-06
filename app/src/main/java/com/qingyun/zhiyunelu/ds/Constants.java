@@ -26,8 +26,8 @@ public final class Constants {
         public static final String[] PERMISSIONS_NICE_TO_HAVE = new String[]{};
     }
 
-    public static final class FilePaths {
-        private FilePaths() {
+    public static final class Paths {
+        private Paths() {
         }
 
         public static final String STORAGE_ROOT_FORMAT = PathUtil.concat(Environment.getExternalStorageDirectory().getAbsolutePath(), "zhiyun/%s");
@@ -35,6 +35,14 @@ public final class Constants {
         public static final String MISC_DIR_FORMAT = PathUtil.concat(STORAGE_ROOT_FORMAT, "misc");
         public static final String UPLOADED_FILE_DIR_FORMAT = PathUtil.concat(STORAGE_ROOT_FORMAT, "files");
         public static final String TEMP_DIR_WX_SEGMENT = "wx/%s";
+        public static final String URL_SEGMENT_MESSAGE_HUB = "message";
+    }
+
+    public static final class Logic {
+        private Logic() {
+        }
+
+        public static final String EVENT_MESSAGE_HUB_DIALING = "Dialing";
     }
 
     public static final Setting SETTING_BASIC;
@@ -63,6 +71,7 @@ public final class Constants {
         ret.logic.smsChatSyncReserveMs = 2 * 1000L;
         ret.logic.smsChatSyncCountThreshold = 200L;
         ret.logic.pollingIntervalMs = 2 * 60 * 60 * 1000L;
+        ret.logic.messageHubAutoReconnectIntervalMs = 10 * 1000L;
         ret.path = new Setting.Path();
         ret.path.decryptedWxDbFileName = "wx.db";
         return ret;

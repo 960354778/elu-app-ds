@@ -73,6 +73,22 @@ public class TasksActivity extends BaseActivity {
             LinearLayout llDoctorName;
             @BindView(R.id.dialing_doctor_name_value)
             TextView tvDoctorName;
+            @BindView(R.id.dialing_hospital_area)
+            LinearLayout llHospital;
+            @BindView(R.id.dialing_hospital)
+            TextView tvHospital;
+            @BindView(R.id.dialing_department_area)
+            LinearLayout llDepartment;
+            @BindView(R.id.dialing_department)
+            TextView tvDepartment;
+            @BindView(R.id.dialing_location_area)
+            LinearLayout llLocation;
+            @BindView(R.id.dialing_location)
+            TextView tvLocation;
+            @BindView(R.id.dialing_representative_area)
+            LinearLayout llRepresentative;
+            @BindView(R.id.dialing_representative)
+            TextView tvRepresentative;
 
             public Widget(View view) {
                 super(view);
@@ -135,6 +151,15 @@ public class TasksActivity extends BaseActivity {
             } else {
                 widget.llDoctorName.setVisibility(View.VISIBLE);
                 widget.tvDoctorName.setText(task.doctorName);
+            }
+            widget.tvHospital.setText(task.hospitalName);
+            widget.tvDepartment.setText(task.departmentName);
+            widget.tvLocation.setText(StringUtil.join(true, "-", (Object[]) new String[] {task.provinceName, task.cityName, task.districtName}));
+            if (StringUtil.isNullOrEmpty(task.representativeName)) {
+                widget.llRepresentative.setVisibility(View.GONE);
+            } else {
+                widget.llRepresentative.setVisibility(View.VISIBLE);
+                widget.tvRepresentative.setText(task.representativeName);
             }
         }
     }

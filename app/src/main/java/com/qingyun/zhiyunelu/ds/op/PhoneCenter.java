@@ -150,7 +150,7 @@ public class PhoneCenter {
                             size = newSize;
                             sameTimes = 0;
                         }
-                        LogStub.log(new LogEntry(LogStub.LOG_LEVEL_DEBUG, this, "Waiting record audio file write complete, old: (%s)%d, new: (%s)%d, sameTimes: %d", originFile, originSize, newFile, newSize, sameTimes));
+                        LogStub.log(new LogEntry(LogStub.LOG_LEVEL_DEBUG, this, "Waiting record audio file write complete, sameTimes: %d, new: (%s)%d, old: (%s)%d", sameTimes, newFile, newSize, originFile, originSize));
                         if (sameTimes >= assistant.getSetting().logic.callRecordMatchSameTimesThreshold) {
                             disposable.dispose();
                             if (file == null) {

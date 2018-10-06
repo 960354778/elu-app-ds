@@ -4,6 +4,7 @@ import android.accounts.NetworkErrorException;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.google.gson.reflect.TypeToken;
 import com.qingyun.zhiyunelu.ds.App;
 import com.qingyun.zhiyunelu.ds.R;
 import com.qingyun.zhiyunelu.ds.data.ApiResult;
@@ -25,11 +26,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
-import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.subjects.BehaviorSubject;
-import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -52,6 +51,7 @@ import velites.java.utility.ex.BusinessException;
 import velites.java.utility.ex.CodedException;
 import velites.java.utility.log.LogEntry;
 import velites.java.utility.log.LogStub;
+import velites.java.utility.misc.CollectionUtil;
 import velites.java.utility.misc.DateTimeUtil;
 import velites.java.utility.misc.ExceptionUtil;
 import velites.java.utility.misc.RxUtil;
@@ -62,16 +62,19 @@ public class ApiService {
     private static final String REQUEST_HEADER_KEY_TOKEN = "token";
     private static final String REQUEST_HEADER_KEY_TOKEN_VERSION = "token_version";
 
-    private final App.Assistant assitant;
+    private final App.Assistant assistant;
 
-    private Map<String, List<SimpleItem>> pocket = new ConcurrentHashMap<>();
+    private Map<String, List<SimpleItem>> pocket;
     private TokenInfo token;
     public TokenInfo getToken() {
         return token;
     }
-    private Subject<Boolean> tokenChanged;
-    public Observable<Boolean> getTokenChanged() {
-        return tokenChanged;
+    public boolean isLoggedIn() {
+        return this.token != null;
+    }
+    private Subject<Boolean> loginStateChanged;
+    public Observable<Boolean> getLoginStateChanged() {
+        return loginStateChanged;
     }
     private int serverTimeAdvanced;
     public Calendar inferServerTime() {
@@ -87,28 +90,43 @@ public class ApiService {
 
     private Disposable expireChecker;
 
-    public ApiService(App.Assistant assitant) {
-        this.assitant = assitant;
+    public ApiService(App.Assistant assistant) {
+        this.assistant = assistant;
         this.initToken();
+        this.initPocket();
+    }
+
+    private void initPocket() {
+        String str = this.assistant.getPrefs().getSerializedPocket();
+        if (StringUtil.isNullOrEmpty(str)) {
+            this.pocket = new ConcurrentHashMap<>();
+        } else {
+            this.pocket = this.assistant.getGson().fromJson(str, new TypeToken<ConcurrentHashMap<String, List<SimpleItem>>>(){}.getType());
+            LogStub.log(new LogEntry(LogStub.LOG_LEVEL_DEBUG, this, "Restored pocket from cache: %s", str));
+        }
     }
 
     private void initToken() {
-        String str = this.assitant.getPrefs().getSerializedToken();
+        String str = this.assistant.getPrefs().getSerializedToken();
         if (!StringUtil.isNullOrEmpty(str)) {
-            this.token = this.assitant.getGson().fromJson(str, TokenInfo.class);
+            this.token = this.assistant.getGson().fromJson(str, TokenInfo.class);
             LogStub.log(new LogEntry(LogStub.LOG_LEVEL_INFO, this, "Restored token from cache: %s", str));
         }
-        tokenChanged = BehaviorSubject.createDefault(token != null);
+        loginStateChanged = BehaviorSubject.createDefault(this.isLoggedIn());
     }
 
     private void updateToken(TokenInfo token) {
+        boolean originLoggedIn = this.isLoggedIn();
         TokenInfo originToken = this.token;
         this.token = token;
-        String str = this.assitant.getGson().toJson(token);
-        this.assitant.getPrefs().setSerializedToken(token == null ? null : str);
-        LogStub.log(new LogEntry(LogStub.LOG_LEVEL_INFO, this, "Replaces token from %s to %s", this.assitant.getGson().toJson(originToken), str));
+        String str = this.assistant.getGson().toJson(token);
+        this.assistant.getPrefs().setSerializedToken(token == null ? null : str);
+        LogStub.log(new LogEntry(LogStub.LOG_LEVEL_INFO, this, "Replaces token from %s to %s", this.assistant.getGson().toJson(originToken), str));
         this.checkStartExpireCheck();
-        tokenChanged.onNext(token != null);
+        boolean currentLoggedIn = this.isLoggedIn();
+        if (currentLoggedIn != originLoggedIn) {
+            loginStateChanged.onNext(currentLoggedIn);
+        }
     }
 
     private void checkStartExpireCheck() {
@@ -134,8 +152,19 @@ public class ApiService {
         this.updateToken(null);
     }
 
+    public Map<String, String> obtainExtraHeaders() {
+        Map<String, String> ret = null;
+        TokenInfo t = token;
+        if (t != null) {
+            ret = new HashMap<>();
+            ret.put(REQUEST_HEADER_KEY_TOKEN, t.value);
+            ret.put(REQUEST_HEADER_KEY_TOKEN_VERSION, t.version);
+        }
+        return ret;
+    }
+
     private void mergePocket(Map<String, List<SimpleItem>> p) {
-        if (p != null) {
+        if (!CollectionUtil.isNullOrEmpty(p)) {
             for (Map.Entry<String, List<SimpleItem>> ety : p.entrySet()) {
                 String k = ety.getKey();
                 List<SimpleItem> v = ety.getValue();
@@ -145,6 +174,7 @@ public class ApiService {
                     pocket.put(k, v);
                 }
             }
+            assistant.getPrefs().setSerializedPocket(assistant.getGson().toJson(pocket));
         }
     }
 
@@ -172,7 +202,7 @@ public class ApiService {
                 .addInterceptor(logInterceptor).addInterceptor(new FulfillTokenInterceptor())
                 .sslSocketFactory(NetHelper.createTrustAllSSLSocketFactory(), new NetHelper.TrustAllCerts())
                 .hostnameVerifier(new NetHelper.TrustAllHostnameVerifier());
-        Setting.Network setting = this.assitant.getSetting().network;
+        Setting.Network setting = this.assistant.getSetting().network;
         if (setting.connectTimeoutMs != null) {
             okb = okb.connectTimeout(setting.connectTimeoutMs, TimeUnit.MILLISECONDS);
         }
@@ -186,19 +216,19 @@ public class ApiService {
     }
 
     public IAsyncApiService createAsyncApi(String url) {
-        return new Retrofit.Builder().client(createClient()).baseUrl(url).addConverterFactory(new ConverterFactory(GsonConverterFactory.create(this.assitant.getGson()))).addCallAdapterFactory(RxJava2CallAdapterFactory.create()).build().create(IAsyncApiService.class);
+        return new Retrofit.Builder().client(createClient()).baseUrl(url).addConverterFactory(new ConverterFactory(GsonConverterFactory.create(this.assistant.getGson()))).addCallAdapterFactory(RxJava2CallAdapterFactory.create()).build().create(IAsyncApiService.class);
     }
 
     public IAsyncApiService createAsyncApi() {
-        return createAsyncApi(this.assitant.getSetting().network.apiRootUrl);
+        return createAsyncApi(this.assistant.getSetting().network.apiRootUrl);
     }
 
     public ISyncApiService createSyncApi(String url) {
-        return new Retrofit.Builder().client(createClient()).baseUrl(url).addConverterFactory(new ConverterFactory(GsonConverterFactory.create(this.assitant.getGson()))).addCallAdapterFactory(new SynchronousCallAdapterFactory()).build().create(ISyncApiService.class);
+        return new Retrofit.Builder().client(createClient()).baseUrl(url).addConverterFactory(new ConverterFactory(GsonConverterFactory.create(this.assistant.getGson()))).addCallAdapterFactory(new SynchronousCallAdapterFactory()).build().create(ISyncApiService.class);
     }
 
     public ISyncApiService createSyncApi() {
-        return createSyncApi(this.assitant.getSetting().network.apiRootUrl);
+        return createSyncApi(this.assistant.getSetting().network.apiRootUrl);
     }
 
     public abstract static class ApiNextConsumer<TData> implements Consumer<ApiResult<TData>> {
@@ -330,12 +360,13 @@ public class ApiService {
         @Override
         public Response intercept(Chain chain) throws IOException {
             Request req = chain.request();
-            TokenInfo t = token;
-            if (t != null) {
-                req = req.newBuilder()
-                        .header(REQUEST_HEADER_KEY_TOKEN, token.value)
-                        .header(REQUEST_HEADER_KEY_TOKEN_VERSION, token.version)
-                        .build();
+            Map<String, String> extra = obtainExtraHeaders();
+            if (!CollectionUtil.isNullOrEmpty(extra)) {
+                Request.Builder b = req.newBuilder();
+                for (Map.Entry<String, String> ety : extra.entrySet()) {
+                    b.header(ety.getKey(), ety.getValue());
+                }
+                req = b.build();
             }
             return chain.proceed(req);
         }

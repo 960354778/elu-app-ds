@@ -12,6 +12,7 @@ public class Prefs extends BasePrefManager {
 
     private static final String PERMISSIONS_REQUESTED = "permissions_requested";
     private static final String SERIALIZED_TOKEN = "serialized_token";
+    private static final String SERIALIZED_POCKET = "serialized_pocket";
     private static final String LAST_USERNAME = "accountName";
     private static final String LAST_PASSWORD = "accountPwd";
     private static final String SELF_PHONE = "mySelfPhoneNum";
@@ -35,6 +36,14 @@ public class Prefs extends BasePrefManager {
 
     public void setSerializedToken(String value) {
         this.setStr(SERIALIZED_TOKEN, value);
+    }
+
+    public String getSerializedPocket() {
+        return this.getStr(SERIALIZED_POCKET);
+    }
+
+    public void setSerializedPocket(String value) {
+        this.setStr(SERIALIZED_POCKET, value);
     }
 
     public String getLastUsername() {

@@ -16,7 +16,7 @@ public class PollingCenter {
 
     public PollingCenter(App.Assistant assistant) {
         this.assistant = assistant;
-        this.assistant.getApi().getTokenChanged().subscribe(o -> this.startPolling(false), RxUtil.simpleErrorConsumer);
+        this.assistant.getApi().getLoginStateChanged().subscribe(o -> this.startPolling(false), RxUtil.simpleErrorConsumer);
     }
 
     public void startPolling(boolean isJustCompleted) {
@@ -26,7 +26,7 @@ public class PollingCenter {
     }
 
     private void checkStartPolling(boolean isJustCompleted) {
-        if (assistant.getApi().getToken() == null) {
+        if (!assistant.getApi().isLoggedIn()) {
             if (this.working != null) {
                 this.working.dispose();
                 this.working = null;

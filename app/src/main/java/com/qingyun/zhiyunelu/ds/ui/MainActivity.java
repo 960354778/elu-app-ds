@@ -11,7 +11,6 @@ import com.qingyun.zhiyunelu.ds.R;
 import com.qingyun.zhiyunelu.ds.data.ApiResult;
 import com.qingyun.zhiyunelu.ds.data.TokenInfo;
 import com.qingyun.zhiyunelu.ds.op.ApiService;
-import com.qingyun.zhiyunelu.ds.op.ObserverWithProgress;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import butterknife.BindView;
@@ -87,12 +86,14 @@ public class MainActivity extends BaseActivity {
             getAppAssistant().getMessaging().syncTaskMessages()
                     .subscribeOn(RxHelper.createKeepingScopeIOSchedule()).observeOn(RxHelper.createKeepingScopeMainThreadSchedule())
                     .compose(bindUntilEvent(ActivityEvent.DESTROY))
-                    .subscribe(new ApiService.ApiErrorObserver<Boolean>() {
+                    .subscribe(new ApiService.ApiErrorObserver<Boolean>(MainActivity.this) {
                         @Override
                         public void onNext(Boolean res) {
                             super.onNext(res);
                             if (SyntaxUtil.nvl(res, false)) {
                                 TasksActivity.launchMe(MainActivity.this);
+                            } else {
+                                Popups.buildAlert(MainActivity.this, getString(R.string.warn_no_cached_dial_message), true);
                             }
                         }
                     });
@@ -115,7 +116,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         decorateToolbar();
         widgets.bind(this);
-        getAppAssistant().getApi().getTokenChanged()
+        getAppAssistant().getApi().getLoginStateChanged()
                 .observeOn(RxHelper.createKeepingScopeMainThreadSchedule())
                 .compose(this.bindToLifecycle())
                 .subscribe(loggedIn -> this.widgets.render(), RxUtil.simpleErrorConsumer);
