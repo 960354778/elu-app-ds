@@ -2,8 +2,8 @@
 
 buildscript {
     apply from: 'config.gradle'
-    if (hasProperty('extraConfig')) {
-        print("loading extra config from: \"${extraConfig}\"...\n")
+    if (rootProject.hasProperty('extraConfig')) {
+        println("loading extra config from: \"${extraConfig}\"...")
         apply from: extraConfig
     }
     repositories(rootProject.ext.config_repos)
