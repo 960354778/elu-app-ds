@@ -45,8 +45,8 @@ rootProject.ext {
         buildToolsVersion: versions.build,
         minSdkVersion: 21,
         targetSdkVersion: 28,
-        versionCode: 2097,
-        versionName: '2.9.7',
+        versionCode: 2100,
+        versionName: '2.10.0',
         applicationId: "com.qingyun.zhiyunelu.ds",
         apk_name_prefix: "zhiyunDS",
         java_version: JavaVersion.VERSION_1_8,
@@ -82,7 +82,8 @@ rootProject.ext {
         retrofit_rx: [group: "com.squareup.retrofit2", name:"adapter-rxjava2", version: versions.retrofit],
         retrofit_gson: [group: "com.squareup.retrofit2", name:"converter-gson", version: versions.retrofit],
         object_diff: [group: "de.danielbechler", name:"java-object-diff", version: versions.object_diff],
-        ok_log: [group: "com.squareup.okhttp3", name:"logging-interceptor", version: versions.okhttp],
+        okhttp: [group: "com.squareup.okhttp3", name:"okhttp", version: versions.okhttp],
+        okhttp_log: [group: "com.squareup.okhttp3", name:"logging-interceptor", version: versions.okhttp],
         websocket: [group: "org.java-websocket", name:"Java-WebSocket", version: versions.websocket],
     ]
     dependencies = [:]

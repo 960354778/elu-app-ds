@@ -32,32 +32,10 @@ public class MessagingCenter {
     private final App.Assistant assistant;
     private final HubConnection hub;
     private TaskMessage latestTask;
-    private HubConnectionListener connListener = new HubConnectionListener() {
-        @Override
-        public void onConnected() {
-            LogStub.log(new LogEntry(LogStub.LOG_LEVEL_INFO, this, "Message hub connected"));
-        }
-
-        @Override
-        public void onDisconnected() {
-            LogStub.log(new LogEntry(LogStub.LOG_LEVEL_INFO, this, "Message hub disconnected"));
-        }
-
-        @Override
-        public void onMessage(HubMessage message) {
-            LogStub.log(new LogEntry(LogStub.LOG_LEVEL_VERBOSE, this, "Message hub received message: %s", SerializationUtil.describe(message)));
-        }
-
-        @Override
-        public void onError(Exception exception) {
-            LogStub.log(new LogEntry(LogStub.LOG_LEVEL_WARNING, this, "Message hub got error: %s", ExceptionUtil.extractException(exception)));
-        }
-    };
 
     public MessagingCenter(App.Assistant assistant) {
         this.assistant = assistant;
-        this.hub = new WebSocketHubConnection(Uri.parse(assistant.getSetting().network.apiRootUrl).buildUpon().appendPath(Constants.Paths.URL_SEGMENT_MESSAGE_HUB).build(), assistant.getApi()::obtainExtraHeaders);
-        this.hub.addListener(connListener);
+        this.hub = new WebSocketHubConnection(Uri.parse(assistant.getSetting().network.apiRootUrl).buildUpon().appendPath(Constants.Paths.URL_SEGMENT_MESSAGE_HUB).build(), assistant.getApi()::createClient, assistant.getGson());
         this.hub.subscribeToEvent(Constants.Logic.EVENT_MESSAGE_HUB_DIALING, this::handleDialingEvent);
         assistant.getApi().getLoginStateChanged().subscribe(loggedIn -> {
             ensureConnection();
