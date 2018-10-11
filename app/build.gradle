@@ -138,6 +138,7 @@ dependencies {
     implementation project(':AndroidUtility')
     implementation project(':AndroidSupport')
     androidTestImplementation(rootProject.ext.dependencies['test_runner'])
+    implementation rootProject.ext.dependencies['gson']
     implementation rootProject.ext.dependencies['butterknife']
     annotationProcessor rootProject.ext.dependencies['butterknife_annotation']
     implementation rootProject.ext.dependencies['room']
@@ -150,8 +151,8 @@ dependencies {
     implementation rootProject.ext.dependencies['rxbinding_recyclerview_v7']
     implementation rootProject.ext.dependencies['rxlifecycle_components']
     implementation rootProject.ext.dependencies['retrofit']
-    implementation rootProject.ext.dependencies['retrofit_rx']
     implementation rootProject.ext.dependencies['retrofit_gson']
+    implementation rootProject.ext.dependencies['retrofit_rx']
     implementation rootProject.ext.dependencies['okhttp_log']
     implementation rootProject.ext.dependencies['sqlcipher']
 }

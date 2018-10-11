@@ -25,7 +25,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.Query;
 
-public interface IAsyncApiService {
+public interface AsyncApiService {
 
     @POST("MobileUser/Login")
     Observable<ApiResult> login(@Body LoginDto body);

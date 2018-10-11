@@ -32,6 +32,7 @@ public final class Constants {
 
         public static final String STORAGE_ROOT_FORMAT = PathUtil.concat(Environment.getExternalStorageDirectory().getAbsolutePath(), "zhiyun/%s");
         public static final String LOG_DIR_FORMAT = PathUtil.concat(STORAGE_ROOT_FORMAT, "log");
+        public static final String LOG_IMPORTANT_DIR_FORMAT = PathUtil.concat(STORAGE_ROOT_FORMAT, "log-important");
         public static final String MISC_DIR_FORMAT = PathUtil.concat(STORAGE_ROOT_FORMAT, "misc");
         public static final String UPLOADED_FILE_DIR_FORMAT = PathUtil.concat(STORAGE_ROOT_FORMAT, "files");
         public static final String TEMP_DIR_WX_SEGMENT = "wx/%s";

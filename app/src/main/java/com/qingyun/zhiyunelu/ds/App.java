@@ -22,6 +22,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
+import io.reactivex.plugins.RxJavaPlugins;
 import velites.android.support.devices.xiaomi.XiaomiConstants;
 import velites.android.utility.framework.BaseApplication;
 import velites.android.utility.framework.EnvironmentInfo;
@@ -38,6 +39,7 @@ import velites.java.utility.misc.DateTimeUtil;
 import velites.java.utility.misc.ExceptionUtil;
 import velites.java.utility.misc.FileUtil;
 import velites.java.utility.misc.PathUtil;
+import velites.java.utility.misc.RxUtil;
 import velites.java.utility.misc.SerializationUtil;
 import velites.java.utility.misc.StringUtil;
 import velites.java.utility.misc.SyntaxUtil;
@@ -95,6 +97,7 @@ public class App extends BaseApplication {
                 device = applicationInfoWthMetaData.metaData.getString("Device");
                 prefs = new Prefs(defaultContext);
                 EnvironmentInfo.ensureInit(defaultContext, channel, buildType);
+                RxJavaPlugins.setErrorHandler(RxUtil.simpleErrorConsumer);
                 applySetting(new ObjectMerger(true).merge(ChannelConfig.SETTING_CHANNEL, Constants.SETTING_BASIC, null));
                 ExceptionUtil.wrapperGlobalUncaughtExceptionHandlerWithLog();
             }
@@ -123,6 +126,7 @@ public class App extends BaseApplication {
                 }
                 if (!SyntaxUtil.nvl(setting.logging.suppressFileLog, false)) {
                     lps.add(new SingleLooperLogProcessor("log_file", new LocalFileLogProcessor(new File(StringUtil.formatInvariant(Constants.Paths.LOG_DIR_FORMAT, channel)))));
+                    lps.add(new SingleLooperLogProcessor("log_file_important", new LocalFileLogProcessor(new File(StringUtil.formatInvariant(Constants.Paths.LOG_IMPORTANT_DIR_FORMAT, channel)), LogStub.LOG_LEVEL_WARNING)));
                 }
                 logProcessor = new AggregatedLogProcessor(primitive, lps.toArray(new LogProcessor[0]));
             }

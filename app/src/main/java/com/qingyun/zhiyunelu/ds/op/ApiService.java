@@ -44,6 +44,7 @@ import retrofit2.HttpException;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import velites.android.utility.framework.EnvironmentInfo;
 import velites.android.utility.misc.NetHelper;
 import velites.android.utility.misc.RxHelper;
 import velites.android.utility.misc.ThreadHelper;
@@ -59,6 +60,7 @@ import velites.java.utility.misc.StringUtil;
 import velites.java.utility.thread.RunnableKeepingScope;
 
 public class ApiService {
+    private static final String REQUEST_HEADER_KEY_CLIENT = "client";
     private static final String REQUEST_HEADER_KEY_TOKEN = "token";
     private static final String REQUEST_HEADER_KEY_TOKEN_VERSION = "token_version";
 
@@ -153,10 +155,10 @@ public class ApiService {
     }
 
     public Map<String, String> obtainExtraHeaders() {
-        Map<String, String> ret = null;
+        Map<String, String> ret = new HashMap<>();
+        ret.put(REQUEST_HEADER_KEY_CLIENT, assistant.getGson().toJson(EnvironmentInfo.obtainClientInfo(assistant.getDefaultContext(), false)));
         TokenInfo t = token;
         if (t != null) {
-            ret = new HashMap<>();
             ret.put(REQUEST_HEADER_KEY_TOKEN, t.value);
             ret.put(REQUEST_HEADER_KEY_TOKEN_VERSION, t.version);
         }
@@ -215,19 +217,19 @@ public class ApiService {
         return okb.build();
     }
 
-    public IAsyncApiService createAsyncApi(String url) {
-        return new Retrofit.Builder().client(createClient()).baseUrl(url).addConverterFactory(new ConverterFactory(GsonConverterFactory.create(this.assistant.getGson()))).addCallAdapterFactory(RxJava2CallAdapterFactory.create()).build().create(IAsyncApiService.class);
+    public AsyncApiService createAsyncApi(String url) {
+        return new Retrofit.Builder().client(createClient()).baseUrl(url).addConverterFactory(new ConverterFactory(GsonConverterFactory.create(this.assistant.getGson()))).addCallAdapterFactory(RxJava2CallAdapterFactory.create()).build().create(AsyncApiService.class);
     }
 
-    public IAsyncApiService createAsyncApi() {
+    public AsyncApiService createAsyncApi() {
         return createAsyncApi(this.assistant.getSetting().network.apiRootUrl);
     }
 
-    public ISyncApiService createSyncApi(String url) {
-        return new Retrofit.Builder().client(createClient()).baseUrl(url).addConverterFactory(new ConverterFactory(GsonConverterFactory.create(this.assistant.getGson()))).addCallAdapterFactory(new SynchronousCallAdapterFactory()).build().create(ISyncApiService.class);
+    public SyncApiService createSyncApi(String url) {
+        return new Retrofit.Builder().client(createClient()).baseUrl(url).addConverterFactory(new ConverterFactory(GsonConverterFactory.create(this.assistant.getGson()))).addCallAdapterFactory(new SynchronousCallAdapterFactory()).build().create(SyncApiService.class);
     }
 
-    public ISyncApiService createSyncApi() {
+    public SyncApiService createSyncApi() {
         return createSyncApi(this.assistant.getSetting().network.apiRootUrl);
     }
 
@@ -359,16 +361,14 @@ public class ApiService {
     private class FulfillTokenInterceptor implements Interceptor {
         @Override
         public Response intercept(Chain chain) throws IOException {
-            Request req = chain.request();
+            Request.Builder req = chain.request().newBuilder();
             Map<String, String> extra = obtainExtraHeaders();
             if (!CollectionUtil.isNullOrEmpty(extra)) {
-                Request.Builder b = req.newBuilder();
                 for (Map.Entry<String, String> ety : extra.entrySet()) {
-                    b.header(ety.getKey(), ety.getValue());
+                    req.header(ety.getKey(), ety.getValue());
                 }
-                req = b.build();
             }
-            return chain.proceed(req);
+            return chain.proceed(req.build());
         }
     }
 
