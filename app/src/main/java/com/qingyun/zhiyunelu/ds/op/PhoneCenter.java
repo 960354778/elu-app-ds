@@ -85,6 +85,7 @@ public class PhoneCenter {
         r.status = RecordEntity.Status.Initial;
         this.assistant.getData().getDb().records().save(r);
         this.callingRecord = r;
+        LogStub.log(new LogEntry(LogStub.LOG_LEVEL_DEBUG, PhoneNumberHelper.class, "Tend to dial out (rec: %s, phone: %s, callingRecord: %s)...", SerializationUtil.describe(rec), SerializationUtil.describe(p), SerializationUtil.describe(this.callingRecord)));
         PhoneNumberHelper.callOut(ctx == null ? this.assistant.getDefaultContext() : ctx, this.callingRecord.phoneNumber);
     }
 

@@ -36,8 +36,11 @@
     <string name="warn_requires_permission">请在权限管理中授予本应用所有所需权限</string>
     <string name="warn_missing_account_password">请输入账号或密码</string>
     <string name="warn_no_cached_dial_message">没有待处理的拨号请求</string>
+    <string name="error_business" formatted="false">%s</string>
+    <string name="error_coded" formatted="false">发生错误：%s</string>
+    <string name="error_unauthroized">尚未登录系统或者登录已经过期</string>
+    <string name="error_forbidden">没有操作所需权限</string>
+    <string name="error_http">服务端返回错误</string>
     <string name="error_network">发生网络错误</string>
     <string name="error_api">访问数据发生错误</string>
-    <string name="error_coded" formatted="false">发生错误：%s</string>
-    <string name="error_business" formatted="false">%s</string>
 </resources>

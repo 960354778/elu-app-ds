@@ -6,6 +6,7 @@ import com.google.gson.JsonElement;
 import com.qingyun.zhiyunelu.ds.App;
 import com.qingyun.zhiyunelu.ds.Constants;
 import com.qingyun.zhiyunelu.ds.data.ApiResult;
+import com.qingyun.zhiyunelu.ds.data.EluDatabase_Impl;
 import com.qingyun.zhiyunelu.ds.data.TaskMessage;
 import com.qingyun.zhiyunelu.ds.ui.TasksActivity;
 
@@ -76,26 +77,11 @@ public class MessagingCenter {
         Subject<Boolean> ret = PublishSubject.create();
         this.assistant.getApi().createAsyncApi().obtainDialingInformation()
         .subscribeOn(RxHelper.createKeepingScopeIOSchedule()).observeOn(RxHelper.createKeepingScopeComputationSchedule())
-                .subscribe(new Observer<ApiResult<TaskMessage>>() {
-                    @Override
-                    public void onSubscribe(Disposable disposable) {
-                        ret.onSubscribe(disposable);
-                    }
-
+                .subscribe(new RxUtil.ObserverDelegate<ApiResult<TaskMessage>, Boolean>(ret, s -> latestTask != null) {
                     @Override
                     public void onNext(ApiResult<TaskMessage> res) {
                         latestTask = res == null ? null : res.data;
-                        ret.onNext(latestTask != null);
-                    }
-
-                    @Override
-                    public void onError(Throwable ex) {
-                        ret.onError(ex);
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        ret.onComplete();
+                        super.onNext(res);
                     }
                 });
         return ret;

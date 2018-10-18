@@ -17,6 +17,7 @@ import com.qingyun.zhiyunelu.ds.ui.Popups;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -26,9 +27,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
+import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.subjects.BehaviorSubject;
+import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -218,7 +221,7 @@ public class ApiService {
     }
 
     public AsyncApiService createAsyncApi(String url) {
-        return new Retrofit.Builder().client(createClient()).baseUrl(url).addConverterFactory(new ConverterFactory(GsonConverterFactory.create(this.assistant.getGson()))).addCallAdapterFactory(RxJava2CallAdapterFactory.create()).build().create(AsyncApiService.class);
+        return new Retrofit.Builder().client(createClient()).baseUrl(url).addConverterFactory(new ConverterFactory(GsonConverterFactory.create(this.assistant.getGson()))).addCallAdapterFactory(new AsynchronousCallAdapterFactory()).build().create(AsyncApiService.class);
     }
 
     public AsyncApiService createAsyncApi() {
@@ -278,6 +281,18 @@ public class ApiService {
                     if (cex instanceof  BusinessException) {
                         message = ctx.getString(resID, message);
                     }
+                } else if (ex instanceof HttpException) {
+                    switch (((HttpException)ex).code()) {
+                        case HttpURLConnection.HTTP_UNAUTHORIZED:
+                            message = ctx.getString(R.string.error_unauthroized);
+                            break;
+                        case HttpURLConnection.HTTP_FORBIDDEN:
+                            message = ctx.getString(R.string.error_forbidden);
+                            break;
+                        default:
+                            message = ctx.getString(R.string.error_http);
+                            break;
+                    }
                 } else if (ex instanceof NetworkErrorException) {
                     message = ctx.getString(R.string.error_network);
                 } else {
@@ -334,8 +349,41 @@ public class ApiService {
         protected abstract boolean processResult(TData data, ApiResult<TData> res);
     }
 
-    private static class SynchronousCallAdapterFactory extends CallAdapter.Factory {
+    private class AsynchronousCallAdapterFactory extends CallAdapter.Factory {
+        private CallAdapter.Factory innerFactory = RxJava2CallAdapterFactory.create();
 
+        @Override
+        public CallAdapter<?, ?> get(Type type, Annotation[] annotations, Retrofit retrofit) {
+            CallAdapter origin = innerFactory.get(type, annotations, retrofit);
+            return new CallAdapter<Object, Object>() {
+                @Override
+                public Type responseType() {
+                    return origin.responseType();
+                }
+
+                @Override
+                public Object adapt(Call<Object> call) {
+                    Subject ret = PublishSubject.create();
+                    Observable ob = (Observable) origin.adapt(call);
+                    ob.subscribeOn(RxHelper.createKeepingScopeIOSchedule()).observeOn(RxHelper.createKeepingScopeComputationSchedule())
+                            .subscribe(new RxUtil.ObserverDelegate(ret, null) {
+                                @Override
+                                public void onError(Throwable e) {
+                                    if (e instanceof HttpException) {
+                                        if (((HttpException) e).code() == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                                            updateToken(null);
+                                        }
+                                    }
+                                    super.onError(e);
+                                }
+                            });
+                    return ret;
+                }
+            };
+        }
+    }
+
+    private class SynchronousCallAdapterFactory extends CallAdapter.Factory {
         @Override
         public CallAdapter<?, ?> get(Type type, Annotation[] annotations, Retrofit retrofit) {
             return new CallAdapter<Object, Object>() {
@@ -350,6 +398,9 @@ public class ApiService {
                         retrofit2.Response res = call.execute();
                         if (res.isSuccessful()) {
                             return res.body();
+                        }
+                        if (res.code() == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                            updateToken(null);
                         }
                         throw new HttpException(res);
                     }, null);
