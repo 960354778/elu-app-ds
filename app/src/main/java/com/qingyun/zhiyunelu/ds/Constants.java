@@ -35,7 +35,8 @@ public final class Constants {
         public static final String LOG_IMPORTANT_DIR_FORMAT = PathUtil.concat(STORAGE_ROOT_FORMAT, "log-important");
         public static final String MISC_DIR_FORMAT = PathUtil.concat(STORAGE_ROOT_FORMAT, "misc");
         public static final String UPLOADED_FILE_DIR_FORMAT = PathUtil.concat(STORAGE_ROOT_FORMAT, "files");
-        public static final String TEMP_DIR_WX_SEGMENT = "wx/%s";
+        public static final String TEMP_DIR_WX_ROOT = "wx";
+        public static final String TEMP_DIR_WX_SEGMENT = "%s";
         public static final String URL_SEGMENT_MESSAGE_HUB = "message";
     }
 

@@ -62,6 +62,7 @@ public class App extends BaseApplication {
         private String buildType;
         private File miscDir;
         private File uploadedFileDir;
+        private String wxTempDirPathRoot;
         private String wxTempDirPathFormat;
         private String buildDate;
         private String buildEpoch;
@@ -93,7 +94,8 @@ public class App extends BaseApplication {
                 channel = applicationInfoWthMetaData.metaData.getString("Channel");
                 miscDir = new File(StringUtil.formatInvariant(Constants.Paths.MISC_DIR_FORMAT, channel));
                 uploadedFileDir = new File(StringUtil.formatInvariant(Constants.Paths.UPLOADED_FILE_DIR_FORMAT, channel));
-                wxTempDirPathFormat = PathUtil.concat(defaultContext.getCacheDir().getPath(), Constants.Paths.TEMP_DIR_WX_SEGMENT);
+                wxTempDirPathRoot = PathUtil.concat(defaultContext.getCacheDir().getPath(), Constants.Paths.TEMP_DIR_WX_ROOT);
+                wxTempDirPathFormat = PathUtil.concat(wxTempDirPathRoot, Constants.Paths.TEMP_DIR_WX_SEGMENT);
                 device = applicationInfoWthMetaData.metaData.getString("Device");
                 prefs = new Prefs(defaultContext);
                 EnvironmentInfo.ensureInit(defaultContext, channel, buildType);
@@ -146,6 +148,10 @@ public class App extends BaseApplication {
 
         public File getUploadedFileDir() {
             return uploadedFileDir;
+        }
+
+        public String getWxTempDirPathRoot() {
+            return wxTempDirPathRoot;
         }
 
         public String createWxTempDirPath() {

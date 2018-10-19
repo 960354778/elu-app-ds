@@ -17,6 +17,7 @@ import velites.java.utility.log.LogEntry;
 import velites.java.utility.log.LogStub;
 import velites.java.utility.misc.DateTimeUtil;
 import velites.java.utility.misc.ExceptionUtil;
+import velites.java.utility.misc.FileUtil;
 import velites.java.utility.misc.PathUtil;
 import velites.java.utility.misc.SerializationUtil;
 
@@ -33,6 +34,7 @@ public class WechatCenter {
     public void syncWxDatabase() {
         ExceptionUtil.executeWithRetry(() -> {
             LogStub.log(new LogEntry(LogStub.LOG_LEVEL_DEBUG, this, "Starting sync wechat database..."));
+            FileUtil.deleteFile(assistant.getWxTempDirPathRoot());
             op.checkWechatAndRun(assistant.createWxTempDirPath(), sql -> {
                 WechatMeInfo me = op.obtainMe(sql);
                 LogStub.log(new LogEntry(LogStub.LOG_LEVEL_DEBUG, this, "Processing wechat friends, me is: %s", SerializationUtil.describe(me)));
