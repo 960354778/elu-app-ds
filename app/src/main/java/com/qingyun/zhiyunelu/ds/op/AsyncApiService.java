@@ -4,6 +4,7 @@ package com.qingyun.zhiyunelu.ds.op;
 import android.support.annotation.Nullable;
 
 import com.qingyun.zhiyunelu.ds.data.ApiResult;
+import com.qingyun.zhiyunelu.ds.data.CheckRecordAudiosDto;
 import com.qingyun.zhiyunelu.ds.data.LoginDto;
 import com.qingyun.zhiyunelu.ds.data.PendingSoundRecordInfo;
 import com.qingyun.zhiyunelu.ds.data.RecordCalledOutDto;
@@ -49,8 +50,8 @@ public interface AsyncApiService {
     @POST("MobileTask/UploadAudioToRecord")
     Observable<ApiResult<RecordInfo>> uploadSoundRecord(@Query("taskRecordId") String taskRecordId, @Query("hash") String hash, @Query("duration") String duration, @Part MultipartBody.Part file);
 
-    @POST("MobileTask/CheckAudioToRecords")
-    Observable<ApiResult<PendingSoundRecordInfo[]>> checkAudioToRecords(@Body String[] files);
+    @POST("MobileTask/CheckRecordAudios")
+    Observable<ApiResult<PendingSoundRecordInfo[]>> checkRecordAudios(@Body CheckRecordAudiosDto files);
 
     @POST("MobileSync/UploadSmsContacts")
     Observable<ApiResult<SyncSmsContactsResult>> syncSmsContacts(@Body SyncSmsContactsDto contacts);

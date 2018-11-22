@@ -8,14 +8,20 @@ import android.text.TextUtils;
 import com.qingyun.zhiyunelu.ds.App;
 import com.qingyun.zhiyunelu.ds.R;
 import com.qingyun.zhiyunelu.ds.data.ApiResult;
+import com.qingyun.zhiyunelu.ds.data.CheckRecordAudiosDto;
+import com.qingyun.zhiyunelu.ds.data.MatchRecordModel;
 import com.qingyun.zhiyunelu.ds.data.PendingSoundRecordInfo;
 import com.qingyun.zhiyunelu.ds.data.PhoneInfo;
 import com.qingyun.zhiyunelu.ds.data.RecordEntity;
 import com.qingyun.zhiyunelu.ds.data.RecordInfo;
 
 import java.io.File;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -159,6 +165,7 @@ public class PhoneCenter {
                             } else {
                                 r.fileName = file.getName();
                                 assistant.getData().getDb().records().save(r);
+                                LogStub.log(new LogEntry(LogStub.LOG_LEVEL_INFO, this, "Picked up audio record as saved as: %s", SerializationUtil.describe(r)));
                                 uploadRecordAsync(r, file);
                             }
                         }
@@ -228,7 +235,7 @@ public class PhoneCenter {
     }
 
     public void uploadErrorRecords() {
-        RecordEntity[] rs = assistant.getData().getDb().records().fetchErrors(new RecordEntity.Status[] {RecordEntity.Status.Uploaded});
+        RecordEntity[] rs = assistant.getData().getDb().records().fetchErrorsByStatus(new RecordEntity.Status[] {RecordEntity.Status.Uploaded});
         for (RecordEntity r : rs) {
             if (r.taskRecordId == null || r.status != RecordEntity.Status.Finished) {
                 LogStub.log(new LogEntry(LogStub.LOG_LEVEL_WARNING, this, "There is record having error as unexpected (without TaskRecordId or not finished): %s, error: %s", SerializationUtil.describe(r), r.error));
@@ -255,7 +262,21 @@ public class PhoneCenter {
             }
         }
         if (files.size() > 0) {
-            PendingSoundRecordInfo[] ps = assistant.getApi().createSyncApi().checkAudioToRecords(files.keySet().toArray(new String[0])).data;
+            RecordEntity[] cbs = assistant.getData().getDb().records().fetchCallbacksByStatus(new RecordEntity.Status[]{RecordEntity.Status.Finished});
+            Map<String, RecordEntity> cbsMap = new HashMap<>();
+            for (int i = 0; i < cbs.length; i++) {
+                cbsMap.put(cbs[i].fileName, cbs[i]);
+            }
+            List<MatchRecordModel> mrms = new ArrayList<>();
+            for (String fn : files.keySet()) {
+                MatchRecordModel mrm = new MatchRecordModel();
+                mrm.fileName = fn;
+                mrm.isCallback = cbsMap.containsKey(fn);
+                mrms.add(mrm);
+            }
+            CheckRecordAudiosDto dto = new CheckRecordAudiosDto();
+            dto.files = mrms.toArray(new MatchRecordModel[0]);
+            PendingSoundRecordInfo[] ps = assistant.getApi().createSyncApi().checkRecordAudios(dto).data;
             if (ps != null) {
                 for (PendingSoundRecordInfo p : ps) {
                     File f = files.get(p.fileName);
@@ -263,12 +284,12 @@ public class PhoneCenter {
                         RecordEntity r = assistant.getData().getDb().records().fetchByFileName(f.getName());
                         if (r == null) {
                             r = new RecordEntity();
-                            r.taskRecordId = p.taskRecordId;
                             r.isIncoming = p.isCallback;
-                            r.status = RecordEntity.Status.Finished;
                             r.fileName = f.getName();
-                            this.assistant.getData().getDb().records().save(r);
                         }
+                        r.taskRecordId = p.taskRecordId;
+                        r.status = RecordEntity.Status.Finished;
+                        this.assistant.getData().getDb().records().save(r);
                         uploadRecordSync(r, f);
                     }
                 }

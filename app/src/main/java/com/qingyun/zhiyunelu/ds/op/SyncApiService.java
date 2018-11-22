@@ -2,6 +2,7 @@ package com.qingyun.zhiyunelu.ds.op;
 
 
 import com.qingyun.zhiyunelu.ds.data.ApiResult;
+import com.qingyun.zhiyunelu.ds.data.CheckRecordAudiosDto;
 import com.qingyun.zhiyunelu.ds.data.LoginDto;
 import com.qingyun.zhiyunelu.ds.data.PendingSoundRecordInfo;
 import com.qingyun.zhiyunelu.ds.data.RecordCalledOutDto;
@@ -46,8 +47,8 @@ public interface SyncApiService {
     @POST("MobileTask/UploadAudioToRecord")
     ApiResult<RecordInfo> uploadSoundRecord(@Query("taskRecordId") String taskRecordId, @Query("hash") String hash, @Query("duration") String duration, @Part MultipartBody.Part file);
 
-    @POST("MobileTask/CheckAudioToRecords")
-    ApiResult<PendingSoundRecordInfo[]> checkAudioToRecords(@Body String[] files);
+    @POST("MobileTask/CheckRecordAudios")
+    ApiResult<PendingSoundRecordInfo[]> checkRecordAudios(@Body CheckRecordAudiosDto files);
 
     @POST("MobileSync/UploadSmsContacts")
     ApiResult<SyncSmsContactsResult> syncSmsContacts(@Body SyncSmsContactsDto contacts);
