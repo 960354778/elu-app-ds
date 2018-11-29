@@ -93,8 +93,6 @@ rootProject.ext {
     def dt = new Date()
     config = [
         releaseKeyConfigPath: 'key/elu-ds.signing.properties',
-        aliPushAppKey: '24820090',
-        aliPushAppSecret: '14d242381711ddcdf6a2ec44bc547f73',
         outputDir: '',
         buildDate: "${dt}",
         buildDateEpoch: dt.getTime(),

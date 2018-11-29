@@ -19,8 +19,6 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         manifestPlaceholders += [
                 commonOrientation: "portrait",
-                aliPushAppKey: rootProject.ext.config.aliPushAppKey,
-                aliPushAppSecret: rootProject.ext.config.aliPushAppSecret,
                 buildDate: rootProject.ext.config.buildDate,
                 buildDateEpoch: rootProject.ext.config.buildDateEpoch,
                 buildRevision: rootProject.ext.config.buildRevision
