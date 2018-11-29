@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 def FLAVOR_CHANNEL = 'channel'
 def FLAVOR_DEVICE = 'device'
 
-def developChannels = ['local', 'dev', 'qa', 'demo', 'pre', 'val']
+def developChannels = ['local', 'dev', 'qa', 'tra', 'demo', 'pre', 'val']
 def debugOnlyChannels = []
 def originChannels = developChannels + 'prd'
 
@@ -84,6 +84,9 @@ android {
             dimension FLAVOR_CHANNEL
         }
         qa {
+            dimension FLAVOR_CHANNEL
+        }
+        tra {
             dimension FLAVOR_CHANNEL
         }
         demo {
