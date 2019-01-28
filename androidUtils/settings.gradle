@@ -1,0 +1,9 @@
+include ':JavaUtility', ':Math'
+include ':AndroidUtility', ':AndroidSupport', ':TiledMap'
+
+project(':JavaUtility').projectDir = new File('javaUtils/utility')
+project(':Math').projectDir = new File('javaUtils/math')
+
+project(':AndroidUtility').projectDir = new File('utility')
+project(':AndroidSupport').projectDir = new File('support')
+project(':TiledMap').projectDir = new File('tiledMap')

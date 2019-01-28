@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/support/AndroidSupport.iml" filepath="$PROJECT_DIR$/support/AndroidSupport.iml" />
+      <module fileurl="file://$PROJECT_DIR$/utility/AndroidUtility.iml" filepath="$PROJECT_DIR$/utility/AndroidUtility.iml" />
+      <module fileurl="file://$PROJECT_DIR$/javaUtils/utility/JavaUtility.iml" filepath="$PROJECT_DIR$/javaUtils/utility/JavaUtility.iml" />
+      <module fileurl="file://$PROJECT_DIR$/javaUtils/math/Math.iml" filepath="$PROJECT_DIR$/javaUtils/math/Math.iml" />
+      <module fileurl="file://$PROJECT_DIR$/javaUtils/math/Math.iml" filepath="$PROJECT_DIR$/javaUtils/math/Math.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tiledMap/TiledMap.iml" filepath="$PROJECT_DIR$/tiledMap/TiledMap.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tiledMap/TiledMap.iml" filepath="$PROJECT_DIR$/tiledMap/TiledMap.iml" />
+      <module fileurl="file://$PROJECT_DIR$/android.iml" filepath="$PROJECT_DIR$/android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/utility.iml" filepath="$PROJECT_DIR$/utility.iml" />
+    </modules>
+  </component>
+</project>

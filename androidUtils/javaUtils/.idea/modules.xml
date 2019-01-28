@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/utility/JavaUtility.iml" filepath="$PROJECT_DIR$/.idea/modules/utility/JavaUtility.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/math/Math.iml" filepath="$PROJECT_DIR$/.idea/modules/math/Math.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/javaUtils.iml" filepath="$PROJECT_DIR$/.idea/modules/javaUtils.iml" />
+    </modules>
+  </component>
+</project>

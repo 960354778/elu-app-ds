@@ -1,0 +1,69 @@
+
+import java.nio.file.Paths
+
+rootProject.ext {
+    utils = [
+        normalizePath               : { p ->
+            if (p && File.separator == '\\') {
+                p = p.replace("/", File.separator).replaceAll('^\\\\(\\w)\\\\', '$1:\\\\')
+            }
+            return p
+        },
+        resolvePath                 : { p1, p2 ->
+            return Paths.get(p1).resolve(p2)
+        },
+        getVersionDescriptionFromGit: { variant, allowDirty = false, prefix = null, anchorHead = null ->
+            def desc = ""
+            try {
+                if (!prefix) prefix = "tag-"
+                def cmd1 = "git describe --match ${prefix}* --exact-match"
+                if (!allowDirty) cmd1 += " --dirty"
+                def p1 = cmd1.execute()
+                p1.waitFor()
+                if (p1.exitValue() == 0) {
+                    def tag = p1.text.trim()
+                    if (!tag.endsWith('-dirty')) {
+                        if (!anchorHead) anchorHead = "publish"
+                        def anchor = "-${anchorHead}-${variant.versionName}-${variant.versionCode}"
+                        def index = tag.lastIndexOf(anchor)
+                        if (index > prefix.length()) {
+                            def cmd2 = "git tag -n -l ${tag}"
+                            def p2 = cmd2.execute()
+                            p2.waitFor()
+                            if (p2.exitValue() == 0) {
+                                def annotation = p2.text.trim()
+                                if (annotation.startsWith(tag)) {
+                                    desc = annotation.substring(tag.length()).trim()
+                                }
+                            }
+                            if (desc.length() <= 0) {
+                                desc = "${variant.versionName}-${variant.versionCode}${tag.substring(index + anchor.length())}"
+                            }
+                        }
+                    }
+                }
+            } catch (IOException e) {
+                print(e)
+            }
+            return desc
+        },
+        processApkOutputs           : { android, name, dir ->
+            android.applicationVariants.all { variant, allowDirty = false, prefix = null, anchorHead = null ->
+                variant.outputs.all { output ->
+                    def file = output.outputFile
+                    if (file != null && file.name.endsWith('.apk')) {
+                        def versionDescription = utils.getVersionDescriptionFromGit(variant, allowDirty, prefix, anchorHead)
+                        if (versionDescription.length() <= 0) {
+                            versionDescription = variant.versionName
+                        }
+                        output.outputFileName = "${name}-${versionDescription}-${variant.getFlavorName()}-${variant.buildType.getName()}.apk"
+                        if (dir) {
+                            output.outputFileName = Paths.get(output.outputFile.parent).relativize(Paths.get(dir)).resolve(output.outputFileName).toFile()
+                        }
+                    }
+                }
+            }
+        },
+    ]
+}
+

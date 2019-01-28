@@ -1,0 +1,19 @@
+<resources>
+    <dimen name="size_standard">48dp</dimen>
+    <dimen name="size_standard_double">96dp</dimen>
+    <dimen name="size_standard_action">32dp</dimen>
+    <dimen name="size_standard_visual">24dp</dimen>
+    <dimen name="size_standard_action_small">16dp</dimen>
+    <dimen name="size_standard_visual_small">12dp</dimen>
+    <dimen name="size_1px">1px</dimen>
+    <dimen name="size_zero">0px</dimen>
+    <dimen name="space_standard">8dp</dimen>
+    <dimen name="space_standard_big">12dp</dimen>
+    <dimen name="space_standard_double">16dp</dimen>
+    <dimen name="font_standard_normal">14sp</dimen>
+    <dimen name="font_standard_small">12sp</dimen>
+    <dimen name="font_standard_big">16sp</dimen>
+    <dimen name="font_standard_bigger">18sp</dimen>
+    <dimen name="radius_standard">5dp</dimen>
+    <dimen name="elevation_standard">4dp</dimen>
+</resources>

@@ -1,0 +1,5 @@
+include ':JavaUtility', ':Math'
+
+project(':JavaUtility').projectDir = new File('utility')
+project(':Math').projectDir = new File('math')
+

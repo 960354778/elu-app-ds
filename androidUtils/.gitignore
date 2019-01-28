@@ -1,0 +1,13 @@
+
+.DS_Store
+desktop.ini
+*.iml
+.gradle
+local.properties
+/.idea/workspace.xml
+/.idea/libraries
+build
+___*
+/captures
+.externalNativeBuild
+*.log

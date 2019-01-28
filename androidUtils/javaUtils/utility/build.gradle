@@ -1,0 +1,11 @@
+apply plugin: 'java'
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    testImplementation rootProject.ext.dependencies['junit']
+    implementation rootProject.ext.dependencies['gson']
+    implementation rootProject.ext.dependencies['rxjava']
+    implementation rootProject.ext.dependencies['object_diff']
+}
+sourceCompatibility = rootProject.ext.java.version
+targetCompatibility = rootProject.ext.java.version
