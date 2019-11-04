@@ -5,6 +5,7 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
+import com.orhanobut.logger.Logger;
 import com.qingyun.zhiyunelu.ds.App;
 import com.qingyun.zhiyunelu.ds.R;
 import com.qingyun.zhiyunelu.ds.data.ApiResult;
@@ -14,6 +15,7 @@ import com.qingyun.zhiyunelu.ds.data.PendingSoundRecordInfo;
 import com.qingyun.zhiyunelu.ds.data.PhoneInfo;
 import com.qingyun.zhiyunelu.ds.data.RecordEntity;
 import com.qingyun.zhiyunelu.ds.data.RecordInfo;
+import com.qingyun.zhiyunelu.ds.db.Phonedb.PhocneEntity;
 
 import java.io.File;
 import java.lang.reflect.Array;
@@ -56,8 +58,11 @@ public class PhoneCenter {
     private PhoneStateListener listener;
     private RecordEntity callingRecord;
     private Integer currentState;
+    private PhocneEntity phocneEntity;
+
 
     public PhoneCenter(App.Assistant assistant) {
+        Logger.e("进入PhoneCenter");
         this.assistant = assistant;
         this.telephony = (TelephonyManager) assistant.getDefaultContext().getSystemService(Context.TELEPHONY_SERVICE);
 //        this.assistant.getDefaultContext().registerReceiver(new BroadcastReceiver() {
@@ -96,6 +101,7 @@ public class PhoneCenter {
     }
 
     private void handleCallStateChanged(int state, String phoneNumber) {
+        Logger.e("进入这里handleCallStateChanged");
         Integer originState = this.currentState;
         this.currentState = state;
         Calendar now = DateTimeUtil.now();
@@ -126,6 +132,7 @@ public class PhoneCenter {
     }
 
     private void matchRecordFile(RecordEntity r) {
+        Logger.e("进入这里matchRecordFile");
         Observable.interval(assistant.getSetting().logic.callRecordMatchDelayMs, assistant.getSetting().logic.callRecordMatchIntervalMs, TimeUnit.MILLISECONDS)
                 .subscribeOn(RxHelper.createKeepingScopeIOSchedule()).observeOn(RxHelper.createKeepingScopeComputationSchedule())
                 .subscribe(new Observer<Long>() {
@@ -184,6 +191,7 @@ public class PhoneCenter {
     }
 
     private void uploadRecordAsync(RecordEntity r, File f) {
+        Logger.e("进入这里uploadRecordAsync");
         if (r.taskRecordId != null) {
             RequestBody requestFile = RequestBody.create(MediaType.parse(MediaHelper.retrieveMediaMimetype(f.toString())), f);
             MultipartBody.Part filePart = MultipartBody.Part.createFormData(r.taskRecordId, f.getName(), requestFile);
@@ -198,8 +206,17 @@ public class PhoneCenter {
                             r.status = RecordEntity.Status.Uploaded;
                             assistant.getData().getDb().records().save(r);
                             ToastHelper.showToastShort(assistant.getDefaultContext(), assistant.getDefaultContext().getString(R.string.info_sound_record_uploaded, r.phoneNumber, r.fileName));
-                            ExceptionUtil.executeWithRetry(() -> FileUtil.moveFile(f, new File(PathUtil.concat(assistant.getUploadedFileDir().getPath(), f.getName()))), 1, null);
-                            return true;
+                            Logger.e("录音文件"+r.fileName+"\n"+f);
+                            //moveFile移动文件
+                            ExceptionUtil.executeWithRetry(() -> FileUtil.moveFile(f,
+                                    new File(PathUtil.concat(assistant.getUploadedFileDir().getPath(), f.getName()))), 1, null);
+                            String path = assistant.getUploadedFileDir()+f.getName();
+                            Logger.i("录音文件"+r.fileName+"\n"+path);
+
+                          /*  phocneEntity = new PhocneEntity();
+                            phocneEntity.compellation ="";
+                            assistant.getData().getPhocneDatabase().phocneDao().insert();*/
+                           return true;
                         }
                         @Override
                         public void onError(Throwable ex) {

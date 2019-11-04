@@ -1,67 +1,176 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/MMStyle"
     android:orientation="vertical"
+    android:background="@mipmap/background_color"
     >
-    <LinearLayout
-        style="@style/MWHorStyle"
-        android:layout_height="@dimen/size_standard"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="@dimen/space_standard"
-        android:layout_marginRight="@dimen/space_standard"
-        android:layout_marginTop="@dimen/space_standard_double"
-        android:layout_marginBottom="@dimen/space_standard_double"
-        android:background="@drawable/edit_bg_shape"
-        android:paddingLeft="@dimen/space_standard"
-        android:paddingRight="@dimen/space_standard"
-        >
-        <TextView
-            style="@style/EluStyle.TextBold"
-            android:layout_gravity="center_vertical"
-            android:text="@string/label_account"
-            />
-        <EditText
-            android:id="@+id/login_account"
-            style="@style/EluStyle.EditText"
-            android:layout_gravity="center_vertical"
-            android:hint="@string/hint_enter_account"
-            />
-    </LinearLayout>
-    <LinearLayout
-        style="@style/MWHorStyle"
-        android:layout_height="@dimen/size_standard"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="@dimen/space_standard"
-        android:layout_marginRight="@dimen/space_standard"
-        android:layout_marginTop="@dimen/space_standard_double"
-        android:layout_marginBottom="@dimen/space_standard_double"
-        android:background="@drawable/edit_bg_shape"
-        >
-        <TextView
-            style="@style/EluStyle.TextBold"
-            android:layout_gravity="center_vertical"
-            android:text="@string/label_password"
-            />
-        <EditText
-            android:id="@+id/login_password"
-            style="@style/EluStyle.EditText"
-            android:layout_gravity="center_vertical"
-            android:hint="@string/hint_enter_password"
-            android:inputType="textPassword"
-            />
-    </LinearLayout>
-    <Button
-        android:id="@+id/login_login"
-        style="@style/EluStyle.TextBold"
+
+
+    <ImageView
+        android:id="@+id/image01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:src="@mipmap/crm02"/>
+
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@mipmap/zhiyun"
+        android:layout_below="@+id/image01"
+        android:layout_centerHorizontal="true"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:layout_marginTop="-54dp"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/crm03"
+        android:layout_alignParentBottom="true"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"/>
+
+    <RelativeLayout
+        android:id="@+id/rv_image01"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/size_standard"
-        android:layout_marginLeft="@dimen/size_standard"
-        android:layout_marginRight="@dimen/size_standard"
-        android:layout_marginTop="@dimen/size_standard"
+        android:layout_height="50dp">
+        <TextView
+            android:gravity="center"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:text="登入"
+            android:textSize="18dp"
+            android:textColor="@color/bg_gray"
+            />
+
+        <ImageView
+            android:id="@+id/iv_setting"
+            android:layout_margin="15dp"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/cer02"
+            android:adjustViewBounds="true"
+            />
+
+    </RelativeLayout>
+
+    <TextView
         android:gravity="center"
-        android:padding="@dimen/space_standard"
-        android:text="@string/label_login"
-        android:textColor="@android:color/white"
-        android:textSize="@dimen/font_standard_bigger"
+        android:layout_marginTop="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rv_image01"
+        android:layout_marginLeft="45dp"
+        android:layout_marginRight="45dp"
+        android:text="智云CRM手机端"
+        android:textSize="32dp"
+        android:textColor="@color/bg_gray"
+        android:textStyle="bold"
         />
-</LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/line1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/image01"
+        android:layout_marginTop="100dp"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="45dp"
+            android:layout_marginRight="45dp">
+
+            <ImageView
+                android:layout_centerVertical="true"
+                android:id="@+id/iv_account"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:src="@mipmap/account"
+                android:adjustViewBounds="true"
+                android:layout_marginLeft="10dp"/>
+
+            <EditText
+                android:id="@+id/login_account"
+                style="@style/EluStyle.EditText"
+                android:layout_width="match_parent"
+                android:layout_gravity="center_vertical"
+                android:hint="@string/hint_enter_account"
+                android:layout_marginLeft="35dp"
+                android:textSize="18dp"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/login_grey"
+                android:layout_below="@+id/login_account"
+                android:layout_marginTop="3dp"
+                />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="45dp"
+            android:layout_marginRight="45dp"
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                android:layout_centerVertical="true"
+                android:id="@+id/iv_password"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:src="@mipmap/password"
+                android:adjustViewBounds="true"
+                android:layout_marginLeft="10dp"/>
+
+            <EditText
+                android:id="@+id/login_password"
+                style="@style/EluStyle.EditText"
+                android:layout_width="match_parent"
+                android:layout_gravity="center_vertical"
+                android:hint="@string/hint_enter_password"
+                android:inputType="textPassword"
+                android:layout_marginLeft="35dp"
+                android:textSize="18dp"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/login_grey"
+                android:layout_below="@+id/login_password"
+                android:layout_marginTop="3dp"
+                />
+
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/login_login"
+        android:gravity="center"
+        android:layout_width="180dp"
+        android:layout_height="50dp"
+        android:text="@string/label_login"
+        android:layout_below="@+id/line1"
+        android:layout_centerHorizontal="true"
+        android:textSize="24dp"
+        android:background="@drawable/login_shape"
+        android:textColor="@color/bg_gray"
+        android:layout_marginTop="50dp"/>
+
+
+</RelativeLayout>

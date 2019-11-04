@@ -6,7 +6,12 @@ import android.content.pm.PackageManager;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.orhanobut.logger.AndroidLogAdapter;
+import com.orhanobut.logger.FormatStrategy;
+import com.orhanobut.logger.Logger;
+import com.orhanobut.logger.PrettyFormatStrategy;
 import com.qingyun.zhiyunelu.ds.data.Setting;
+import com.qingyun.zhiyunelu.ds.db.Phonedb.StudentDao;
 import com.qingyun.zhiyunelu.ds.op.ApiService;
 import com.qingyun.zhiyunelu.ds.op.DataCenter;
 import com.qingyun.zhiyunelu.ds.op.MessagingCenter;
@@ -76,6 +81,7 @@ public class App extends BaseApplication {
         private WechatCenter wechat;
         private SmsCenter sms;
         private PollingCenter polling;
+        private StudentDao studentDao;
 
         private BaseInitializer<Context> initializer = new BaseInitializer<Context>(false, null) {
             @Override
@@ -140,6 +146,7 @@ public class App extends BaseApplication {
             wechat = new WechatCenter(this);
             sms = new SmsCenter(this);
             polling = new PollingCenter(this);
+            studentDao = new StudentDao(this);
         }
 
         public File getMiscDir() {
@@ -234,6 +241,11 @@ public class App extends BaseApplication {
             return polling;
         }
 
+        public StudentDao getStudentDao() {
+            return studentDao;
+        }
+
+
         public final void ensureInit(Context ctx) {
             initializer.ensureInit(ctx);
         }
@@ -266,6 +278,17 @@ public class App extends BaseApplication {
     @Override
     public void onCreate() {
         instance = this;
+
+        FormatStrategy formatStrategy = PrettyFormatStrategy.newBuilder()
+                .showThreadInfo(true)      //（可选）是否显示线程信息。 默认值为true
+                //.methodCount(2)               // （可选）要显示的方法行数。 默认2
+                //.methodOffset(7)               // （可选）设置调用堆栈的函数偏移值，0的话则从打印该Log的函数开始输出堆栈信息，默认是0
+                //.logStrategy(customLog)  //（可选）更改要打印的日志策略。 默认LogCat
+                .tag("")                  //（可选）每个日志的全局标记。 默认PRETTY_LOGGER（如上图）
+                .build();
+
+        Logger.addLogAdapter(new AndroidLogAdapter(formatStrategy));
+
         super.onCreate();
         if(SystemHelper.isAppProcess(this)){
             assistant = new Assistant();

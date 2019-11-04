@@ -1,0 +1,5 @@
+<root>
+    <item name='butterknife.OnClick'>
+        <annotation name='java.lang.Deprecated' />
+    </item>
+</root>

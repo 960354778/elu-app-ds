@@ -2,8 +2,12 @@ package com.qingyun.zhiyunelu.ds.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,6 +16,8 @@ import android.widget.TextView;
 import com.qingyun.zhiyunelu.ds.R;
 import com.qingyun.zhiyunelu.ds.op.ObserverWithProgress;
 import com.trello.rxlifecycle2.android.ActivityEvent;
+
+import org.w3c.dom.Text;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -26,6 +32,9 @@ import velites.java.utility.misc.RxUtil;
  */
 
 public class SettingActivity extends BaseActivity {
+
+    private TextView tv_return;
+
     public static void launchMe(Context ctx) {
         Intent intent = new Intent(ctx, SettingActivity.class);
         ctx.startActivity(intent);
@@ -47,23 +56,28 @@ public class SettingActivity extends BaseActivity {
         TextView tvBuildRevision;
         @BindView(R.id.setting_self_phone)
         EditText etSelfPhone;
-        @BindView(R.id.setting_area_debug_url)
-        View areaDebugUrl;
+        /*@BindView(R.id.setting_area_debug_url)
+        View areaDebugUrl;*/
         @BindView(R.id.setting_debug_url)
         EditText etDebugUrl;
         @BindView(R.id.setting_export_wx)
-        Button btExportWx;
+        TextView btExportWx;
 
         void render() {
             tvBuildDate.setText(getAppAssistant().getBuildDate());
-            tvBuildRevision.setText(getAppAssistant().getBuildRevision());
+            if(getAppAssistant().getBuildRevision() != null && getAppAssistant().getBuildRevision() == ""){
+                tvBuildRevision.setText(getAppAssistant().getBuildRevision());
+                Log.e("tvBuildRevision","A--"+getAppAssistant().getBuildRevision());
+            }else {
+                tvBuildRevision.setText("XXXXXXX");
+            }
             etSelfPhone.setText(getAppAssistant().getPrefs().getSelfPhone());
             if (getAppAssistant().isDebug()) {
-                areaDebugUrl.setVisibility(View.VISIBLE);
+                //areaDebugUrl.setVisibility(View.VISIBLE);
                 btExportWx.setVisibility(View.VISIBLE);
                 etDebugUrl.setText(getAppAssistant().getPrefs().getDebugApiBase());
             } else {
-                areaDebugUrl.setVisibility(View.GONE);
+                //areaDebugUrl.setVisibility(View.GONE);
                 btExportWx.setVisibility(View.GONE);
             }
         }
@@ -94,15 +108,22 @@ public class SettingActivity extends BaseActivity {
     private final Widgets widgets = new Widgets();
 
 
-    @Override
-    protected Integer getContentResId() {
-        return R.layout.activity_setting;
-    }
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_setting);
+        tv_return = (TextView) findViewById(R.id.tv_return);
+        tv_return.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        /*onTouchEvent*/
         widgets.bind(this);
         widgets.render();
     }
+    
 }

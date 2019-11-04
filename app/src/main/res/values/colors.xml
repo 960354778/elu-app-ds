@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="primary">#ff3f51b5</color>
-    <color name="primaryDark">#ff303f9f</color>
+    <color name="primaryDark">#2575d8</color>
     <color name="accent">#ffff4081</color>
     <color name="bg_black">#ff000000</color>
     <color name="bg_gray">#ffe8e8e8</color>
@@ -12,4 +12,9 @@
     <color name="fg_black">#ff000000</color>
     <color name="fg_dark">#ff353c46</color>
     <color name="fg_white">#ffffffff</color>
+
+    <color name="main_grey">#c6c5c5</color>
+
+    <color name="login_grey">#a49e9e</color>
+
 </resources>

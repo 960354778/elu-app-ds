@@ -23,6 +23,7 @@ import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import velites.android.support.R2;
 import velites.android.support.ui.BaseBindableViewHolder;
 import velites.android.support.ui.BaseLayoutWidget;
 import velites.android.utility.misc.PhoneNumberHelper;
@@ -34,6 +35,8 @@ import velites.java.utility.misc.StringUtil;
 
 public class TasksActivity extends BaseActivity {
 
+    private TextView tv_return;
+
     public static void launchMe(Context ctx) {
         Intent intent = new Intent(ctx, TasksActivity.class);
         ctx.startActivity(intent);
@@ -41,16 +44,24 @@ public class TasksActivity extends BaseActivity {
 
     private BaseLayoutWidget.List list;
 
-    @Override
+    /*@Override
     protected Integer getContentResId() {
         return R.layout.layout_list;
-    }
+    }*/
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_tasks);
         list = new BaseLayoutWidget.List(this);
         list.getList().setAdapter(new Adapter(getAppAssistant().getMessaging().getTasks()));
+        tv_return = (TextView) findViewById(R.id.tv_return);
+        tv_return.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void dial(RecordInfo rec, PhoneInfo p) {

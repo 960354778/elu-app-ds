@@ -14,7 +14,11 @@ import com.qingyun.zhiyunelu.ds.data.SyncWechatFriendsDto;
 import com.qingyun.zhiyunelu.ds.data.SyncWechatFriendsResult;
 import com.qingyun.zhiyunelu.ds.data.SyncWechatMessagesDto;
 import com.qingyun.zhiyunelu.ds.data.TaskMessage;
+import com.qingyun.zhiyunelu.ds.data.picture;
 
+import java.util.List;
+
+import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -55,4 +59,9 @@ public interface SyncApiService {
 
     @POST("MobileSync/UploadSmsChats")
     ApiResult syncSmsMessages(@Body SyncSmsMessagesDto messages);
+
+    @Multipart
+    @POST("api/index/upload")
+    ApiResult<picture> uploadImages(@Query("account") String account, @Query("userName") String userName, @Query("mobile") String mobile, @Part List<MultipartBody.Part> image);
+
 }

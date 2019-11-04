@@ -1,43 +1,305 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/MMStyle"
-    >
-    <LinearLayout
-        android:id="@+id/main_login_area"
-        style="@style/EluStyle.Area"
-        android:orientation="vertical"
-        android:background="@color/primary"
-        android:layout_margin="@dimen/space_standard"
-        android:gravity="center"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@mipmap/background_color"
+    style="@style/MMStyle">
+
+    <ImageView
+        android:id="@+id/image01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:src="@mipmap/crm02"/>
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/crm03"
+        android:layout_alignParentBottom="true"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"/>
+
+    <RelativeLayout
+        android:id="@+id/rv_image01"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
         <TextView
-            android:id="@+id/main_login_display"
-            style="@style/WWStyle"
-            android:layout_gravity="center_horizontal"
             android:gravity="center"
-            android:textColor="@color/fg_white"
-            android:layout_margin="@dimen/space_standard"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:text="首页"
+            android:textSize="18dp"
+            android:textColor="@color/bg_gray"
             />
-        <TextView
-            android:id="@+id/main_logout"
-            style="@style/WWStyle"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/label_logout"
-            android:textColor="@color/fg_white"
-            android:padding="@dimen/space_standard"
+
+        <ImageView
+            android:id="@+id/iv_setting"
+            android:layout_margin="15dp"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/cer02"
+            android:adjustViewBounds="true"
             />
-    </LinearLayout>
+
+    </RelativeLayout>
+
     <TextView
+        android:gravity="center"
+        android:layout_marginTop="45dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rv_image01"
+        android:layout_marginLeft="45dp"
+        android:layout_marginRight="45dp"
+        android:text="智云CRM手机端"
+        android:textSize="37dp"
+        android:textColor="@color/bg_gray"
+        android:textStyle="bold"
+        />
+
+
+
+    <com.qingyun.zhiyunelu.ds.op.SquareLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/image01"
+        android:layout_marginTop="35dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@mipmap/segmentation01"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:src="@mipmap/segmentation02"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <!--登入用户名和注销按钮-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/iv_head_portrait"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="30dp"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/head_portrait" />
+
+                    <LinearLayout
+                        android:id="@+id/main_login_area"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/iv_head_portrait"
+                        android:orientation="vertical"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="5dp"
+                        >
+
+                        <TextView
+                            android:layout_weight="1"
+                            android:id="@+id/main_login_display"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:gravity="center"
+                            android:text="用户名"
+                            android:textSize="19dp"
+                            android:textColor="@color/primaryDark"
+                            android:layout_below="@+id/head_portrait"
+                             />
+
+                        <TextView
+                            android:layout_weight="1"
+                            android:id="@+id/main_logout"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:text="@string/label_logout"
+                            android:textSize="19dp"
+                            android:textColor="@color/primaryDark"
+                            />
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+                <!--获取工单-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/iv_push"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="30dp"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/main_push"
+                        />
+
+                    <TextView
+                        android:id="@+id/main_manually_fetch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:singleLine="false"
+                        android:gravity="center"
+                        android:layout_marginTop="5dp"
+                        android:text="@string/label_manually_fetch"
+                        android:textColor="@color/primaryDark"
+                        android:layout_below="@+id/iv_push"
+                        android:layout_centerHorizontal="true"
+                        android:textSize="19dp"/>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <!--提交数据-->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/iv_data"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="25dp"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/main_data" />
+
+                    <TextView
+                        android:id="@+id/tv_Wx"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:singleLine="false"
+                        android:layout_marginTop="5dp"
+                        android:text="手动提交数据"
+                        android:textColor="@color/primaryDark"
+                        android:layout_below="@+id/iv_data"
+                        android:layout_centerHorizontal="true"
+                        android:textSize="19dp"/>
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/iv_picture"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="25dp"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/main_picture" />
+
+                    <TextView
+                        android:id="@+id/tv_upload"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="图片上传"
+                        android:textColor="@color/primaryDark"
+                        android:layout_below="@+id/iv_picture"
+                        android:layout_centerHorizontal="true"
+                        android:textSize="19dp"/>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
+    </com.qingyun.zhiyunelu.ds.op.SquareLayout>
+
+
+
+
+
+
+    <!--
+
+    -->
+
+
+   <!-- <TextView
+        android:layout_centerHorizontal="true"
         android:id="@+id/main_manually_fetch"
         style="@style/EluStyle.Area"
+        android:layout_width="160dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="150dp"
+        android:layout_marginBottom="@dimen/space_standard"
         android:background="@color/primary"
         android:gravity="center"
-        android:textColor="@color/fg_white"
         android:text="@string/label_manually_fetch"
-        android:layout_below="@+id/main_login_area"
-        android:layout_alignParentStart="true"
-        android:layout_margin="@dimen/space_standard"
-        />
+        android:textColor="@color/fg_white" />
+
+
+    <TextView
+        android:id="@+id/tv_Wx"
+        android:layout_height="90dp"
+        android:layout_width="160dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="150dp"
+        android:layout_marginBottom="@dimen/space_standard"
+        android:background="@color/primary"
+        android:gravity="center"
+        android:text="手动提交数据"
+        android:textColor="@color/fg_white" />
+
+
+    <TextView
+        android:id="@+id/tv_upload"
+        android:layout_height="90dp"
+        android:layout_width="160dp"
+        android:layout_below="@+id/tv_Wx"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="150dp"
+        android:layout_marginBottom="@dimen/space_standard"
+        android:background="@color/primary"
+        android:gravity="center"
+        android:text="图片上传"
+        android:textColor="@color/fg_white" />-->
 </RelativeLayout>

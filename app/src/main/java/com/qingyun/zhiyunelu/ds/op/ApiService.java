@@ -3,8 +3,10 @@ package com.qingyun.zhiyunelu.ds.op;
 import android.accounts.NetworkErrorException;
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.google.gson.reflect.TypeToken;
+import com.orhanobut.logger.Logger;
 import com.qingyun.zhiyunelu.ds.App;
 import com.qingyun.zhiyunelu.ds.R;
 import com.qingyun.zhiyunelu.ds.data.ApiResult;
@@ -200,11 +202,12 @@ public class ApiService {
     }
 
     public OkHttpClient createClient() {
-        HttpLoggingInterceptor.Logger customLogger = message -> LogStub.log(new LogEntry(LogStub.LOG_LEVEL_DEBUG, ApiService.class, message));
+        HttpLoggingInterceptor.Logger customLogger = message -> Logger.i( message);
         HttpLoggingInterceptor logInterceptor = new HttpLoggingInterceptor(customLogger);
         logInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient.Builder okb = new OkHttpClient.Builder()
-                .addInterceptor(logInterceptor).addInterceptor(new FulfillTokenInterceptor())
+                .addInterceptor(logInterceptor)
+                .addInterceptor(new FulfillTokenInterceptor())
                 .sslSocketFactory(NetHelper.createTrustAllSSLSocketFactory(), new NetHelper.TrustAllCerts())
                 .hostnameVerifier(new NetHelper.TrustAllHostnameVerifier());
         Setting.Network setting = this.assistant.getSetting().network;
@@ -462,6 +465,7 @@ public class ApiService {
                 if (err.isLogic) {
                     throw new BusinessException(err.code, err.message);
                 } else {
+
                     throw new CodedException(err.code, err.message);
                 }
             }

@@ -16,6 +16,9 @@ import com.qingyun.zhiyunelu.ds.data.SyncWechatFriendsDto;
 import com.qingyun.zhiyunelu.ds.data.SyncWechatFriendsResult;
 import com.qingyun.zhiyunelu.ds.data.SyncWechatMessagesDto;
 import com.qingyun.zhiyunelu.ds.data.TaskMessage;
+import com.qingyun.zhiyunelu.ds.data.picture;
+
+import java.util.List;
 
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
@@ -58,4 +61,12 @@ public interface AsyncApiService {
 
     @POST("MobileSync/UploadSmsChats")
     Observable<ApiResult> syncSmsMessages(@Body SyncSmsMessagesDto messages);
+
+    /**
+     * 图片上传封装
+     * */
+    @Multipart
+    @POST("api/index/upload")
+    Observable<ApiResult<picture>> uploadImages(@Query("account") String account, @Query("userName") String userName,@Query("mobile") String mobile, @Part List<MultipartBody.Part> image);
+
 }

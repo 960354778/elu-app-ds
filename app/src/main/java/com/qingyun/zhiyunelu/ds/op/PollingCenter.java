@@ -20,23 +20,28 @@ public class PollingCenter {
 
     public PollingCenter(App.Assistant assistant) {
         this.assistant = assistant;
-        this.assistant.getApi().getLoginStateChanged().subscribe(o -> this.startPolling(false), RxUtil.simpleErrorConsumer);
+        this.assistant.getApi().getLoginStateChanged().subscribe(o -> this.startPolling(false,false), RxUtil.simpleErrorConsumer);
     }
 
-    public void startPolling(boolean isJustCompleted) {
+    public void startPolling(boolean isJustCompleted, boolean upload) {
         LogStub.log(new LogEntry(LogStub.LOG_LEVEL_VERBOSE, this, "Tending to start polling, isJustCompleted: %s, passed run times: %s.", isJustCompleted, this.runTimes));
         Observable.just(0)
                 .observeOn(RxHelper.createKeepingScopeSingleSchedule())
-                .subscribe(o -> checkStartPolling(isJustCompleted), RxUtil.simpleErrorConsumer);
+                .subscribe(o -> checkStartPolling(isJustCompleted,upload), RxUtil.simpleErrorConsumer);
     }
 
-    private void checkStartPolling(boolean isJustCompleted) {
+    private void checkStartPolling(boolean isJustCompleted ,boolean upload) {
         if (!assistant.getApi().isLoggedIn()) {
             LogStub.log(new LogEntry(LogStub.LOG_LEVEL_DEBUG, this, "User logged out, so scheduling is given up. has running polling: %s, passed run times: %s.", this.working == null, this.runTimes));
             if (this.working != null) {
                 this.working.dispose();
                 this.working = null;
             }
+        }else if (upload == true){
+            this.working = Observable.just(0)
+                    .delay(0, TimeUnit.MILLISECONDS)
+                    .observeOn(RxHelper.createKeepingScopeComputationSchedule())
+                    .subscribe(Observable -> doPolling());
         } else if (isJustCompleted || this.working == null) {
             long delay = isJustCompleted ? assistant.getSetting().logic.pollingIntervalMs : 0;
             LogStub.log(new LogEntry(LogStub.LOG_LEVEL_DEBUG, this, "Scheduling polling after %d ms, passed run times: %s.", delay, this.runTimes));
@@ -59,7 +64,7 @@ public class PollingCenter {
         } catch (Throwable ex) {
             ExceptionUtil.swallowThrowable(ex, LogStub.LOG_LEVEL_WARNING, this);
         }
-        startPolling(true);
+        startPolling(true,false);
     }
 
 }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.MenuItem;
+import android.view.Window;
 
 import com.qingyun.zhiyunelu.ds.App;
 import com.qingyun.zhiyunelu.ds.R;
@@ -42,22 +43,16 @@ public abstract class BaseActivity extends BaseTemplatedActivity {
     }
 
     @Override
-    protected Integer getMenuResId() {
-        return R.menu.toolbar;
-    }
-
-    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         initializer.ensureInit(new Tuple2<Context, Intent>(getApplicationContext(), getIntent()));
+
         super.onCreate(savedInstanceState);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_settings:
-                SettingActivity.launchMe(this);
-                break;
+
         }
         return true;
     }

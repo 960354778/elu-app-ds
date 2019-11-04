@@ -1,8 +1,11 @@
 package velites.android.support.wx;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
+import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.util.Xml;
 
 import net.sqlcipher.database.SQLiteDatabase;
@@ -121,6 +124,9 @@ public class WechatOperator {
             if (owner == null) {
                 throw new CodedException(EXCEPTION_CODE_NO_OWNER, null);
             }
+            Log.e("WechatOperator","authInfoPath:"+authInfoPath+"\n");
+            Log.e("WechatOperator","TEMP_AUTH_INFO_FILE_NAME:"+TEMP_AUTH_INFO_FILE_NAME+"\n");
+            Log.e("WechatOperator","owner:"+owner+"\n");
             files.authInfo = copyFile(authInfoPath, files.root, TEMP_AUTH_INFO_FILE_NAME, owner);
             files.systemInfo = copyFile(systemInfoPath, files.root, TEMP_SYSTEM_INFO_FILE_NAME, owner);
             files.individualDirSegment = EncryptUtil.MD5Lower(StringUtil.formatInvariant(INDIVIDUAL_DIR_FORMAT, obtainWxUin(files.authInfo)));
@@ -150,19 +156,21 @@ public class WechatOperator {
                 }
                 cmds.add(StringUtil.formatInvariant("chown %s %s", owner, ret));
                 RootUtility.runAsRoot(ProcessRunner.defaultOptionsThrowIfExitNonZero, cmds.toArray(new String[0]));
+
             } else {
+                Log.e("WechatOperator","异常------------------------------------");
                 runner.checkThrowExecFailureException();
             }
         }
         return ret;
     }
 
-    private void decodeDB(TempFiles files, Action1<SQLiteDatabase> act) {
+    private void decodeDB(Context context, TempFiles files, Action1<SQLiteDatabase> act) {
         SQLiteDatabase.loadLibs(this.context);
         SQLiteDatabase db = null;
         if (files != null && files.db != null && files.db.exists()) {
             try {
-                String pwd = obtainPassword(files.authInfo, files.systemInfo);
+                String pwd = obtainPassword(context,files.authInfo, files.systemInfo);
                 LogStub.log(new LogEntry(LogStub.LOG_LEVEL_VERBOSE, WechatOperator.class, "Using password for wx db(%s): %s", files.db, pwd));
                 db = SQLiteDatabase.openOrCreateDatabase(files.db, pwd, null, new SQLiteDatabaseHook() {
                     public void preKey(SQLiteDatabase database) {
@@ -184,7 +192,7 @@ public class WechatOperator {
         }
     }
 
-    public void checkWechatAndRun(String tempDir, final Action1<SQLiteDatabase> act) {
+    public void checkWechatAndRun(Context context,String tempDir, final Action1<SQLiteDatabase> act) {
         if (act == null) {
             return;
         }
@@ -192,7 +200,7 @@ public class WechatOperator {
         prepareForWX(tempDir, new Action1<TempFiles>() {
             @Override
             public void a(TempFiles files) {
-                decodeDB(files, new Action1<SQLiteDatabase>() {
+                decodeDB(context,files, new Action1<SQLiteDatabase>() {
                     @Override
                     public void a(SQLiteDatabase db) {
                         act.a(db);
@@ -265,13 +273,25 @@ public class WechatOperator {
         return id;
     }
 
-    private static String obtainPassword(File authInfo, File systemInfo) {
+    @SuppressLint({"HardwareIds", "MissingPermission"})
+    private static String obtainPassword(Context context, File authInfo, File systemInfo) {
+        Log.e("WechatOperator","authInfo:"+authInfo+"\n"+"systemInfo:"+systemInfo);
         String pwd = null;
         String uin = obtainWxUin(authInfo);
         String deviceId = obtainDeviceId(systemInfo);
+        Pattern pattern = Pattern.compile("[0-9]*");
+        if (pattern.matcher(deviceId).matches()){
+
+        }else {
+            TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+            deviceId = tm.getDeviceId();
+        }
+        Log.e("WechatOperator","uin:"+uin+"\n"+"deviceId:"+deviceId);
         if(!StringUtil.isNullOrEmpty(uin) && !StringUtil.isNullOrEmpty(deviceId)){
             pwd = EncryptUtil.MD5(deviceId+uin).substring(0, 7).toLowerCase();
-        }   return pwd;
+        }
+        Log.e("WechatOperator","pwd:"+pwd);
+        return pwd;
     }
 
     public final WechatMeInfo obtainMe(SQLiteDatabase sql) {

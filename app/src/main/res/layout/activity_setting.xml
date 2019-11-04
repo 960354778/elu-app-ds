@@ -1,97 +1,243 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/MMVerStyle"
-    android:padding="@dimen/space_standard"
+    android:background="@mipmap/background_color"
     >
+
+    <ImageView
+       android:id="@+id/image01"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:adjustViewBounds="true"
+       android:scaleType="fitCenter"
+       android:src="@mipmap/crm04"/>
+
+    <ImageView
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:src="@mipmap/crm03"
+       android:layout_alignParentBottom="true"
+       android:adjustViewBounds="true"
+       android:scaleType="fitCenter"/>
+
+    <RelativeLayout
+       android:id="@+id/rv_image01"
+       android:layout_width="match_parent"
+       android:layout_height="50dp">
+
+        <ImageView
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="18dp"
+            android:src="@mipmap/setting"
+            android:layout_marginLeft="15dp"/>
+
+
+        <TextView
+            android:id="@+id/tv_return"
+            android:gravity="center"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:text="设置"
+            android:textSize="18dp"
+            android:textColor="@color/bg_gray"
+            android:layout_marginLeft="15dp"
+            />
+
+      <!--<ImageView
+          android:id="@+id/iv_setting"
+          android:layout_margin="15dp"
+          android:layout_width="30dp"
+          android:layout_height="match_parent"
+          android:layout_alignParentRight="true"
+          android:src="@mipmap/cer02"
+          android:adjustViewBounds="true"
+          />-->
+
+   </RelativeLayout>
+
+    <TextView
+       android:gravity="center"
+       android:layout_marginTop="15dp"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:layout_below="@+id/rv_image01"
+       android:layout_marginLeft="45dp"
+       android:layout_marginRight="45dp"
+       android:text="智云CRM手机端"
+       android:textSize="36dp"
+       android:textColor="@color/bg_gray"
+       android:textStyle="bold"
+       />
+
     <LinearLayout
-        style="@style/MWHorStyle"
-        >
-        <TextView
-            style="@style/WWStyle"
-            android:text="@string/label_build_date"
-            android:layout_marginEnd="@dimen/space_standard"
-            android:textSize="@dimen/font_standard_big"
-            android:padding="@dimen/space_standard"
-            />
-        <TextView
-            android:id="@+id/setting_build_date"
-            style="@style/WWStyle"
-            android:textSize="@dimen/font_standard_big"
-            android:padding="@dimen/space_standard"
-            />
+        android:id="@+id/lineLy_01"
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:layout_below="@+id/image01"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="25dp"
+        android:orientation="vertical">
+
+       <TextView
+           android:gravity="center_vertical"
+           android:layout_weight="1"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:text="编译日期"
+           android:textSize="18sp"
+           />
+       <TextView
+           android:id="@+id/setting_build_date"
+           android:gravity="center_vertical"
+           android:layout_weight="1"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:textSize="18sp"
+           android:text="XXXXXXX"
+           />
+
+       <TextView
+           android:gravity="center_vertical"
+           android:layout_weight="1"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:text="编译版本"
+           android:textSize="18sp"
+           android:layout_marginTop="10dp"
+           />
+       <TextView
+           android:id="@+id/setting_build_revision"
+           android:gravity="center_vertical"
+           android:layout_weight="1"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:text="XXXXXXX"
+           android:textSize="18sp"
+           />
+
     </LinearLayout>
-    <LinearLayout
-        style="@style/MWHorStyle"
-        >
-        <TextView
-            style="@style/WWStyle"
-            android:text="@string/label_build_revision"
-            android:layout_marginEnd="@dimen/space_standard"
-            android:textSize="@dimen/font_standard_big"
-            android:padding="@dimen/space_standard"
-            />
-        <TextView
-            android:id="@+id/setting_build_revision"
-            style="@style/WWStyle"
-            android:textSize="@dimen/font_standard_big"
-            android:padding="@dimen/space_standard"
-            />
-    </LinearLayout>
-    <LinearLayout
-        style="@style/MWHorStyle"
-        >
-        <TextView
-            style="@style/WWStyle"
-            android:text="@string/label_self_phone"
-            android:layout_marginEnd="@dimen/space_standard"
-            android:textSize="@dimen/font_standard_big"
-            android:padding="@dimen/space_standard"
-            />
-        <EditText
-            android:id="@+id/setting_self_phone"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="@dimen/font_standard_big"
-            android:hint="@string/hint_self_phone"
-            android:inputType="phone"
-            />
-        <Button
-            android:id="@+id/setting_save_self_phone"
-            style="@style/WWStyle"
-            android:text="@string/label_save"
-            android:layout_marginStart="@dimen/space_standard"
-            android:textSize="@dimen/font_standard_big"
-            android:padding="@dimen/space_standard"
-            />
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/setting_area_debug_url"
-        style="@style/MWHorStyle"
-        >
-        <EditText
-            android:id="@+id/setting_debug_url"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="@dimen/font_standard_big"
-            android:hint="@string/hint_debug_url"
-            android:inputType="textUri"
-            />
-        <Button
-            android:id="@+id/setting_save_debug_url"
-            style="@style/WWStyle"
-            android:text="@string/label_save"
-            android:layout_marginStart="@dimen/space_standard"
-            android:textSize="@dimen/font_standard_big"
-            android:padding="@dimen/space_standard"
-            />
-    </LinearLayout>
-    <Button
+
+
+   <LinearLayout
+       android:id="@+id/line1"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:layout_below="@+id/lineLy_01"
+       android:layout_marginTop="25dp"
+       android:orientation="vertical">
+
+      <RelativeLayout
+          android:layout_weight="1"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:layout_marginLeft="25dp"
+          android:layout_marginRight="25dp">
+
+         <TextView
+             android:layout_centerVertical="true"
+             android:id="@+id/iv_account"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:textSize="16dp"
+             android:text="本机号码"
+             android:textStyle="bold"
+             android:textColor="@color/primaryDark"/>
+
+         <EditText
+             android:layout_centerVertical="true"
+             android:id="@+id/setting_self_phone"
+             style="@style/EluStyle.EditText"
+             android:layout_width="match_parent"
+             android:hint="@string/hint_self_phone"
+             android:inputType="phone"
+             android:textSize="16dp"
+             android:layout_marginLeft="70dp"
+             />
+
+         <TextView
+             android:id="@+id/setting_save_self_phone"
+             android:layout_centerVertical="true"
+             android:gravity="center"
+             android:layout_width="75dp"
+             android:layout_height="35dp"
+             android:background="@drawable/login_shape"
+             android:text="@string/label_save"
+             android:layout_marginStart="@dimen/space_standard"
+             android:textSize="16sp"
+             android:textColor="@color/bg_gray"
+             android:layout_alignParentRight="true"
+             />
+
+         <View
+             android:layout_width="match_parent"
+             android:layout_height="1dp"
+             android:background="@color/login_grey"
+             android:layout_below="@+id/setting_self_phone"
+             android:layout_marginTop="10dp"
+             />
+
+      </RelativeLayout>
+
+      <RelativeLayout
+          android:layout_weight="1"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:layout_marginLeft="25dp"
+          android:layout_marginRight="25dp"
+          android:layout_marginTop="10dp">
+
+
+
+          <EditText
+              android:layout_centerVertical="true"
+              android:id="@+id/setting_debug_url"
+              style="@style/EluStyle.EditText"
+              android:layout_width="match_parent"
+              android:hint="@string/hint_debug_url"
+              android:inputType="phone"
+              android:textSize="16dp"
+              />
+
+          <TextView
+              android:id="@+id/setting_save_debug_url"
+              android:layout_centerVertical="true"
+              android:gravity="center"
+              android:layout_width="75dp"
+              android:layout_height="35dp"
+              android:background="@drawable/login_shape"
+              android:text="@string/label_save"
+              android:layout_marginStart="@dimen/space_standard"
+              android:textSize="16sp"
+              android:textColor="@color/bg_gray"
+              android:layout_alignParentRight="true"
+              />
+
+         <View
+             android:layout_width="match_parent"
+             android:layout_height="1dp"
+             android:background="@color/login_grey"
+             android:layout_below="@+id/setting_save_debug_url"
+             android:layout_marginTop="10dp"
+             />
+
+      </RelativeLayout>
+
+   </LinearLayout>
+
+
+    <TextView
+        android:gravity="center"
         android:id="@+id/setting_export_wx"
-        style="@style/WWStyle"
+        android:layout_width="240dp"
+        android:layout_height="50dp"
         android:text="@string/label_export_wx"
-        android:textSize="@dimen/font_standard_big"
-        android:padding="@dimen/space_standard"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:textColor="@color/bg_gray"
+        android:background="@drawable/login_shape"
+        android:layout_below="@+id/line1"
+        android:layout_marginTop="35dp"
+        android:layout_centerHorizontal="true"
     />
-</LinearLayout>
+</RelativeLayout>

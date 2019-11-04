@@ -38,6 +38,7 @@ rootProject.ext {
             maven { url u }
         }
         google()
+        maven { url "https://jitpack.io" }
         jcenter()
     }
     android = [

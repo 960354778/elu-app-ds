@@ -7,6 +7,7 @@
       <module fileurl="file://$PROJECT_DIR$/androidUtils/javaUtils/utility/JavaUtility.iml" filepath="$PROJECT_DIR$/androidUtils/javaUtils/utility/JavaUtility.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/elu-app-ds.iml" filepath="$PROJECT_DIR$/elu-app-ds.iml" />
+      <module fileurl="file://$PROJECT_DIR$/imageselector/imageselector.iml" filepath="$PROJECT_DIR$/imageselector/imageselector.iml" />
     </modules>
   </component>
 </project>

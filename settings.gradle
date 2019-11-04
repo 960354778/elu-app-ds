@@ -1,5 +1,5 @@
 
-include ':JavaUtility', ':AndroidUtility', ':AndroidSupport', ':app'
+include ':JavaUtility', ':AndroidUtility', ':AndroidSupport', ':app', ':imageselector'
 
 project(':JavaUtility').projectDir = new File('androidUtils/javaUtils/utility')
 project(':AndroidUtility').projectDir = new File('androidUtils/utility')

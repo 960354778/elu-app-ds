@@ -1,13 +1,18 @@
 package com.qingyun.zhiyunelu.ds.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.View;
 import android.widget.TextView;
 
 import com.qingyun.zhiyunelu.ds.App;
 import com.qingyun.zhiyunelu.ds.Constants;
 import com.qingyun.zhiyunelu.ds.R;
+import com.qingyun.zhiyunelu.ds.data.TokenInfo;
 import com.trello.rxlifecycle2.android.ActivityEvent;
+
+import org.w3c.dom.Text;
 
 import java.util.concurrent.TimeUnit;
 
@@ -32,9 +37,12 @@ public class SplashActivity extends BaseActivity {
     private static final long STAY_FROM_INIT_IN_MS = 2000;
     private static final long INTERVAL_CHECK_MS = 3000;
 
+    boolean loggedIn;
+    private TextView tv_login;
+
     class Widgets extends BaseLayoutWidget {
-        @BindView(R.id.splash_version)
-        TextView version;
+       /* @BindView(R.id.splash_version)
+        TextView version;*/
     }
     private final Widgets widgets = new Widgets();
 
@@ -44,6 +52,22 @@ public class SplashActivity extends BaseActivity {
         Observable.just(0).delay(STAY_FROM_ENTER_IN_MS, TimeUnit.MILLISECONDS).subscribe(wait);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        tv_login = (TextView) findViewById(R.id.tv_login);
+        TokenInfo token = getAppAssistant().getApi().getToken();
+        loggedIn = token != null;
+        if (loggedIn){
+            tv_login.setVisibility(View.GONE);
+        }else {
+            tv_login.setVisibility(View.VISIBLE);
+        }
+        tv_login.setClickable(false);
+        tv_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SplashActivity.this,LoginActivity.class));
+                finish();
+            }
+        });
         widgets.bind(this);
         Observable.create(RxUtil.buildSimpleFuncObservable(() -> {
             App.getInstance().getAssistant().awaitInit();
@@ -56,7 +80,7 @@ public class SplashActivity extends BaseActivity {
 
     private void showInfo(final int msg, Subject<Integer> wait) {
         Tuple2<String, Integer> v = EnvironmentInfo.obtainAppVersion(this);
-        widgets.version.setText(getString(R.string.content_splash_version, v.v1, v.v2, App.getInstance().getAssistant().isDebug() ? "DEBUG" : ""));
+        //widgets.version.setText(getString(R.string.content_splash_version, v.v1, v.v2, App.getInstance().getAssistant().isDebug() ? "DEBUG" : ""));
         RequestPermissionAssistant.startRequestPermission(this, Constants.Misc.REQUEST_CODE_REQUIRE_PERMISSION, !App.getInstance().getAssistant().getPrefs().getPermissionRequested(), new Func2<Func0<Boolean>, String[], Boolean>() {
             @Override
             public Boolean f(Func0<Boolean> arg1, String[] arg2) {
@@ -78,8 +102,16 @@ public class SplashActivity extends BaseActivity {
                     .subscribeOn(RxHelper.createKeepingScopeIOSchedule()).observeOn(RxHelper.createKeepingScopeMainThreadSchedule())
                     .compose(this.bindUntilEvent(ActivityEvent.DESTROY))
                     .subscribe(o -> {
-                        MainActivity.launchMe(SplashActivity.this);
-                        SplashActivity.this.finish();
+                        tv_login.setClickable(true);
+                        TokenInfo token = getAppAssistant().getApi().getToken();
+                        loggedIn = token != null;
+                        if (loggedIn) {
+                            MainActivity.launchMe(SplashActivity.this);
+                            SplashActivity.this.finish();
+                        } else {
+                            startActivity(new Intent(SplashActivity.this,LoginActivity.class));
+                            finish();
+                        }
                     }, RxUtil.simpleErrorConsumer);
         } else {
             ToastHelper.showToastLong(this, msg);

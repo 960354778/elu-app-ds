@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/MWStyle"
     android:layout_margin="@dimen/space_standard"
-    app:cardBackgroundColor="@color/bg_gray"
+    app:cardBackgroundColor="@color/bg_white"
     app:cardCornerRadius="@dimen/radius_standard"
     app:cardElevation="@dimen/elevation_standard"
     app:contentPadding="@dimen/space_standard"
@@ -12,6 +12,10 @@
     <LinearLayout
         style="@style/MWVerStyle"
         >
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="8dp" />
+        <!--工单编号-->
         <LinearLayout
             style="@style/EluStyle.InfoLine"
             android:id="@+id/dialing_task_code_area"
@@ -30,6 +34,11 @@
                 android:id="@+id/dialing_task_code_value"
                 />
         </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/main_grey"/>
+        <!--医生姓名-->
         <LinearLayout
             style="@style/EluStyle.InfoLine"
             android:id="@+id/dialing_doctor_name_area"
@@ -48,6 +57,11 @@
                 android:id="@+id/dialing_doctor_name_value"
                 />
         </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/main_grey"/>
+        <!--医生编号-->
         <LinearLayout
             style="@style/EluStyle.InfoLine"
             android:id="@+id/dialing_doctor_no_area"
@@ -66,6 +80,11 @@
                 android:id="@+id/dialing_doctor_no_value"
                 />
         </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/main_grey"/>
+        <!--医院-->
         <LinearLayout
             style="@style/EluStyle.InfoLine"
             android:id="@+id/dialing_hospital_area"
@@ -84,6 +103,11 @@
                 android:id="@+id/dialing_hospital"
                 />
         </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/main_grey"/>
+        <!--科室-->
         <LinearLayout
             style="@style/EluStyle.InfoLine"
             android:id="@+id/dialing_department_area"
@@ -102,6 +126,11 @@
                 android:id="@+id/dialing_department"
                 />
         </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/main_grey"/>
+        <!--所在地-->
         <LinearLayout
             style="@style/EluStyle.InfoLine"
             android:id="@+id/dialing_location_area"
@@ -120,6 +149,11 @@
                 android:id="@+id/dialing_location"
                 />
         </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/main_grey"/>
+        <!--专员-->
         <LinearLayout
             style="@style/EluStyle.InfoLine"
             android:id="@+id/dialing_representative_area"
@@ -138,5 +172,14 @@
                 android:id="@+id/dialing_representative"
                 />
         </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/main_grey"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="55dp" />
+
     </LinearLayout>
 </android.support.v7.widget.CardView>

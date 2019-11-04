@@ -4,8 +4,8 @@
     <string name="label_login">登录</string>
     <string name="label_task">工单</string>
     <string name="label_logout">注销</string>
-    <string name="label_save">保存</string>
-    <string name="label_manually_fetch">手工获取推送信息</string>
+    <string name="label_save">保&#8194;存</string>
+    <string name="label_manually_fetch">手工获取\n推送信息</string>
     <string name="label_account">账号</string>
     <string name="label_password">密码</string>
     <string name="label_build_date">编译日期</string>
@@ -26,8 +26,8 @@
     <string name="info_no_phone_number">没有可拨打的电话号码</string>
     <string name="info_sound_record_uploaded" formatted="false">和号码%s通话的录音文件%s已经成功上传</string>
     <string name="info_sound_record_upload_failed" formatted="false">上传通话录音文件失败！ 号码：%s， 文件：%s</string>
-    <string name="hint_enter_account">请输入账号&#8230;</string>
-    <string name="hint_enter_password">请输入密码&#8230;</string>
+    <string name="hint_enter_account">账号</string>
+    <string name="hint_enter_password">密码</string>
     <string name="hint_self_phone">请输入本机手机号码&#8230;</string>
     <string name="hint_debug_url">请输入数据接口地址头&#8230;</string>
     <string name="warn_requires_root">请先root手机并授予本应用root权限</string>

@@ -14,7 +14,8 @@ public final class ChannelConfig {
     private static Setting buildChannelSetting() {
         Setting ret = new Setting();
         ret.network = new Setting.Network();
-        ret.network.apiRootUrl = "https://tra-api.zhiyunyilu.com/";
+       /* ret.network.apiRootUrl = "https://tra-api.zhiyunyilu.com/";*/
+        ret.network.apiRootUrl = "https://qa-api.zhiyunyilu.com/";
         return ret;
     }
 

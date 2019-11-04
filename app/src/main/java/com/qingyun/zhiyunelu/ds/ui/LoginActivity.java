@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.qingyun.zhiyunelu.ds.R;
 import com.qingyun.zhiyunelu.ds.data.ApiResult;
@@ -40,7 +41,7 @@ public class LoginActivity extends BaseActivity {
         @BindView(R.id.login_password)
         EditText etPassword;
         @BindView(R.id.login_login)
-        Button btLogin;
+        TextView btLogin;
 
         private void render(){
             etAccount.setText(getAppAssistant().getPrefs().getLastUsername());
@@ -67,6 +68,7 @@ public class LoginActivity extends BaseActivity {
                         @Override
                         public boolean processResult(Object o, ApiResult res) {
                             LogStub.log(new LogEntry(LogStub.LOG_LEVEL_INFO, LoginActivity.this,"Logged in as user: %s", res.token.account.loginName));
+                            startActivity(new Intent(LoginActivity.this,MainActivity.class));
                             LoginActivity.this.finish();
                             return true;
                         }
@@ -79,15 +81,13 @@ public class LoginActivity extends BaseActivity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
         decorateToolbar();
         widgets.bind(this);
         widgets.render();
     }
 
-    @Override
-    protected Integer getContentResId() {
-        return R.layout.activity_login;
-    }
+
 
     private void decorateToolbar() {
         getToolbar().setNavigationIcon(null);

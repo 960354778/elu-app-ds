@@ -1,8 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/MMVerStyle"
     android:background="@color/bg_white_grey">
-    <View
+
+    <RelativeLayout
+        android:id="@+id/rv_image01"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true">
+
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="登录"
+            android:textColor="@color/primaryDark"
+            android:textSize="18dp" />
+
+       <!-- <ImageView
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_margin="15dp"
+            android:adjustViewBounds="true"
+            android:src="@mipmap/cer" />-->
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/image01"
+        android:layout_marginTop="60dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rv_image01"
+        android:layout_marginLeft="45dp"
+        android:layout_marginRight="45dp"
+        android:src="@mipmap/crm"/>
+
+    <TextView
+        android:id="@+id/text01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="提供移动化/数字化管理"
+        android:layout_centerHorizontal="true"
+        android:textSize="21dp"
+        android:layout_below="@+id/image01"
+        android:layout_marginTop="10dp"/>
+
+
+    <ImageView
+        android:layout_below="@+id/text01"
+        android:layout_marginTop="40dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/guide_page"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        />
+
+
+    <TextView
+        android:id="@+id/tv_login"
+        android:gravity="center"
+        android:layout_width="180dp"
+        android:layout_height="50dp"
+        android:text="登录"
+       android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="60dp"
+        android:textSize="24dp"
+        android:background="@drawable/shape"
+        android:textColor="@color/primaryDark"/>
+
+    <!--<View
         android:layout_width="match_parent"
         android:layout_height="@dimen/size_zero"
         android:layout_weight="5"
@@ -33,5 +106,5 @@
         style="@style/WWStyle"
         android:layout_margin="@dimen/space_standard_big"
         android:layout_gravity="center_horizontal"
-        />
-</LinearLayout>
+        />-->
+</RelativeLayout>

@@ -112,7 +112,7 @@ android {
                     res.srcDirs += 'src/origin/res'
                 }
             }
-            def appName = '智云'
+            def appName = '图片测试'
             if (developChannels.contains(name)) {
                 appName += "(${name.toUpperCase()})"
                 flavor.applicationIdSuffix = ".${name}"
@@ -141,6 +141,9 @@ dependencies {
     implementation project(':JavaUtility')
     implementation project(':AndroidUtility')
     implementation project(':AndroidSupport')
+
+    implementation project(':imageselector')
+
     androidTestImplementation(rootProject.ext.dependencies['test_runner'])
     implementation rootProject.ext.dependencies['gson']
     implementation rootProject.ext.dependencies['butterknife']
@@ -159,4 +162,8 @@ dependencies {
     implementation rootProject.ext.dependencies['retrofit_rx']
     implementation rootProject.ext.dependencies['okhttp_log']
     implementation rootProject.ext.dependencies['sqlcipher']
+
+    //日志
+    implementation 'com.orhanobut:logger:2.1.1'
+    implementation 'org.jetbrains:annotations:15.0'
 }
