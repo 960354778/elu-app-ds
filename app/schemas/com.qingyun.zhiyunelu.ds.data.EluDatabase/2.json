@@ -1,0 +1,130 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "d9d4f520dbcf46b3d7e0b75f5b267e81",
+    "entities": [
+      {
+        "tableName": "records",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `task_record_id` TEXT, `execution_time` INTEGER, `phone_id` TEXT, `phone_number` TEXT, `is_incoming` INTEGER NOT NULL, `status` TEXT, `file_name` TEXT, `error` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "taskRecordId",
+            "columnName": "task_record_id",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "executionTime",
+            "columnName": "execution_time",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "phoneId",
+            "columnName": "phone_id",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "phoneNumber",
+            "columnName": "phone_number",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "isIncoming",
+            "columnName": "is_incoming",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "status",
+            "columnName": "status",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "fileName",
+            "columnName": "file_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "error",
+            "columnName": "error",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_records_task_record_id",
+            "unique": false,
+            "columnNames": [
+              "task_record_id"
+            ],
+            "createSql": "CREATE  INDEX `index_records_task_record_id` ON `${TABLE_NAME}` (`task_record_id`)"
+          },
+          {
+            "name": "index_records_execution_time",
+            "unique": false,
+            "columnNames": [
+              "execution_time"
+            ],
+            "createSql": "CREATE  INDEX `index_records_execution_time` ON `${TABLE_NAME}` (`execution_time`)"
+          },
+          {
+            "name": "index_records_phone_number",
+            "unique": false,
+            "columnNames": [
+              "phone_number"
+            ],
+            "createSql": "CREATE  INDEX `index_records_phone_number` ON `${TABLE_NAME}` (`phone_number`)"
+          },
+          {
+            "name": "index_records_is_incoming",
+            "unique": false,
+            "columnNames": [
+              "is_incoming"
+            ],
+            "createSql": "CREATE  INDEX `index_records_is_incoming` ON `${TABLE_NAME}` (`is_incoming`)"
+          },
+          {
+            "name": "index_records_status",
+            "unique": false,
+            "columnNames": [
+              "status"
+            ],
+            "createSql": "CREATE  INDEX `index_records_status` ON `${TABLE_NAME}` (`status`)"
+          },
+          {
+            "name": "index_records_file_name",
+            "unique": false,
+            "columnNames": [
+              "file_name"
+            ],
+            "createSql": "CREATE  INDEX `index_records_file_name` ON `${TABLE_NAME}` (`file_name`)"
+          }
+        ],
+        "foreignKeys": []
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"d9d4f520dbcf46b3d7e0b75f5b267e81\")"
+    ]
+  }
+}
